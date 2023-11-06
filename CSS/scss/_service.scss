@@ -1,0 +1,56 @@
+.service-icon {
+  i {
+    font-size: 3rem;
+    padding: 0;
+  }
+}
+
+.service-features-card.card {
+  padding: 0;
+  gap: 0;
+
+  h3 {
+    background-color: var(--orb-color-primary);
+    color: var(--orb-color-secondary);
+    padding: 0.25em;
+    width: 100%;
+    margin: 0;
+  }
+
+  .service-features {
+    padding: 0.5rem;
+  }
+}
+
+.details-card {
+  padding: 0;
+  gap: 0;
+
+  h4 {
+    width: 100%;
+    background-color: var(--orb-color-primary);;
+    color: var(--orb-color-secondary);;
+    padding: 0.25em;
+    margin: 0;
+  }
+  .details {
+    padding: 0.5em;
+  }
+}
+
+.invoice,
+.receipt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.quote-card.card,
+.invoice-card.card,
+.schedule-card.card,
+.receipt-card.card {
+  max-width: fit-content;
+  padding: 0;
+}
