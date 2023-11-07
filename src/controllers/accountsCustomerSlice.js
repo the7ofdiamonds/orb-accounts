@@ -83,7 +83,15 @@ export const getStripeCustomer = createAsyncThunk('customer/getStripeCustomer', 
                 'Content-Type': 'application/json'
             },
         });
-        return response.data;
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+
+        const responseData = await response.json();
+        return responseData;
     } catch (error) {
         throw error;
     }

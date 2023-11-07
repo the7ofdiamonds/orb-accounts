@@ -11,11 +11,9 @@ class Pages
 
     public function __construct()
     {
-        $this->front_page_react = [
-        ];
+        $this->front_page_react = [];
 
-        $this->pages = [
-        ];
+        $this->pages = [];
 
         $this->protected_pages = [
             'billing',
@@ -41,6 +39,8 @@ class Pages
         add_action('init', [$this, 'react_rewrite_rules']);
 
         add_filter('query_vars', [$this, 'add_query_vars']);
+
+        add_action('init', [$this, 'is_user_logged_in']);
     }
 
     function react_rewrite_rules()
@@ -52,7 +52,7 @@ class Pages
                 $segment = count($url) - 1;
 
                 if (isset($url[$segment])) {
-                    add_rewrite_rule('^' . $page_title, 'index.php?' . $segment . '=$1', 'top');
+                    add_rewrite_rule('^' . $page_title, 'index.php?' . $url[$segment] . '=$1', 'top');
                 }
             }
         }
