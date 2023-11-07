@@ -8,28 +8,7 @@ class Post_Types
 
     public function __construct()
     {
-        $this->post_types = [
-            [
-                'name' => 'services',
-                'menu_icon' => '',
-                'menu_position' => 13,
-                'title' => 'SERVICES',
-                'singular' => 'Service',
-                'plural' => 'Services',
-                'archive_page' => 'services',
-                'single_page' => 'service'
-            ],
-            [
-                'name' => 'products',
-                'menu_icon' => '',
-                'menu_position' => 14,
-                'title' => 'PRODUCTS',
-                'singular' => 'Product',
-                'plural' => 'Products',
-                'archive_page' => 'products',
-                'single_page' => 'product'
-            ],
-        ];
+        $this->post_types = [];
 
         add_action('init', [$this, 'custom_post_type']);
     }

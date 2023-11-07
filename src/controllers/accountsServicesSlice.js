@@ -52,7 +52,7 @@ export const getAvailableServices = createAsyncThunk('services/getAvailableServi
   }
 });
 
-export const servicesSlice = createSlice({
+export const accountsServicesSlice = createSlice({
   name: 'services',
   initialState,
   extraReducers: (builder) => {
@@ -86,4 +86,4 @@ export const servicesSlice = createSlice({
 })
 
 
-export default servicesSlice;
+export default accountsServicesSlice;

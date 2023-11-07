@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getClient } from '../controllers/clientSlice';
-import { getClientReceipts } from '../controllers/receiptSlice';
+import { getClient } from '../controllers/accountsClientSlice';
+import { getClientReceipts } from '../controllers/accountsReceiptSlice';
 
 function BillingReceipts() {
   const dispatch = useDispatch();

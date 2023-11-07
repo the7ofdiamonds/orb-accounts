@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -38,25 +37,37 @@ export const addStripeCustomer = createAsyncThunk('customer/addStripeCustomer', 
         country
     } = getState().customer;
 
-    const customer_data = {
-        client_id: client_id,
-        company_name: company_name,
-        tax_id: tax_id,
-        first_name: first_name,
-        last_name: last_name,
-        user_email: user_email,
-        phone: phone,
-        address_line_1: address_line_1,
-        address_line_2: address_line_2,
-        city: city,
-        state: state,
-        zipcode: zipcode,
-        country: country
-    };
-
     try {
-        const response = await axios.post('/wp-json/orb/v1/stripe/customers', customer_data);
-        return response.data;
+        const response = await fetch('/wp-json/orb/v1/stripe/customers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client_id: client_id,
+                company_name: company_name,
+                tax_id: tax_id,
+                first_name: first_name,
+                last_name: last_name,
+                user_email: user_email,
+                phone: phone,
+                address_line_1: address_line_1,
+                address_line_2: address_line_2,
+                city: city,
+                state: state,
+                zipcode: zipcode,
+                country: country
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+
+        const responseData = await response.json();
+        return responseData;
     } catch (error) {
         throw error;
     }
@@ -66,7 +77,12 @@ export const getStripeCustomer = createAsyncThunk('customer/getStripeCustomer', 
     const { stripe_customer_id } = getState().client;
 
     try {
-        const response = await axios.get(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`);
+        const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        });
         return response.data;
     } catch (error) {
         throw error;
@@ -129,7 +145,7 @@ export const updateStripeCustomer = createAsyncThunk('customer/updateStripeCusto
     }
 });
 
-export const customerSlice = createSlice({
+export const accountsCustomerSlice = createSlice({
     name: 'customer',
     initialState,
     reducers: {
@@ -244,5 +260,6 @@ export const {
     updateCity,
     updateState,
     updateZipcode,
-} = customerSlice.actions;
-export default customerSlice;
+} = accountsCustomerSlice.actions;
+
+export default accountsCustomerSlice;

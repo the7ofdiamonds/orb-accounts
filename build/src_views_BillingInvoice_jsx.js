@@ -64,11 +64,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/clientSlice.js */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/customerSlice.js */ "./src/controllers/customerSlice.js");
-/* harmony import */ var _controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/invoiceSlice.js */ "./src/controllers/invoiceSlice.js");
-/* harmony import */ var _controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/paymentSlice.js */ "./src/controllers/paymentSlice.js");
-/* harmony import */ var _controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/receiptSlice.js */ "./src/controllers/receiptSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
 /* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
 /* harmony import */ var _error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../error/ErrorComponent.jsx */ "./src/error/ErrorComponent.jsx");
 /* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
@@ -129,25 +129,25 @@ function InvoiceComponent() {
   const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_2__.getClient)()).then(response => {
+      dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.getClient)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeCustomer)()).then(response => {
+          dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeCustomer)()).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
               setMessage(response.error.message);
             } else {
-              dispatch((0,_controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getInvoiceByID)(id)).then(response => {
+              dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getInvoiceByID)(id)).then(response => {
                 if (response.error !== undefined) {
                   console.error(response.error.message);
                   setMessageType('error');
                   setMessage(response.error.message);
                 } else {
-                  dispatch((0,_controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(response.payload.stripe_invoice_id)).then(response => {
+                  dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(response.payload.stripe_invoice_id)).then(response => {
                     if (response.error !== undefined) {
                       console.error(response.error.message);
                       setMessageType('error');
@@ -164,7 +164,7 @@ function InvoiceComponent() {
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_intent_id) {
-      dispatch((0,_controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)()).then(response => {
+      dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -175,14 +175,14 @@ function InvoiceComponent() {
   }, [payment_intent_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (status === 'paid' && stripe_invoice_id) {
-      dispatch((0,_controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getReceipt)()).then(response => {
+      dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getReceipt)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
           console.log(response.payload.id);
-          (0,_controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.updateReceiptID)(response.payload.id);
+          (0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.updateReceiptID)(response.payload.id);
         }
       });
     }
@@ -193,19 +193,19 @@ function InvoiceComponent() {
     } else if (status === 'open' && client_secret) {
       window.location.href = `/billing/payment/${id}`;
     } else if (status === 'draft' && stripe_invoice_id) {
-      dispatch((0,_controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.finalizeInvoice)()).then(response => {
+      dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.finalizeInvoice)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)(response.payload.payment_intent_id)).then(response => {
+          dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)(response.payload.payment_intent_id)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
               setMessage(response.error.message);
             } else {
-              dispatch((0,_controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.updateClientSecret)(response.payload.client_secret)).then(response => {
+              dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.updateClientSecret)(response.payload.client_secret)).then(response => {
                 if (response.error !== undefined) {
                   console.error(response.error.message);
                   setMessageType('error');

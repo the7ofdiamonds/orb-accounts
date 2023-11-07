@@ -168,8 +168,7 @@ export const deleteInvoice = createAsyncThunk('invoice/deleteInvoice', async (st
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error(error);
-    throw error.message;
+    throw error;
   }
 });
 
@@ -330,7 +329,7 @@ export const finalizeInvoice = createAsyncThunk('invoice/finalizeInvoice', async
   }
 });
 
-export const invoiceSlice = createSlice({
+export const accountsInvoiceSlice = createSlice({
   name: 'invoice',
   initialState,
   reducers: {
@@ -506,4 +505,4 @@ export const invoiceSlice = createSlice({
   }
 });
 
-export default invoiceSlice;
+export default accountsInvoiceSlice;

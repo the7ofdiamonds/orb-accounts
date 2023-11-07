@@ -16,7 +16,7 @@ class DatabaseReceipt
         $this->table_name = 'orb_receipt';
     }
 
-    public function saveReceipt($invoice_id, $stripe_invoice, $payment_method_id, $payment_method, $first_name, $last_name, $charges)
+    public function saveReceipt($invoice_id, $stripe_invoice, $payment_method_id, $payment_method, $first_name, $last_name, $charges, $onboarding_link)
     {
         $result = $this->wpdb->insert(
             $this->table_name,
@@ -31,7 +31,8 @@ class DatabaseReceipt
                 'payment_method' => $payment_method,
                 'first_name' => $first_name,
                 'last_name' => $last_name,
-                'receipt_pdf_url' => $charges->receipt_url
+                'receipt_pdf_url' => $charges->receipt_url,
+                'onboarding_link' => $onboarding_link
             ]
         );
 
@@ -41,7 +42,7 @@ class DatabaseReceipt
             return $receipt_id;
         } else {
             $error_message = $this->wpdb->last_error;
-            throw new Exception($error_message, );
+            throw new Exception($error_message,);
         }
     }
 
@@ -79,7 +80,8 @@ class DatabaseReceipt
                 'first_name' => $receipt->first_name,
                 'last_name' => $receipt->last_name,
                 'receipt_pdf_url' => $receipt->receipt_pdf_url,
-                'invoice_id' => $receipt->invoice_id
+                'invoice_id' => $receipt->invoice_id,
+                'onboarding_link' => $receipt->onboarding_link
             ];
 
             return $data;
@@ -112,6 +114,7 @@ class DatabaseReceipt
                 'payment_method' => $receipt->payment_method,
                 'first_name' => $receipt->first_name,
                 'last_name' => $receipt->last_name,
+                'onboarding_link' => $receipt->onboarding_link
             ];
 
             return $receipt_data;
@@ -146,6 +149,7 @@ class DatabaseReceipt
             'payment_method' => $receipt->payment_method,
             'first_name' => $receipt->first_name,
             'last_name' => $receipt->last_name,
+            'onboarding_link' => $receipt->onboarding_link
         ];
 
         return $receipt_data;

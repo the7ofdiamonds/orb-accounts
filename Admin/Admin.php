@@ -3,14 +3,10 @@
 namespace ORB\Accounts\Admin;
 
 use ORB\Accounts\Admin\AdminEmail;
-use ORB\Accounts\Admin\AdminEmailContact;
-use ORB\Accounts\Admin\AdminEmailSupport;
 use ORB\Accounts\Admin\AdminEmailSchedule;
 use ORB\Accounts\Admin\AdminEmailQuote;
 use ORB\Accounts\Admin\AdminEmailInvoice;
 use ORB\Accounts\Admin\AdminEmailReceipt;
-use ORB\Accounts\Admin\AdminHero;
-use ORB\Accounts\Admin\AdminLocation;
 use ORB\Accounts\Admin\AdminCommunication;
 use ORB\Accounts\Admin\AdminStripe;
 
@@ -23,14 +19,10 @@ class Admin
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_styles']);
 
         // new AdminEmail;
-        // new AdminEmailContact;
-        // new AdminEmailSupport;
         new AdminEmailSchedule;
         new AdminEmailQuote;
         new AdminEmailInvoice;
         new AdminEmailReceipt;
-        // new AdminHero;
-        // new AdminLocation;
         // new AdminCommunication;
         // new AdminStripe;
     }

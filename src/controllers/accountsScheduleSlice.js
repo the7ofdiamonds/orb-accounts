@@ -43,8 +43,7 @@ export const getOfficeHours = createAsyncThunk('schedule/getOfficeHours',
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.log(error)
-      throw error.message;
+      throw error;
     }
   });
 
@@ -68,8 +67,7 @@ export const getAvailableTimes = createAsyncThunk('schedule/getAvailableTimes',
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.log(error)
-      throw error.message;
+      throw error;
     }
   });
 
@@ -104,8 +102,7 @@ export const sendInvites = createAsyncThunk('schedule/sendInvites',
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.log(error)
-      throw error.message;
+      throw error;
     }
   });
 
@@ -146,8 +143,7 @@ export const saveEvent = createAsyncThunk('schedule/saveEvent',
       const responseData = await response.json();
       return responseData;
     } catch (error) {
-      console.log(error)
-      throw error.message;
+      throw error;
     }
   });
 
@@ -171,8 +167,7 @@ export const getEvent = createAsyncThunk('schedule/getEvent', async (_, { getSta
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error)
-    throw error.message;
+    throw error;
   }
 });
 
@@ -196,8 +191,7 @@ export const getClientEvents = createAsyncThunk('schedule/getClientEvents', asyn
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error)
-    throw error.message;
+    throw error;
   }
 });
 
@@ -220,12 +214,11 @@ export const getCommunicationPreferences = createAsyncThunk('schedule/getCommuni
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error)
-    throw error.message;
+    throw error;
   }
 });
 
-export const scheduleSlice = createSlice({
+export const accountsScheduleSlice = createSlice({
   name: 'schedule',
   initialState,
   reducers: {
@@ -369,5 +362,6 @@ export const {
   updateDescription,
   updateCommunicationPreference,
   updateAttendees,
-  updateEvent } = scheduleSlice.actions;
-export default scheduleSlice;
+  updateEvent } = accountsScheduleSlice.actions;
+
+export default accountsScheduleSlice;

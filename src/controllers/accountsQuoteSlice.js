@@ -329,7 +329,7 @@ export const getStripeClientQuotes = createAsyncThunk('quote/getStripeClientQuot
   }
 });
 
-export const quoteSlice = createSlice({
+export const accountsQuoteSlice = createSlice({
   name: 'quote',
   initialState,
   reducers: {
@@ -530,5 +530,5 @@ export const quoteSlice = createSlice({
   }
 });
 
-export const { addSelections, calculateSelections } = quoteSlice.actions;
-export default quoteSlice;
+export const { addSelections, calculateSelections } = accountsQuoteSlice.actions;
+export default accountsQuoteSlice;

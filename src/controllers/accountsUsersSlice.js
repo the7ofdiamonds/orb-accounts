@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -14,14 +13,30 @@ const initialState = {
 
 export const addClient = createAsyncThunk('users/addClient', async (client_data) => {
     try {
-        const response = await axios.post('/wp-json/orb/v1/clients', client_data);
-        return response.data;
+        const response = await fetch('/wp-json/orb/v1/clients', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client_data: client_data
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+
+        const responseData = await response.json();
+        return responseData;
     } catch (error) {
-        throw new Error(error.message);
+        throw error;
     }
 });
 
-export const usersSlice = createSlice({
+export const accountsUsersSlice = createSlice({
     name: 'users',
     initialState,
     extraReducers: (builder) => {
@@ -41,4 +56,4 @@ export const usersSlice = createSlice({
     }
 })
 
-export default usersSlice;
+export default accountsUsersSlice;

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getClient } from '../controllers/clientSlice';
+import { getClient } from '../controllers/accountsClientSlice';
 import {
   getClientInvoices,
   deleteInvoice,
-} from '../controllers/invoiceSlice';
+} from '../controllers/accountsInvoiceSlice';
 
 function BillingInvoices() {
   const dispatch = useDispatch();

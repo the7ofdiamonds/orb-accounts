@@ -1,23 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { usersSlice } from '../controllers/usersSlice.js';
-import { clientSlice } from '../controllers/clientSlice.js';
-import { customerSlice } from '../controllers/customerSlice.js';
-import { quoteSlice } from '../controllers/quoteSlice.js';
-import { invoiceSlice } from '../controllers/invoiceSlice.js';
-import { scheduleSlice } from '../controllers/scheduleSlice.js';
-import { paymentSlice } from '../controllers/paymentSlice.js';
-import { receiptSlice } from '../controllers/receiptSlice.js';
+import { accountsUsersSlice } from '../controllers/accountsUsersSlice.js';
+import { accountsClientSlice } from '../controllers/accountsClientSlice.js';
+import { accountsCustomerSlice } from '../controllers/accountsCustomerSlice.js';
+import { accountsQuoteSlice } from '../controllers/accountsQuoteSlice.js';
+import { accountsInvoiceSlice } from '../controllers/accountsInvoiceSlice.js';
+import { accountsPaymentSlice } from '../controllers/accountsPaymentSlice.js';
+import { accountsReceiptSlice } from '../controllers/accountsReceiptSlice.js';
+import { accountsScheduleSlice } from '../controllers/accountsScheduleSlice.js';
 
 const store = configureStore({
   reducer: {
-    users: usersSlice.reducer,
-    client: clientSlice.reducer,
-    customer: customerSlice.reducer,
-    quote: quoteSlice.reducer,
-    invoice: invoiceSlice.reducer,
-    schedule: scheduleSlice.reducer,
-    payment: paymentSlice.reducer,
-    receipt: receiptSlice.reducer,
+    users: accountsUsersSlice.reducer,
+    client: accountsClientSlice.reducer,
+    customer: accountsCustomerSlice.reducer,
+    quote: accountsQuoteSlice.reducer,
+    invoice: accountsInvoiceSlice.reducer,
+    payment: accountsPaymentSlice.reducer,
+    receipt: accountsReceiptSlice.reducer,
+    schedule: accountsScheduleSlice.reducer,
   },
 });
 

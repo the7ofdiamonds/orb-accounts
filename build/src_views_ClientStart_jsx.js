@@ -37,8 +37,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/clientSlice */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/customerSlice.js */ "./src/controllers/customerSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
 /* harmony import */ var _loading_LoadingComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../loading/LoadingComponent */ "./src/loading/LoadingComponent.jsx");
 /* harmony import */ var _components_StatusBar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/StatusBar */ "./src/views/components/StatusBar.jsx");
 
@@ -72,45 +72,45 @@ function ClientComponent() {
     phone
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.customer);
   const handleCompanyNameChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateCompanyName)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateCompanyName)(event.target.value));
   };
   const handleTaxIDChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateTaxID)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateTaxID)(event.target.value));
   };
   const handleFirstNameChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateFirstName)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateFirstName)(event.target.value));
   };
   const handleLastNameChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateLastName)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateLastName)(event.target.value));
   };
   const handlePhoneChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updatePhone)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updatePhone)(event.target.value));
   };
   const handleAddressChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateAddress)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateAddress)(event.target.value));
   };
   const handleAddressChange2 = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateAddress2)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateAddress2)(event.target.value));
   };
   const handleCityChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateCity)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateCity)(event.target.value));
   };
   const handleStateChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateState)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateState)(event.target.value));
   };
   const handleZipcodeChange = event => {
-    dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateZipcode)(event.target.value));
+    dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateZipcode)(event.target.value));
   };
   const [isFomCompleted, setIsFormCompleted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)(user_email)).then(response => {
+      dispatch((0,_controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)(user_email)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeCustomer)()).then(response => {
+          dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeCustomer)()).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
@@ -146,7 +146,7 @@ function ClientComponent() {
       setMessage('Please provide zipcode.');
       setMessageType('error');
     } else if (isFomCompleted && stripe_customer_id === '' || stripe_customer_id === undefined) {
-      dispatch((0,_controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__.addClient)()).then(response => {
+      dispatch((0,_controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__.addClient)()).then(response => {
         if (response.error === undefined) {
           window.location.href = '/client/selections';
         } else {
@@ -156,7 +156,7 @@ function ClientComponent() {
         }
       });
     } else if (stripe_customer_id) {
-      dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateStripeCustomer)()).then(response => {
+      dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.updateStripeCustomer)()).then(response => {
         if (response.error === undefined) {
           window.location.href = '/client/selections';
         } else {

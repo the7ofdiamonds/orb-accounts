@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getClient } from '../controllers/clientSlice';
-import { getClientQuotes } from '../controllers/quoteSlice';
+import { getClient } from '../controllers/accountsClientSlice';
+import { getClientQuotes } from '../controllers/accountsQuoteSlice';
 
 function BillingQuotes() {
   const dispatch = useDispatch();

@@ -160,6 +160,7 @@ class Database
         first_name VARCHAR(255) DEFAULT NULL,
         last_name VARCHAR(255) DEFAULT NULL,
         receipt_pdf_url VARCHAR(255) DEFAULT NULL,
+        onboarding_link VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 

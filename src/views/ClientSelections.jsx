@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchServices } from '../controllers/servicesSlice.js';
-import { getClient } from '../controllers/clientSlice.js';
+import { fetchServices } from '../controllers/accountsServicesSlice.js';
+import { getClient } from '../controllers/accountsClientSlice.js';
 import {
   addSelections,
   calculateSelections,
@@ -11,7 +11,7 @@ import {
   getClientQuotes,
   getQuote,
   updateStripeQuote,
-} from '../controllers/quoteSlice.js';
+} from '../controllers/accountsQuoteSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';

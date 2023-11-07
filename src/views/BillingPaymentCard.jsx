@@ -4,18 +4,18 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import PaymentNavigationComponent from './components/PaymentNavigation';
 
-import { getClient } from '../controllers/clientSlice';
+import { getClient } from '../controllers/accountsClientSlice';
 import {
   getInvoiceByID,
   getStripeInvoice,
   updateInvoiceStatus,
-} from '../controllers/invoiceSlice';
-import { getPaymentIntent } from '../controllers/paymentSlice';
+} from '../controllers/accountsInvoiceSlice';
+import { getPaymentIntent } from '../controllers/accountsPaymentSlice';
 import {
   postReceipt,
   getPaymentMethod,
   updatePaymentMethod,
-} from '../controllers/receiptSlice';
+} from '../controllers/accountsReceiptSlice';
 
 import { PaymentMethodGenerator } from '../utils/PaymentMethod';
 import { FormatCreditNumber } from '../utils/FormatCreditNumber';

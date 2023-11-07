@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getClient } from '../controllers/clientSlice.js';
-import { getStripeCustomer } from '../controllers/customerSlice.js';
-import { getStripeInvoice } from '../controllers/invoiceSlice.js';
-import { getPaymentIntent } from '../controllers/paymentSlice.js';
+import { getClient } from '../controllers/accountsClientSlice.js';
+import { getStripeCustomer } from '../controllers/accountsCustomerSlice.js';
+import { getStripeInvoice } from '../controllers/accountsInvoiceSlice.js';
+import { getPaymentIntent } from '../controllers/accountsPaymentSlice.js';
 import {
   getPaymentMethod,
   getReceiptByID,
-} from '../controllers/receiptSlice.js';
+} from '../controllers/accountsReceiptSlice.js';
 
 import formatPhoneNumber from '../utils/PhoneNumberFormatter.js';
 

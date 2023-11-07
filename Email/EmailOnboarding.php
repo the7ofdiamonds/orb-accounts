@@ -48,13 +48,13 @@ class EmailOnboarding
 
     }
 
-    function onboardingEmailMessage($databaseReceipt, $stripeInvoice, $project_name)
+    function onboardingEmailMessage($databaseReceipt, $stripeInvoice, $subject)
     {
         $swap_var = array(
             "{YOUR_NAME}" => $databaseReceipt['first_name'] . ' ' . $databaseReceipt['last_name'],
             "{PAYMENT_AMOUNT}" => $stripeInvoice->amount_paid,
             "{YOUR_COMPANY_NAME}" => $stripeInvoice->customer_name,
-            "{PROJECT_NAME}" => $project_name,
+            "{SUBJECT}" => $subject,
         );
 
         if (file_exists($this->message)) {
@@ -76,14 +76,14 @@ class EmailOnboarding
         return $bodyMessage;
     }
 
-    function onboardingEmailBody($databaseReceipt, $stripeInvoice, $project_name)
+    function onboardingEmailBody($databaseReceipt, $stripeInvoice, $subject, $onboarding_link)
     {
         $swap_var = array(
             "{YOUR_NAME}" => $databaseReceipt['first_name'] . ' ' . $databaseReceipt['last_name'],
             "{PAYMENT_AMOUNT}" => $stripeInvoice->amount_paid,
             "{YOUR_COMPANY_NAME}" => $stripeInvoice->customer_name,
-            "{PROJECT_NAME}" => $project_name,
-            "{ONBOARDING_URL}" => $this->onboarding_link
+            "{SUBJECT}" => $subject,
+            "{ONBOARDING_URL}" => $onboarding_link
         );
 
         if (file_exists($this->body)) {
@@ -105,10 +105,10 @@ class EmailOnboarding
         return $bodyHeader;
     }
 
-    function emailBody($databaseReceipt, $stripeInvoice, $project_name)
+    function emailBody($databaseReceipt, $stripeInvoice, $subject, $onboarding_link)
     {
         $header = $this->email->emailHeader();
-        $body = $this->onboardingEmailBody($databaseReceipt, $stripeInvoice, $project_name);
+        $body = $this->onboardingEmailBody($databaseReceipt, $stripeInvoice, $subject, $onboarding_link);
         $footer = $this->email->emailFooter();
 
         $fullEmailBody = $header . $body . $footer;
@@ -116,17 +116,19 @@ class EmailOnboarding
         return $fullEmailBody;
     }
 
-    function sendOnboardingEmail($stripe_invoice_id, $project_name)
+    function sendOnboardingEmail($stripe_invoice_id, $stripe_customer_id)
     {
         try {
-            $databaseReceipt = $this->database_receipt->getReceipt($stripe_invoice_id);
+            $databaseReceipt = $this->database_receipt->getReceipt($stripe_invoice_id, $stripe_customer_id);
             $stripeInvoice = $this->stripe_invoice->getStripeInvoice($databaseReceipt['stripe_invoice_id']);
+
+            $onboarding_link = $databaseReceipt['onboarding_link'];
 
             $to_email = $stripeInvoice->customer_email;
             $name = $stripeInvoice->customer_name;
             $to_name = $name;
 
-            $subject = 'Onboarding for Project' . $project_name;
+            $subject = 'Onboarding for Receipt# ' . $databaseReceipt['id'];
 
             $this->mailer->isSMTP();
             $this->mailer->SMTPAuth = $this->smtp_auth;
@@ -142,8 +144,8 @@ class EmailOnboarding
 
             $this->mailer->isHTML(true);
             $this->mailer->Subject = $subject;
-            $this->mailer->Body = $this->emailBody($databaseReceipt, $stripeInvoice, $project_name);
-            $this->mailer->AltBody = $this->onboardingEmailMessage($databaseReceipt, $stripeInvoice, $project_name);
+            $this->mailer->Body = $this->emailBody($databaseReceipt, $stripeInvoice, $subject, $onboarding_link);
+            $this->mailer->AltBody = $this->onboardingEmailMessage($databaseReceipt, $stripeInvoice, $subject);
 
             // Make the body the pdf
             // if ($stripeInvoice->status === 'paid' || $stripeInvoice->status === 'open') {

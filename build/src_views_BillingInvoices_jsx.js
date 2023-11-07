@@ -14,8 +14,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/clientSlice */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_invoiceSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/invoiceSlice */ "./src/controllers/invoiceSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice */ "./src/controllers/accountsInvoiceSlice.js");
 
 
 
@@ -34,12 +34,12 @@ function BillingInvoices() {
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.invoice);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)());
+      dispatch((0,_controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)());
     }
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_invoiceSlice__WEBPACK_IMPORTED_MODULE_3__.getClientInvoices)());
+      dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_3__.getClientInvoices)());
     }
   }, [stripe_customer_id, dispatch]);
   if (invoiceLoading) {
@@ -69,8 +69,8 @@ function BillingInvoices() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "View"))) : invoice.status === 'void' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Void") : invoice.status === 'uncollectible' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Uncollectible") : invoice.status === 'open' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: `/services/invoice/${invoice.id}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Continue")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    onClick: async () => await dispatch((0,_controllers_invoiceSlice__WEBPACK_IMPORTED_MODULE_3__.deleteInvoice)(invoice.stripe_invoice_id)).then(() => {
-      dispatch((0,_controllers_invoiceSlice__WEBPACK_IMPORTED_MODULE_3__.getClientInvoices)());
+    onClick: async () => await dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_3__.deleteInvoice)(invoice.stripe_invoice_id)).then(() => {
+      dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_3__.getClientInvoices)());
     })
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Delete")))))))))) : '');
 }

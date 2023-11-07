@@ -22,10 +22,10 @@ class CSS
     {
         add_action('wp_head', [$this, 'load_pages_css']);
 
-        $this->handle_prefix = 'orb_products_services_';
+        $this->handle_prefix = 'orb_accounts_';
         $this->dir = ORB_ACCOUNTS;
         $this->dirURL = ORB_ACCOUNTS_URL;
-        $this->cssFileName = 'orb-products-services.css';
+        $this->cssFileName = 'orb-accounts.css';
 
         $this->cssFolderPath = $this->dir . 'CSS/';
         $this->cssFolderPathURL = $this->dirURL . 'CSS/';

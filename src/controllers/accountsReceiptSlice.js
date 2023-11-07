@@ -61,24 +61,36 @@ export const postReceipt = createAsyncThunk('receipt/postReceipt', async (_, { g
   const { invoice_id, stripe_invoice_id } = getState().invoice;
   const { payment_method_id, amount_paid, payment_date, balance, payment_method } = getState().receipt;
 
-  const payment = {
-    stripe_customer_id: stripe_customer_id,
-    invoice_id: invoice_id,
-    stripe_invoice_id: stripe_invoice_id,
-    payment_method_id: payment_method_id,
-    amount_paid: amount_paid,
-    payment_date: payment_date,
-    balance: balance,
-    payment_method: payment_method,
-    first_name: first_name,
-    last_name: last_name,
-  };
-
   try {
-    const response = await axios.post('/wp-json/orb/v1/receipt', payment);
-    return response.data;
+    const response = await fetch('/wp-json/orb/v1/receipt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        stripe_customer_id: stripe_customer_id,
+        invoice_id: invoice_id,
+        stripe_invoice_id: stripe_invoice_id,
+        payment_method_id: payment_method_id,
+        amount_paid: amount_paid,
+        payment_date: payment_date,
+        balance: balance,
+        payment_method: payment_method,
+        first_name: first_name,
+        last_name: last_name,
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 }
 );
@@ -162,7 +174,7 @@ export const getClientReceipts = createAsyncThunk('receipt/getClientReceipts', a
   }
 });
 
-export const receiptSlice = createSlice({
+export const accountsReceiptSlice = createSlice({
   name: 'receipt',
   initialState,
   reducers: {

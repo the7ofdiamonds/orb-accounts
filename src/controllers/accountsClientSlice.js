@@ -86,7 +86,7 @@ export const getClient = createAsyncThunk('client/getClient', async (_, { getSta
     }
 });
 
-export const clientSlice = createSlice({
+export const accountsClientSlice = createSlice({
     name: 'client',
     initialState,
     extraReducers: (builder) => {
@@ -124,4 +124,4 @@ export const clientSlice = createSlice({
     }
 })
 
-export default clientSlice;
+export default accountsClientSlice;

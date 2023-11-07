@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PaymentNavigationComponent from './components/PaymentNavigation.jsx';
 
-import { getClient } from '../controllers/clientSlice.js';
-import { getStripeCustomer } from '../controllers/customerSlice.js';
+import { getClient } from '../controllers/accountsClientSlice.js';
+import { getStripeCustomer } from '../controllers/accountsCustomerSlice.js';
 import {
   getInvoiceByID,
   getStripeInvoice,
-} from '../controllers/invoiceSlice.js';
-import { getPaymentIntent } from '../controllers/paymentSlice.js';
-import { getReceipt } from '../controllers/receiptSlice.js';
+} from '../controllers/accountsInvoiceSlice.js';
+import { getPaymentIntent } from '../controllers/accountsPaymentSlice.js';
+import { getReceipt } from '../controllers/accountsReceiptSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';

@@ -64,9 +64,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/clientSlice.js */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/quoteSlice.js */ "./src/controllers/quoteSlice.js");
-/* harmony import */ var _controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/invoiceSlice.js */ "./src/controllers/invoiceSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
 /* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
 /* harmony import */ var _error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../error/ErrorComponent.jsx */ "./src/error/ErrorComponent.jsx");
 /* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
@@ -105,19 +105,19 @@ function QuoteComponent() {
   const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_2__.getClient)()).then(response => {
+      dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.getClient)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.getQuoteByID)(id, response.payload.stripe_customer_id)).then(response => {
+          dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.getQuoteByID)(id, response.payload.stripe_customer_id)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
               setMessage(response.error.message);
             } else {
-              dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeQuote)(response.payload.stripe_quote_id)).then(response => {
+              dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeQuote)(response.payload.stripe_quote_id)).then(response => {
                 if (response.error !== undefined) {
                   console.error(response.error.message);
                   setMessageType('error');
@@ -138,7 +138,7 @@ function QuoteComponent() {
   }, [status]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (quote_id && status === 'accepted') {
-      dispatch((0,_controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getInvoiceByQuoteID)(quote_id)).then(response => {
+      dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getInvoiceByQuoteID)(quote_id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -150,7 +150,7 @@ function QuoteComponent() {
   const handleCancel = () => {
     // pop up that gives the option to cancel or add to the selections
     if (stripe_quote_id && status === 'open') {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.cancelQuote)()).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.cancelQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -161,13 +161,13 @@ function QuoteComponent() {
   };
   const handleAccept = async () => {
     if (stripe_quote_id && status === 'open') {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.acceptQuote)()).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.acceptQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.saveInvoice)(response.payload.invoice)).then(response => {
+          dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.saveInvoice)(response.payload.invoice)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');

@@ -44,7 +44,7 @@ export const getPaymentIntent = createAsyncThunk('payment/getPaymentIntent', asy
 }
 );
 
-export const paymentSlice = createSlice({
+export const accountsPaymentSlice = createSlice({
   name: 'payment',
   initialState,
   reducers: {

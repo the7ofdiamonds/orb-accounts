@@ -64,11 +64,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/clientSlice.js */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/customerSlice.js */ "./src/controllers/customerSlice.js");
-/* harmony import */ var _controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/invoiceSlice.js */ "./src/controllers/invoiceSlice.js");
-/* harmony import */ var _controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/paymentSlice.js */ "./src/controllers/paymentSlice.js");
-/* harmony import */ var _controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/receiptSlice.js */ "./src/controllers/receiptSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
 /* harmony import */ var _utils_PhoneNumberFormatter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/PhoneNumberFormatter.js */ "./src/utils/PhoneNumberFormatter.js");
 /* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
 /* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
@@ -131,13 +131,13 @@ function ReceiptComponent() {
   const Balance = amount_remaining / 100;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_2__.getClient)()).then(response => {
+      dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.getClient)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeCustomer)(response.payload.stripe_customer_id)).then(response => {
+          dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__.getStripeCustomer)(response.payload.stripe_customer_id)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
@@ -150,13 +150,13 @@ function ReceiptComponent() {
   }, [dispatch, user_email]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getReceiptByID)(id)).then(response => {
+      dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getReceiptByID)(id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentMethod)(response.payload.payment_method_id)).then(response => {
+          dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentMethod)(response.payload.payment_method_id)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
@@ -169,7 +169,7 @@ function ReceiptComponent() {
   }, [dispatch, id, stripe_customer_id]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_invoice_id) {
-      dispatch((0,_controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(stripe_invoice_id)).then(response => {
+      dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(stripe_invoice_id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -180,7 +180,7 @@ function ReceiptComponent() {
   }, [dispatch, stripe_invoice_id]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_intent_id) {
-      dispatch((0,_controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)(payment_intent_id)).then(response => {
+      dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)(payment_intent_id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');

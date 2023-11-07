@@ -10022,17 +10022,17 @@ function App() {
 
 /***/ }),
 
-/***/ "./src/controllers/clientSlice.js":
-/*!****************************************!*\
-  !*** ./src/controllers/clientSlice.js ***!
-  \****************************************/
+/***/ "./src/controllers/accountsClientSlice.js":
+/*!************************************************!*\
+  !*** ./src/controllers/accountsClientSlice.js ***!
+  \************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsClientSlice: () => (/* binding */ accountsClientSlice),
 /* harmony export */   addClient: () => (/* binding */ addClient),
-/* harmony export */   clientSlice: () => (/* binding */ clientSlice),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   getClient: () => (/* binding */ getClient)
 /* harmony export */ });
@@ -10123,7 +10123,7 @@ const getClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
     throw error;
   }
 });
-const clientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+const accountsClientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'client',
   initialState,
   extraReducers: builder => {
@@ -10154,21 +10154,21 @@ const clientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice
     });
   }
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (clientSlice);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsClientSlice);
 
 /***/ }),
 
-/***/ "./src/controllers/customerSlice.js":
-/*!******************************************!*\
-  !*** ./src/controllers/customerSlice.js ***!
-  \******************************************/
+/***/ "./src/controllers/accountsCustomerSlice.js":
+/*!**************************************************!*\
+  !*** ./src/controllers/accountsCustomerSlice.js ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsCustomerSlice: () => (/* binding */ accountsCustomerSlice),
 /* harmony export */   addStripeCustomer: () => (/* binding */ addStripeCustomer),
-/* harmony export */   customerSlice: () => (/* binding */ customerSlice),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   getStripeCustomer: () => (/* binding */ getStripeCustomer),
 /* harmony export */   updateAddress: () => (/* binding */ updateAddress),
@@ -10184,10 +10184,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   updateTaxID: () => (/* binding */ updateTaxID),
 /* harmony export */   updateZipcode: () => (/* binding */ updateZipcode)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
 const initialState = {
   customerLoading: false,
@@ -10206,7 +10203,7 @@ const initialState = {
   country: '',
   stripe_customer_id: ''
 };
-const addStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('customer/addStripeCustomer', async (_, {
+const addStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/addStripeCustomer', async (_, {
   getState
 }) => {
   const {
@@ -10226,42 +10223,58 @@ const addStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.creat
     zipcode,
     country
   } = getState().customer;
-  const customer_data = {
-    client_id: client_id,
-    company_name: company_name,
-    tax_id: tax_id,
-    first_name: first_name,
-    last_name: last_name,
-    user_email: user_email,
-    phone: phone,
-    address_line_1: address_line_1,
-    address_line_2: address_line_2,
-    city: city,
-    state: state,
-    zipcode: zipcode,
-    country: country
-  };
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post('/wp-json/orb/v1/stripe/customers', customer_data);
-    return response.data;
+    const response = await fetch('/wp-json/orb/v1/stripe/customers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        client_id: client_id,
+        company_name: company_name,
+        tax_id: tax_id,
+        first_name: first_name,
+        last_name: last_name,
+        user_email: user_email,
+        phone: phone,
+        address_line_1: address_line_1,
+        address_line_2: address_line_2,
+        city: city,
+        state: state,
+        zipcode: zipcode,
+        country: country
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
     throw error;
   }
 });
-const getStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('customer/getStripeCustomer', async (stripeCustomerID, {
+const getStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/getStripeCustomer', async (stripeCustomerID, {
   getState
 }) => {
   const {
     stripe_customer_id
   } = getState().client;
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().get(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`);
+    const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 });
-const updateStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('customer/updateStripeCustomer', async (_, {
+const updateStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/updateStripeCustomer', async (_, {
   getState
 }) => {
   const {
@@ -10315,7 +10328,7 @@ const updateStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.cr
     throw error;
   }
 });
-const customerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
+const accountsCustomerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'customer',
   initialState,
   reducers: {
@@ -10419,20 +10432,21 @@ const {
   updateCity,
   updateState,
   updateZipcode
-} = customerSlice.actions;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (customerSlice);
+} = accountsCustomerSlice.actions;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsCustomerSlice);
 
 /***/ }),
 
-/***/ "./src/controllers/invoiceSlice.js":
-/*!*****************************************!*\
-  !*** ./src/controllers/invoiceSlice.js ***!
-  \*****************************************/
+/***/ "./src/controllers/accountsInvoiceSlice.js":
+/*!*************************************************!*\
+  !*** ./src/controllers/accountsInvoiceSlice.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsInvoiceSlice: () => (/* binding */ accountsInvoiceSlice),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   deleteInvoice: () => (/* binding */ deleteInvoice),
 /* harmony export */   finalizeInvoice: () => (/* binding */ finalizeInvoice),
@@ -10441,7 +10455,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getInvoiceByID: () => (/* binding */ getInvoiceByID),
 /* harmony export */   getInvoiceByQuoteID: () => (/* binding */ getInvoiceByQuoteID),
 /* harmony export */   getStripeInvoice: () => (/* binding */ getStripeInvoice),
-/* harmony export */   invoiceSlice: () => (/* binding */ invoiceSlice),
 /* harmony export */   pdfInvoice: () => (/* binding */ pdfInvoice),
 /* harmony export */   saveInvoice: () => (/* binding */ saveInvoice),
 /* harmony export */   updateInvoice: () => (/* binding */ updateInvoice),
@@ -10617,8 +10630,7 @@ const deleteInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsy
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.error(error);
-    throw error.message;
+    throw error;
   }
 });
 const updateInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/updateInvoice', async (_, {
@@ -10782,7 +10794,7 @@ const finalizeInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createA
     throw error;
   }
 });
-const invoiceSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+const accountsInvoiceSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'invoice',
   initialState,
   reducers: {
@@ -10930,21 +10942,21 @@ const invoiceSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlic
     });
   }
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (invoiceSlice);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsInvoiceSlice);
 
 /***/ }),
 
-/***/ "./src/controllers/paymentSlice.js":
-/*!*****************************************!*\
-  !*** ./src/controllers/paymentSlice.js ***!
-  \*****************************************/
+/***/ "./src/controllers/accountsPaymentSlice.js":
+/*!*************************************************!*\
+  !*** ./src/controllers/accountsPaymentSlice.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsPaymentSlice: () => (/* binding */ accountsPaymentSlice),
 /* harmony export */   getPaymentIntent: () => (/* binding */ getPaymentIntent),
-/* harmony export */   paymentSlice: () => (/* binding */ paymentSlice),
 /* harmony export */   updateClientSecret: () => (/* binding */ updateClientSecret)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
@@ -10990,7 +11002,7 @@ const getPaymentIntent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.create
     throw error;
   }
 });
-const paymentSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+const accountsPaymentSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'payment',
   initialState,
   reducers: {
@@ -11017,16 +11029,17 @@ const paymentSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlic
 
 /***/ }),
 
-/***/ "./src/controllers/quoteSlice.js":
-/*!***************************************!*\
-  !*** ./src/controllers/quoteSlice.js ***!
-  \***************************************/
+/***/ "./src/controllers/accountsQuoteSlice.js":
+/*!***********************************************!*\
+  !*** ./src/controllers/accountsQuoteSlice.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   acceptQuote: () => (/* binding */ acceptQuote),
+/* harmony export */   accountsQuoteSlice: () => (/* binding */ accountsQuoteSlice),
 /* harmony export */   addSelections: () => (/* binding */ addSelections),
 /* harmony export */   calculateSelections: () => (/* binding */ calculateSelections),
 /* harmony export */   cancelQuote: () => (/* binding */ cancelQuote),
@@ -11038,7 +11051,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getQuoteByID: () => (/* binding */ getQuoteByID),
 /* harmony export */   getStripeClientQuotes: () => (/* binding */ getStripeClientQuotes),
 /* harmony export */   getStripeQuote: () => (/* binding */ getStripeQuote),
-/* harmony export */   quoteSlice: () => (/* binding */ quoteSlice),
 /* harmony export */   updateQuote: () => (/* binding */ updateQuote),
 /* harmony export */   updateQuoteID: () => (/* binding */ updateQuoteID),
 /* harmony export */   updateQuoteStatus: () => (/* binding */ updateQuoteStatus),
@@ -11381,7 +11393,7 @@ const getStripeClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
     throw error;
   }
 });
-const quoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'quote',
   initialState,
   reducers: {
@@ -11551,26 +11563,26 @@ const quoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)
 const {
   addSelections,
   calculateSelections
-} = quoteSlice.actions;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (quoteSlice);
+} = accountsQuoteSlice.actions;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsQuoteSlice);
 
 /***/ }),
 
-/***/ "./src/controllers/receiptSlice.js":
-/*!*****************************************!*\
-  !*** ./src/controllers/receiptSlice.js ***!
-  \*****************************************/
+/***/ "./src/controllers/accountsReceiptSlice.js":
+/*!*************************************************!*\
+  !*** ./src/controllers/accountsReceiptSlice.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsReceiptSlice: () => (/* binding */ accountsReceiptSlice),
 /* harmony export */   getClientReceipts: () => (/* binding */ getClientReceipts),
 /* harmony export */   getPaymentMethod: () => (/* binding */ getPaymentMethod),
 /* harmony export */   getReceipt: () => (/* binding */ getReceipt),
 /* harmony export */   getReceiptByID: () => (/* binding */ getReceiptByID),
 /* harmony export */   postReceipt: () => (/* binding */ postReceipt),
-/* harmony export */   receiptSlice: () => (/* binding */ receiptSlice),
 /* harmony export */   updatePaymentMethod: () => (/* binding */ updatePaymentMethod),
 /* harmony export */   updateReceiptID: () => (/* binding */ updateReceiptID)
 /* harmony export */ });
@@ -11647,23 +11659,34 @@ const postReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsync
     balance,
     payment_method
   } = getState().receipt;
-  const payment = {
-    stripe_customer_id: stripe_customer_id,
-    invoice_id: invoice_id,
-    stripe_invoice_id: stripe_invoice_id,
-    payment_method_id: payment_method_id,
-    amount_paid: amount_paid,
-    payment_date: payment_date,
-    balance: balance,
-    payment_method: payment_method,
-    first_name: first_name,
-    last_name: last_name
-  };
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post('/wp-json/orb/v1/receipt', payment);
-    return response.data;
+    const response = await fetch('/wp-json/orb/v1/receipt', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        stripe_customer_id: stripe_customer_id,
+        invoice_id: invoice_id,
+        stripe_invoice_id: stripe_invoice_id,
+        payment_method_id: payment_method_id,
+        amount_paid: amount_paid,
+        payment_date: payment_date,
+        balance: balance,
+        payment_method: payment_method,
+        first_name: first_name,
+        last_name: last_name
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 });
 const getReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('receipt/getReceipt', async (_, {
@@ -11747,7 +11770,7 @@ const getClientReceipts = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.creat
     throw error.message;
   }
 });
-const receiptSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
+const accountsReceiptSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
   name: 'receipt',
   initialState,
   reducers: {
@@ -11842,15 +11865,16 @@ const receiptSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlic
 
 /***/ }),
 
-/***/ "./src/controllers/scheduleSlice.js":
-/*!******************************************!*\
-  !*** ./src/controllers/scheduleSlice.js ***!
-  \******************************************/
+/***/ "./src/controllers/accountsScheduleSlice.js":
+/*!**************************************************!*\
+  !*** ./src/controllers/accountsScheduleSlice.js ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsScheduleSlice: () => (/* binding */ accountsScheduleSlice),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   getAvailableTimes: () => (/* binding */ getAvailableTimes),
 /* harmony export */   getClientEvents: () => (/* binding */ getClientEvents),
@@ -11858,7 +11882,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getEvent: () => (/* binding */ getEvent),
 /* harmony export */   getOfficeHours: () => (/* binding */ getOfficeHours),
 /* harmony export */   saveEvent: () => (/* binding */ saveEvent),
-/* harmony export */   scheduleSlice: () => (/* binding */ scheduleSlice),
 /* harmony export */   sendInvites: () => (/* binding */ sendInvites),
 /* harmony export */   updateAttendees: () => (/* binding */ updateAttendees),
 /* harmony export */   updateCommunicationPreference: () => (/* binding */ updateCommunicationPreference),
@@ -11910,8 +11933,7 @@ const getOfficeHours = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAs
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
 const getAvailableTimes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('schedule/getAvailableTimes', async () => {
@@ -11930,8 +11952,7 @@ const getAvailableTimes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.creat
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
 const sendInvites = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('schedule/sendInvites', async (_, {
@@ -11972,8 +11993,7 @@ const sendInvites = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsync
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
 const saveEvent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('schedule/saveEvent', async (_, {
@@ -12014,8 +12034,7 @@ const saveEvent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncTh
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
 const getEvent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('schedule/getEvent', async (_, {
@@ -12039,8 +12058,7 @@ const getEvent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThu
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
 const getClientEvents = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('schedule/getClientEvents', async (_, {
@@ -12064,8 +12082,7 @@ const getClientEvents = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createA
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
 const getCommunicationPreferences = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('schedule/getCommunicationPreferences', async (_, {
@@ -12086,11 +12103,10 @@ const getCommunicationPreferences = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    console.log(error);
-    throw error.message;
+    throw error;
   }
 });
-const scheduleSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
+const accountsScheduleSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
   name: 'schedule',
   initialState,
   reducers: {
@@ -12207,28 +12223,25 @@ const {
   updateCommunicationPreference,
   updateAttendees,
   updateEvent
-} = scheduleSlice.actions;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (scheduleSlice);
+} = accountsScheduleSlice.actions;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsScheduleSlice);
 
 /***/ }),
 
-/***/ "./src/controllers/usersSlice.js":
-/*!***************************************!*\
-  !*** ./src/controllers/usersSlice.js ***!
-  \***************************************/
+/***/ "./src/controllers/accountsUsersSlice.js":
+/*!***********************************************!*\
+  !*** ./src/controllers/accountsUsersSlice.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsUsersSlice: () => (/* binding */ accountsUsersSlice),
 /* harmony export */   addClient: () => (/* binding */ addClient),
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   usersSlice: () => (/* binding */ usersSlice)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
 const initialState = {
   loading: false,
@@ -12240,15 +12253,29 @@ const initialState = {
   last_name: '',
   client_id: ''
 };
-const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createAsyncThunk)('users/addClient', async client_data => {
+const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('users/addClient', async client_data => {
   try {
-    const response = await axios__WEBPACK_IMPORTED_MODULE_0___default().post('/wp-json/orb/v1/clients', client_data);
-    return response.data;
+    const response = await fetch('/wp-json/orb/v1/clients', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        client_data: client_data
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 });
-const usersSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
+const accountsUsersSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'users',
   initialState,
   extraReducers: builder => {
@@ -12264,7 +12291,7 @@ const usersSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)
     });
   }
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (usersSlice);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsUsersSlice);
 
 /***/ }),
 
@@ -12280,14 +12307,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _controllers_usersSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/usersSlice.js */ "./src/controllers/usersSlice.js");
-/* harmony import */ var _controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/clientSlice.js */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/customerSlice.js */ "./src/controllers/customerSlice.js");
-/* harmony import */ var _controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/quoteSlice.js */ "./src/controllers/quoteSlice.js");
-/* harmony import */ var _controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/invoiceSlice.js */ "./src/controllers/invoiceSlice.js");
-/* harmony import */ var _controllers_scheduleSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/scheduleSlice.js */ "./src/controllers/scheduleSlice.js");
-/* harmony import */ var _controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/paymentSlice.js */ "./src/controllers/paymentSlice.js");
-/* harmony import */ var _controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/receiptSlice.js */ "./src/controllers/receiptSlice.js");
+/* harmony import */ var _controllers_accountsUsersSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/accountsUsersSlice.js */ "./src/controllers/accountsUsersSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
+/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsScheduleSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsScheduleSlice.js */ "./src/controllers/accountsScheduleSlice.js");
 
 
 
@@ -12299,14 +12326,14 @@ __webpack_require__.r(__webpack_exports__);
 
 const store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_8__.configureStore)({
   reducer: {
-    users: _controllers_usersSlice_js__WEBPACK_IMPORTED_MODULE_0__.usersSlice.reducer,
-    client: _controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_1__.clientSlice.reducer,
-    customer: _controllers_customerSlice_js__WEBPACK_IMPORTED_MODULE_2__.customerSlice.reducer,
-    quote: _controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.quoteSlice.reducer,
-    invoice: _controllers_invoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.invoiceSlice.reducer,
-    schedule: _controllers_scheduleSlice_js__WEBPACK_IMPORTED_MODULE_5__.scheduleSlice.reducer,
-    payment: _controllers_paymentSlice_js__WEBPACK_IMPORTED_MODULE_6__.paymentSlice.reducer,
-    receipt: _controllers_receiptSlice_js__WEBPACK_IMPORTED_MODULE_7__.receiptSlice.reducer
+    users: _controllers_accountsUsersSlice_js__WEBPACK_IMPORTED_MODULE_0__.accountsUsersSlice.reducer,
+    client: _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_1__.accountsClientSlice.reducer,
+    customer: _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_2__.accountsCustomerSlice.reducer,
+    quote: _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.accountsQuoteSlice.reducer,
+    invoice: _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.accountsInvoiceSlice.reducer,
+    payment: _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.accountsPaymentSlice.reducer,
+    receipt: _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.accountsReceiptSlice.reducer,
+    schedule: _controllers_accountsScheduleSlice_js__WEBPACK_IMPORTED_MODULE_7__.accountsScheduleSlice.reducer
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);

@@ -1,18 +1,18 @@
 "use strict";
 (globalThis["webpackChunkorb_accounts"] = globalThis["webpackChunkorb_accounts"] || []).push([["src_views_ClientSelections_jsx"],{
 
-/***/ "./src/controllers/servicesSlice.js":
-/*!******************************************!*\
-  !*** ./src/controllers/servicesSlice.js ***!
-  \******************************************/
+/***/ "./src/controllers/accountsServicesSlice.js":
+/*!**************************************************!*\
+  !*** ./src/controllers/accountsServicesSlice.js ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsServicesSlice: () => (/* binding */ accountsServicesSlice),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   fetchServices: () => (/* binding */ fetchServices),
-/* harmony export */   getAvailableServices: () => (/* binding */ getAvailableServices),
-/* harmony export */   servicesSlice: () => (/* binding */ servicesSlice)
+/* harmony export */   getAvailableServices: () => (/* binding */ getAvailableServices)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
@@ -60,7 +60,7 @@ const getAvailableServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
     throw error;
   }
 });
-const servicesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+const accountsServicesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'services',
   initialState,
   extraReducers: builder => {
@@ -86,7 +86,7 @@ const servicesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSli
     });
   }
 });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (servicesSlice);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsServicesSlice);
 
 /***/ }),
 
@@ -125,9 +125,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_servicesSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/servicesSlice.js */ "./src/controllers/servicesSlice.js");
-/* harmony import */ var _controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/clientSlice.js */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/quoteSlice.js */ "./src/controllers/quoteSlice.js");
+/* harmony import */ var _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsServicesSlice.js */ "./src/controllers/accountsServicesSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
 /* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
 /* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
 
@@ -163,7 +163,7 @@ function SelectionsComponent() {
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.quote);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice_js__WEBPACK_IMPORTED_MODULE_3__.getClient)()).then(response => {
+      dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_3__.getClient)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -174,7 +174,7 @@ function SelectionsComponent() {
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getClientQuotes)()).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getClientQuotes)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -201,7 +201,7 @@ function SelectionsComponent() {
         const earliestDate = Math.min(...filteredQuotes);
         quotes.forEach(quote => {
           if (new Date(quote.created_at).getTime() === earliestDate) {
-            dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)(quote.stripe_quote_id)).then(response => {
+            dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)(quote.stripe_quote_id)).then(response => {
               if (response.error !== undefined) {
                 console.error(response.error.message);
                 setMessageType('error');
@@ -215,7 +215,7 @@ function SelectionsComponent() {
   }, [quotes, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_quote_id) {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)()).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -226,7 +226,7 @@ function SelectionsComponent() {
   }, [stripe_quote_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_servicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.fetchServices)()).then(response => {
+      dispatch((0,_controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.fetchServices)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -236,10 +236,10 @@ function SelectionsComponent() {
     }
   }, [stripe_customer_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.addSelections)(checkedItems));
+    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.addSelections)(checkedItems));
   }, [dispatch, checkedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.calculateSelections)(services.cost));
+    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.calculateSelections)(services.cost));
   }, [dispatch, services.cost, checkedItems]);
   const handleCheckboxChange = (event, id, price_id, description, cost) => {
     const isChecked = event.target.checked;
@@ -261,7 +261,7 @@ function SelectionsComponent() {
     if (selections.length === 0) {
       setMessageType('error');
     } else if (stripe_quote_id && status === 'canceled' && selections.length > 0 || stripe_quote_id === '' && status === '' && selections.length > 0 && stripe_customer_id) {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.createQuote)(selections)).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.createQuote)(selections)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -269,7 +269,7 @@ function SelectionsComponent() {
         }
       });
     } else if (stripe_quote_id && status === 'draft' && selections.length > 0) {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.updateStripeQuote)()).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.updateStripeQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -277,7 +277,7 @@ function SelectionsComponent() {
         }
       });
     } else if (stripe_quote_id && status === 'draft') {
-      dispatch((0,_controllers_quoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.finalizeQuote)()).then(response => {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.finalizeQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');

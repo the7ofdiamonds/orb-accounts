@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getClient } from '../controllers/clientSlice.js';
+import { getClient } from '../controllers/accountsClientSlice.js';
 import {
   cancelQuote,
   acceptQuote,
   getStripeQuote,
   getQuoteByID,
-} from '../controllers/quoteSlice.js';
+} from '../controllers/accountsQuoteSlice.js';
 import {
   getInvoiceByQuoteID,
   saveInvoice,
-} from '../controllers/invoiceSlice.js';
+} from '../controllers/accountsInvoiceSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';

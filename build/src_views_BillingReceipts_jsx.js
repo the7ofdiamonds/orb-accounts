@@ -14,8 +14,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/clientSlice */ "./src/controllers/clientSlice.js");
-/* harmony import */ var _controllers_receiptSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/receiptSlice */ "./src/controllers/receiptSlice.js");
+/* harmony import */ var _controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice */ "./src/controllers/accountsClientSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice */ "./src/controllers/accountsReceiptSlice.js");
 
 
 
@@ -34,12 +34,12 @@ function BillingReceipts() {
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.receipt);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_clientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)());
+      dispatch((0,_controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)());
     }
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_receiptSlice__WEBPACK_IMPORTED_MODULE_3__.getClientReceipts)());
+      dispatch((0,_controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_3__.getClientReceipts)());
     }
   }, [stripe_customer_id, dispatch]);
   if (receiptError) {
