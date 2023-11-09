@@ -19,21 +19,21 @@ class Invoice
         $this->database_invoice = new DatabaseInvoice();
         $this->stripe_invoice = new StripeInvoice($stripeClient);
 
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/stripe/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'create_stripe_invoice'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
+        // add_action('rest_api_init', function () {
+        //     register_rest_route('orb/v1', '/stripe/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
+        //         'methods' => 'POST',
+        //         'callback' => [$this, 'create_stripe_invoice'],
+        //         'permission_callback' => '__return_true',
+        //     ]);
+        // });
 
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'save_invoice'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
+        // add_action('rest_api_init', function () {
+        //     register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
+        //         'methods' => 'POST',
+        //         'callback' => [$this, 'save_invoice'],
+        //         'permission_callback' => '__return_true',
+        //     ]);
+        // });
 
         add_action('rest_api_init', function () {
             register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
@@ -43,21 +43,21 @@ class Invoice
             ]);
         });
 
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)/id', [
-                'methods' => 'POST',
-                'callback' => [$this, 'get_invoice_by_id'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
+        // add_action('rest_api_init', function () {
+        //     register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)/id', [
+        //         'methods' => 'POST',
+        //         'callback' => [$this, 'get_invoice_by_id'],
+        //         'permission_callback' => '__return_true',
+        //     ]);
+        // });
 
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)/quoteid', [
-                'methods' => 'POST',
-                'callback' => [$this, 'get_invoice_by_quote_id'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
+        // add_action('rest_api_init', function () {
+        //     register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)/quoteid', [
+        //         'methods' => 'POST',
+        //         'callback' => [$this, 'get_invoice_by_quote_id'],
+        //         'permission_callback' => '__return_true',
+        //     ]);
+        // });
 
         add_action('rest_api_init', function () {
             register_rest_route('orb/v1', '/stripe/invoices/(?P<slug>[a-zA-Z0-9-_]+)', [
@@ -164,9 +164,9 @@ class Invoice
         try {
             $stripe_invoice_id = $request->get_param('slug');
             $stripe_customer_id = $request['stripe_customer_id'];
-error_log($stripe_invoice_id);
-            $invoice = $this->database_invoice->getInvoice($stripe_invoice_id,  $stripe_customer_id);
 
+            $invoice = $this->database_invoice->getInvoice($stripe_invoice_id,  $stripe_customer_id);
+            error_log('get_invoice');
             return rest_ensure_response($invoice);
         } catch (Exception $e) {
 

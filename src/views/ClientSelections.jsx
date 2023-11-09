@@ -65,7 +65,7 @@ function SelectionsComponent() {
   }, [stripe_customer_id, dispatch]);
 
   useEffect(() => {
-    if (quotes) {
+    if (Array.isArray(quotes) && quotes.length > 0) {
       const filteredQuotes = [];
 
       quotes.forEach((quote) => {
@@ -132,15 +132,15 @@ function SelectionsComponent() {
   }, [dispatch, checkedItems]);
 
   useEffect(() => {
-    dispatch(calculateSelections(services.cost));
-  }, [dispatch, services.cost, checkedItems]);
+    dispatch(calculateSelections(services.price));
+  }, [dispatch, services.price, checkedItems]);
 
-  const handleCheckboxChange = (event, id, price_id, description, cost) => {
+  const handleCheckboxChange = (event, id, price_id, description, price, onboarding_link) => {
     const isChecked = event.target.checked;
 
     setCheckedItems((prevItems) => {
       if (isChecked) {
-        const newItem = { id, price_id, description, cost };
+        const newItem = { id, price_id, description, price, onboarding_link };
         return [...prevItems, newItem];
       } else {
         return prevItems.filter((item) => item.id !== id);
@@ -211,17 +211,17 @@ function SelectionsComponent() {
               {services && services.length ? (
                 <React.Fragment>
                   {services.map((service) => {
-                    const { id, price_id, description, cost } = service;
+                    const { id, price_id, description, price, onboarding_link } = service;
 
                     return (
-                      <tr key={price_id} id="quote_option">
+                      <tr key={id} id="quote_option">
                         <td>
                           <input
                             className="input selection feature-selection"
                             type="checkbox"
                             name="quote[checkbox][]"
                             checked={checkedItems.some(
-                              (item) => item.price_id === price_id
+                              (item) => item.id === id
                             )}
                             onChange={(event) =>
                               handleCheckboxChange(
@@ -229,7 +229,8 @@ function SelectionsComponent() {
                                 id,
                                 price_id,
                                 description,
-                                cost
+                                price,
+                                onboarding_link
                               )
                             }
                           />
@@ -241,7 +242,7 @@ function SelectionsComponent() {
                           {new Intl.NumberFormat('us', {
                             style: 'currency',
                             currency: 'USD',
-                          }).format(cost)}
+                          }).format(price)}
                         </td>
                       </tr>
                     );
@@ -275,7 +276,7 @@ function SelectionsComponent() {
 
         <StatusBar message={message} messageType={messageType} />
 
-        {quote_id && (status === 'open' || status === 'accepted') ? (
+        {Array.isArray(selections) && selections.length > 0 ? (
           <button onClick={handleClick}>
             <h3>QUOTE</h3>
           </button>

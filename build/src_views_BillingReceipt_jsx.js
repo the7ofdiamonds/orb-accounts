@@ -62,16 +62,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
 /* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
-/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
-/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
-/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
-/* harmony import */ var _utils_PhoneNumberFormatter_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/PhoneNumberFormatter.js */ "./src/utils/PhoneNumberFormatter.js");
-/* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
-/* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
+/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _utils_PhoneNumberFormatter_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/PhoneNumberFormatter.js */ "./src/utils/PhoneNumberFormatter.js");
+/* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
+/* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
+
 
 
 
@@ -87,7 +89,7 @@ __webpack_require__.r(__webpack_exports__);
 function ReceiptComponent() {
   const {
     id
-  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useParams)();
+  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useParams)();
   const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   const [messageType, setMessageType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('info');
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
@@ -105,14 +107,17 @@ function ReceiptComponent() {
     phone
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.customer);
   const {
-    selections,
+    selections
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.quote);
+  const {
     subtotal,
     tax,
     amount_due,
     amount_paid,
     amount_remaining,
     payment_date,
-    payment_intent_id
+    payment_intent_id,
+    quote_id
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.invoice);
   const {
     loading,
@@ -121,9 +126,10 @@ function ReceiptComponent() {
     first_name,
     last_name
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.receipt);
+  console.log(selections);
   const timestamp = payment_date * 1000;
   const paymentDate = new Date(timestamp);
-  const formattedPhone = (0,_utils_PhoneNumberFormatter_js__WEBPACK_IMPORTED_MODULE_7__["default"])(phone);
+  const formattedPhone = (0,_utils_PhoneNumberFormatter_js__WEBPACK_IMPORTED_MODULE_8__["default"])(phone);
   const Subtotal = subtotal / 100;
   const Tax = tax / 100;
   const amountDue = amount_due / 100;
@@ -150,13 +156,13 @@ function ReceiptComponent() {
   }, [dispatch, user_email]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getReceiptByID)(id)).then(response => {
+      dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__.getReceiptByID)(id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentMethod)(response.payload.payment_method_id)).then(response => {
+          dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__.getPaymentMethod)(response.payload.payment_method_id)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
@@ -169,18 +175,30 @@ function ReceiptComponent() {
   }, [dispatch, id, stripe_customer_id]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_invoice_id) {
-      dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(stripe_invoice_id)).then(response => {
+      dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_5__.getStripeInvoice)(stripe_invoice_id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
+        } else {
+          console.log(response);
         }
       });
     }
   }, [dispatch, stripe_invoice_id]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (stripe_invoice_id) {
+      dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_5__.getInvoice)(stripe_invoice_id));
+    }
+  }, [dispatch, stripe_invoice_id]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (quote_id) {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuoteByID)(quote_id));
+    }
+  }, [dispatch, quote_id]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_intent_id) {
-      dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)(payment_intent_id)).then(response => {
+      dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentIntent)(payment_intent_id)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -196,7 +214,7 @@ function ReceiptComponent() {
     window.location = '/billing';
   };
   if (loading) {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_8__["default"], null);
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_9__["default"], null);
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
     className: "receipt"
@@ -306,7 +324,7 @@ function ReceiptComponent() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, new Intl.NumberFormat('us', {
     style: 'currency',
     currency: 'USD'
-  }).format(Balance)))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }).format(Balance)))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_10__["default"], {
     message: message,
     messageType: messageType
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

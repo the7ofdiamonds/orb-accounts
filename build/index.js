@@ -10556,6 +10556,7 @@ const getInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
       const errorMessage = errorData.message;
       throw new Error(errorMessage);
     }
+    console.log(response);
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -10820,10 +10821,10 @@ const accountsInvoiceSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
       state.invoiceError = action.error.message;
     }).addCase(getInvoice.pending, state => {
       state.invoiceLoading = true;
-      state.invoiceError = '';
+      state.invoiceError = null;
     }).addCase(getInvoice.fulfilled, (state, action) => {
       state.invoiceLoading = false;
-      state.invoiceError = null;
+      state.invoiceError = '';
       state.invoice_id = action.payload.id;
       state.status = action.payload.status;
       state.stripe_customer_id = action.payload.stripe_customer_id;
@@ -11093,6 +11094,7 @@ const createQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
   const {
     selections
   } = getState().quote;
+  console.log(selections);
   try {
     const response = await fetch('/wp-json/orb/v1/quote', {
       method: 'POST',
@@ -11409,7 +11411,7 @@ const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.crea
     calculateSelections: state => {
       let total = 0.00;
       state.selections.forEach(item => {
-        const serviceCost = parseFloat(item.cost);
+        const serviceCost = parseFloat(item.price);
         if (isNaN(serviceCost)) {
           total += 0;
         } else {

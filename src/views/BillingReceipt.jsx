@@ -4,7 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getClient } from '../controllers/accountsClientSlice.js';
 import { getStripeCustomer } from '../controllers/accountsCustomerSlice.js';
-import { getStripeInvoice } from '../controllers/accountsInvoiceSlice.js';
+import { getQuoteByID } from '../controllers/accountsQuoteSlice.js';
+import {
+  getInvoice,
+  getStripeInvoice,
+} from '../controllers/accountsInvoiceSlice.js';
 import { getPaymentIntent } from '../controllers/accountsPaymentSlice.js';
 import {
   getPaymentMethod,
@@ -35,8 +39,9 @@ function ReceiptComponent() {
     zipcode,
     phone,
   } = useSelector((state) => state.customer);
+
+  const { selections } = useSelector((state) => state.quote);
   const {
-    selections,
     subtotal,
     tax,
     amount_due,
@@ -44,9 +49,11 @@ function ReceiptComponent() {
     amount_remaining,
     payment_date,
     payment_intent_id,
+    quote_id,
   } = useSelector((state) => state.invoice);
   const { loading, stripe_invoice_id, payment_method, first_name, last_name } =
     useSelector((state) => state.receipt);
+  console.log(selections);
 
   const timestamp = payment_date * 1000;
   const paymentDate = new Date(timestamp);
@@ -108,10 +115,24 @@ function ReceiptComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
+        } else {
+          console.log(response);
         }
       });
     }
   }, [dispatch, stripe_invoice_id]);
+
+  useEffect(() => {
+    if (stripe_invoice_id) {
+      dispatch(getInvoice(stripe_invoice_id));
+    }
+  }, [dispatch, stripe_invoice_id]);
+
+  useEffect(() => {
+    if (quote_id) {
+      dispatch(getQuoteByID(quote_id));
+    }
+  }, [dispatch, quote_id]);
 
   useEffect(() => {
     if (payment_intent_id) {

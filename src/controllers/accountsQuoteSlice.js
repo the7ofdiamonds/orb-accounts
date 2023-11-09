@@ -25,7 +25,7 @@ export const updateQuoteID = (stripe_quote_id) => {
 export const createQuote = createAsyncThunk('quote/createQuote', async (_, { getState }) => {
   const { stripe_customer_id } = getState().client;
   const { selections } = getState().quote;
-
+  console.log(selections);
   try {
     const response = await fetch('/wp-json/orb/v1/quote', {
       method: 'POST',
@@ -340,7 +340,7 @@ export const accountsQuoteSlice = createSlice({
       let total = 0.00;
 
       state.selections.forEach((item) => {
-        const serviceCost = parseFloat(item.cost);
+        const serviceCost = parseFloat(item.price);
 
         if (isNaN(serviceCost)) {
           total += 0;

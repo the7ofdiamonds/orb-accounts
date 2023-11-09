@@ -84,7 +84,7 @@ export const getInvoice = createAsyncThunk('invoice/getInvoice', async (stripeIn
       const errorMessage = errorData.message;
       throw new Error(errorMessage);
     }
-
+    console.log(response);
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -353,11 +353,11 @@ export const accountsInvoiceSlice = createSlice({
       })
       .addCase(getInvoice.pending, (state) => {
         state.invoiceLoading = true;
-        state.invoiceError = '';
+        state.invoiceError = null;
       })
       .addCase(getInvoice.fulfilled, (state, action) => {
         state.invoiceLoading = false
-        state.invoiceError = null;
+        state.invoiceError = '';
         state.invoice_id = action.payload.id
         state.status = action.payload.status;
         state.stripe_customer_id = action.payload.stripe_customer_id;

@@ -2,6 +2,7 @@
 
 namespace ORB\Accounts\API\Stripe;
 
+use Exception;
 use ORB\Accounts\Admin\AdminStripe;
 
 use Stripe\Exception\ApiErrorException;
@@ -47,12 +48,16 @@ class StripeQuote
 
             $line_items = [];
 
-            foreach ($selections as $selection) {
-                $price_id = $selection['price_id'];
+            if (isset($selection['price_id'])) {
+                foreach ($selections as $selection) {
+                    $price_id = $selection['price_id'];
 
-                $line_items[] = [
-                    'price' => $price_id
-                ];
+                    $line_items[] = [
+                        'price' => $price_id
+                    ];
+                }
+            } else {
+                throw new Exception('Price ID is required.', 404);
             }
 
             $stripe_quote = $this->stripeClient->quotes->create([
@@ -73,13 +78,13 @@ class StripeQuote
         } catch (ApiErrorException $e) {
             $error_message = $e->getMessage();
             $status_code = $e->getHttpStatus();
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
+            $response = $error_message . ' ' . $status_code;
 
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
+            return $response;
+        } catch (Exception $e) {
+            $error_message = $e->getMessage();
+            $status_code = $e->getCode();
+            $response = $error_message . ' ' . $status_code;
 
             return $response;
         }

@@ -147,23 +147,31 @@ class DatabaseQuote
 
     public function getClientQuotes($stripe_customer_id)
     {
-        if (empty($stripe_customer_id)) {
-            $msg = 'Invalid Stripe Customer ID is required.';
-            throw new Exception($msg);
-        }
+        try {
+            if (empty($stripe_customer_id)) {
+                $msg = 'Invalid Stripe Customer ID is required.';
+                throw new Exception($msg);
+            }
 
-        $quotes = $this->wpdb->get_results(
-            $this->wpdb->prepare(
-                "SELECT * FROM $this->table_name WHERE stripe_customer_id = %d",
-                $stripe_customer_id
-            )
-        );
+            $quotes = $this->wpdb->get_results(
+                $this->wpdb->prepare(
+                    "SELECT * FROM $this->table_name WHERE stripe_customer_id = %s",
+                    $stripe_customer_id
+                )
+            );
 
-        if ($quotes) {
-            return $quotes;
-        } else {
-            $msg = 'There are no quotes to display.';
-            throw new Exception($msg);
+            if ($quotes) {
+                return $quotes;
+            } else {
+                $msg = 'There are no quotes to display.';
+                throw new Exception($msg);
+            }
+        } catch (Exception $e) {
+            $error_message = $e->getMessage();
+            $status_code = $e->getCode();
+            $response = $error_message . ' ' . $status_code;
+
+            return $response;
         }
     }
 

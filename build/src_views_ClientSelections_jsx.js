@@ -95,7 +95,7 @@ function SelectionsComponent() {
     }
   }, [stripe_customer_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (quotes) {
+    if (Array.isArray(quotes) && quotes.length > 0) {
       const filteredQuotes = [];
       quotes.forEach(quote => {
         const timestampNow = Math.floor(Date.now() / 1000);
@@ -150,9 +150,9 @@ function SelectionsComponent() {
     dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.addSelections)(checkedItems));
   }, [dispatch, checkedItems]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.calculateSelections)(services.cost));
-  }, [dispatch, services.cost, checkedItems]);
-  const handleCheckboxChange = (event, id, price_id, description, cost) => {
+    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.calculateSelections)(services.price));
+  }, [dispatch, services.price, checkedItems]);
+  const handleCheckboxChange = (event, id, price_id, description, price, onboarding_link) => {
     const isChecked = event.target.checked;
     setCheckedItems(prevItems => {
       if (isChecked) {
@@ -160,7 +160,8 @@ function SelectionsComponent() {
           id,
           price_id,
           description,
-          cost
+          price,
+          onboarding_link
         };
         return [...prevItems, newItem];
       } else {
@@ -217,17 +218,18 @@ function SelectionsComponent() {
       id,
       price_id,
       description,
-      cost
+      price,
+      onboarding_link
     } = service;
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
-      key: price_id,
+      key: id,
       id: "quote_option"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
       className: "input selection feature-selection",
       type: "checkbox",
       name: "quote[checkbox][]",
-      checked: checkedItems.some(item => item.price_id === price_id),
-      onChange: event => handleCheckboxChange(event, id, price_id, description, cost)
+      checked: checkedItems.some(item => item.id === id),
+      onChange: event => handleCheckboxChange(event, id, price_id, description, price, onboarding_link)
     })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: "feature-description"
     }, description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
@@ -236,7 +238,7 @@ function SelectionsComponent() {
     }, new Intl.NumberFormat('us', {
       style: 'currency',
       currency: 'USD'
-    }).format(cost)));
+    }).format(price)));
   })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     colSpan: 3
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "No features to show yet")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
@@ -251,7 +253,7 @@ function SelectionsComponent() {
   }).format(total))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_6__["default"], {
     message: message,
     messageType: messageType
-  }), quote_id && (status === 'open' || status === 'accepted') ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }), Array.isArray(selections) && selections.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: handleClick
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "QUOTE")) : ''));
 }

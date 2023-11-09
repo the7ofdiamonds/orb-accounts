@@ -21,7 +21,6 @@ class DatabaseInvoice
     public function saveInvoice($stripe_invoice, $quote_id)
     {
         try {
-            error_log(print_r($stripe_invoice, true));
             if (is_object($stripe_invoice)) {
                 $subtotal = intval($stripe_invoice->subtotal) / 100;
                 $tax = intval($stripe_invoice->tax) / 100;
@@ -159,7 +158,7 @@ class DatabaseInvoice
     public function getInvoiceByQuoteID($quote_id, $stripe_customer_id)
     {
         if (empty($quote_id)) {
-            $msg = 'No Invoice ID was provided.';
+            $msg = 'No Quote ID was provided.';
             throw new Exception($msg, 400);
         }
 
