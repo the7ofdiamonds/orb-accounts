@@ -24,7 +24,7 @@ class Database
 
     function createTables()
     {
-        $this->create_services_table();
+        // $this->create_services_table();
         $this->create_client_table();
         $this->create_customer_table();
         $this->create_quote_table();
