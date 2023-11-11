@@ -342,9 +342,7 @@ class Invoice
         try {
             $stripe_customer_id = $request->get_param('slug');
 
-            $invoices = $this->database_invoice->getClientInvoices($stripe_customer_id);
-
-            return rest_ensure_response($invoices);
+            return rest_ensure_response($this->database_invoice->getClientInvoices($stripe_customer_id));
         } catch (Exception $e) {
 
             $error_message = $e->getMessage();

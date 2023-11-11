@@ -125,7 +125,7 @@ class DatabaseQuote
             return $data;
         } else {
             $msg = 'Quote with the ID' . $id . 'not found';
-            throw new Exception($msg);
+            throw new Exception($msg, 404);
         }
     }
 
@@ -141,37 +141,33 @@ class DatabaseQuote
             return $quotes;
         } else {
             $msg = 'There are no quotes to display.';
-            throw new Exception($msg);
+            throw new Exception($msg, 404);
         }
     }
 
     public function getClientQuotes($stripe_customer_id)
     {
-        try {
-            if (empty($stripe_customer_id)) {
-                $msg = 'Invalid Stripe Customer ID is required.';
-                throw new Exception($msg);
-            }
+        if (empty($stripe_customer_id)) {
+            $msg = 'Stripe Customer ID is required.';
+            $code = 400;
 
-            $quotes = $this->wpdb->get_results(
-                $this->wpdb->prepare(
-                    "SELECT * FROM $this->table_name WHERE stripe_customer_id = %s",
-                    $stripe_customer_id
-                )
-            );
+            throw new Exception($msg, $code);
+        }
 
-            if ($quotes) {
-                return $quotes;
-            } else {
-                $msg = 'There are no quotes to display.';
-                throw new Exception($msg);
-            }
-        } catch (Exception $e) {
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-            $response = $error_message . ' ' . $status_code;
+        $quotes = $this->wpdb->get_results(
+            $this->wpdb->prepare(
+                "SELECT * FROM $this->table_name WHERE stripe_customer_id = %s",
+                $stripe_customer_id
+            )
+        );
 
-            return $response;
+        if ($quotes) {
+            return $quotes;
+        } else {
+            $msg = 'There are no quotes to display.';
+            $code = 404;
+
+            throw new Exception($msg, $code);
         }
     }
 

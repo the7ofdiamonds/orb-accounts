@@ -214,7 +214,9 @@ class DatabaseInvoice
     {
         if (empty($stripe_customer_id)) {
             $msg = 'Stripe Customer ID is required';
-            throw new Exception($msg, 400);
+            $code = 400;
+
+            throw new Exception($msg, $code);
         }
 
         $invoices = $this->wpdb->get_results(
@@ -228,7 +230,9 @@ class DatabaseInvoice
             return $invoices;
         } else {
             $msg = 'There are no invoices to display.';
-            throw new Exception($msg, 404);
+            $code = 404;
+
+            throw new Exception($msg, $code);
         }
     }
 

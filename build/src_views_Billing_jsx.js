@@ -136,7 +136,7 @@ function BillingQuotes() {
     stripe_customer_id
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.client);
   const {
-    loading,
+    quoteLoading,
     quoteError,
     quotes,
     pdf
@@ -151,13 +151,14 @@ function BillingQuotes() {
       dispatch((0,_controllers_accountsQuoteSlice__WEBPACK_IMPORTED_MODULE_3__.getClientQuotes)());
     }
   }, [stripe_customer_id, dispatch]);
+  console.log(quoteError);
+  if (quoteLoading) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "Loading...");
+  }
   if (quoteError) {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
       className: "status-bar card error"
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, quoteError))));
-  }
-  if (loading) {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, "Loading...");
   }
   const now = new Date().getTime();
   let sortedQuotes = [];

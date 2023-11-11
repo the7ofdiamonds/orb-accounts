@@ -10,7 +10,7 @@ function BillingQuotes() {
   const { user_email, stripe_customer_id } = useSelector(
     (state) => state.client
   );
-  const { loading, quoteError, quotes, pdf } = useSelector(
+  const { quoteLoading, quoteError, quotes, pdf } = useSelector(
     (state) => state.quote
   );
 
@@ -25,6 +25,11 @@ function BillingQuotes() {
       dispatch(getClientQuotes());
     }
   }, [stripe_customer_id, dispatch]);
+  console.log(quoteError);
+
+  if (quoteLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (quoteError) {
     return (
@@ -36,10 +41,6 @@ function BillingQuotes() {
         </div>
       </>
     );
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
   }
 
   const now = new Date().getTime();

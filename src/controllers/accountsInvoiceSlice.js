@@ -476,12 +476,12 @@ export const accountsInvoiceSlice = createSlice({
       })
       .addCase(getClientInvoices.pending, (state) => {
         state.invoiceLoading = true;
-        state.invoiceError = '';
+        state.invoiceError = null;
       })
       .addCase(getClientInvoices.fulfilled, (state, action) => {
         state.invoiceLoading = false;
+        state.invoiceError = '';
         state.invoices = action.payload;
-        state.invoiceError = null;
       })
       .addCase(getClientInvoices.rejected, (state, action) => {
         state.invoiceLoading = false;

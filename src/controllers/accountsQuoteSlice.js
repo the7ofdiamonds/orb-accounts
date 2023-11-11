@@ -297,7 +297,6 @@ export const getClientQuotes = createAsyncThunk('quote/getClientQuotes', async (
       const errorMessage = errorData.message;
       throw new Error(errorMessage);
     }
-
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -462,11 +461,11 @@ export const accountsQuoteSlice = createSlice({
       })
       .addCase(getClientQuotes.pending, (state) => {
         state.quoteLoading = true;
-        state.quoteError = '';
+        state.quoteError = null;
       })
       .addCase(getClientQuotes.fulfilled, (state, action) => {
         state.quoteLoading = false;
-        state.quoteError = null;
+        state.quoteError = '';
         state.quotes = action.payload;
       })
       .addCase(getClientQuotes.rejected, (state, action) => {
