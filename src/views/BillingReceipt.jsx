@@ -18,6 +18,7 @@ import {
 import formatPhoneNumber from '../utils/PhoneNumberFormatter.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
+import ErrorComponent from '../error/ErrorComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';
 
 function ReceiptComponent() {
@@ -28,7 +29,7 @@ function ReceiptComponent() {
   const [message, setMessage] = useState('');
 
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
   const {
     company_name,
@@ -38,9 +39,8 @@ function ReceiptComponent() {
     state,
     zipcode,
     phone,
-  } = useSelector((state) => state.customer);
-
-  const { selections } = useSelector((state) => state.quote);
+  } = useSelector((state) => state.accountsCustomer);
+  const { selections } = useSelector((state) => state.accountsQuote);
   const {
     subtotal,
     tax,
@@ -50,10 +50,9 @@ function ReceiptComponent() {
     payment_date,
     payment_intent_id,
     quote_id,
-  } = useSelector((state) => state.invoice);
-  const { loading, stripe_invoice_id, payment_method, first_name, last_name } =
-    useSelector((state) => state.receipt);
-  console.log(selections);
+  } = useSelector((state) => state.accountsInvoice);
+  const { receiptLoading, receiptError, stripe_invoice_id, payment_method, first_name, last_name } =
+    useSelector((state) => state.accountsReceipt);
 
   const timestamp = payment_date * 1000;
   const paymentDate = new Date(timestamp);
@@ -154,8 +153,12 @@ function ReceiptComponent() {
     window.location = '/billing';
   };
 
-  if (loading) {
+  if (receiptLoading) {
     return <LoadingComponent />;
+  }
+
+  if (receiptError) {
+    return <ErrorComponent error={receiptError} />;
   }
 
   return (

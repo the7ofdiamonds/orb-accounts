@@ -84,9 +84,9 @@ class JS
                 $full_url = array_values($full_url);
                 $full_path = array_values($full_path);
 
-                $differences = array_diff($full_url, $full_path);
+                // $differences = array_diff_assoc($full_url, $full_path);
 
-                if (empty($differences)) {
+                if ($full_url === $full_path) {
 
                     $fileName = str_replace(' ', '', ucwords(str_replace('/', ' ', $page)));
 
@@ -102,6 +102,8 @@ class JS
                     }
 
                     wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
+
+                    break;
                 }
             }
         } else {

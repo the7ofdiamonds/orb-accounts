@@ -11,15 +11,15 @@ import { accountsScheduleSlice } from '../controllers/accountsScheduleSlice.js';
 
 const store = configureStore({
   reducer: {
-    users: accountsUsersSlice.reducer,
-    client: accountsClientSlice.reducer,
-    customer: accountsCustomerSlice.reducer,
-    services: accountsServicesSlice.reducer,
-    quote: accountsQuoteSlice.reducer,
-    invoice: accountsInvoiceSlice.reducer,
-    payment: accountsPaymentSlice.reducer,
-    receipt: accountsReceiptSlice.reducer,
-    schedule: accountsScheduleSlice.reducer,
+    accountsUsers: accountsUsersSlice.reducer,
+    accountsClient: accountsClientSlice.reducer,
+    accountsCustomer: accountsCustomerSlice.reducer,
+    accountsServices: accountsServicesSlice.reducer,
+    accountsQuote: accountsQuoteSlice.reducer,
+    accountsInvoice: accountsInvoiceSlice.reducer,
+    accountsPayment: accountsPaymentSlice.reducer,
+    accountsReceipt: accountsReceiptSlice.reducer,
+    accountsSchedule: accountsScheduleSlice.reducer,
   },
 });
 

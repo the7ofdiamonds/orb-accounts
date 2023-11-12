@@ -1,8 +1,7 @@
-import axios from 'axios';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
-  loading: false,
+  receiptLoading: false,
   receiptError: '',
   receipts: [],
   receipt_id: '',
@@ -90,7 +89,7 @@ export const postReceipt = createAsyncThunk('receipt/postReceipt', async (_, { g
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    throw error;
+    throw error.message;
   }
 }
 );
@@ -119,7 +118,7 @@ export const getReceipt = createAsyncThunk('receipt/getReceipt', async (_, { get
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    throw error;
+    throw error.message;
   }
 });
 
@@ -146,12 +145,12 @@ export const getReceiptByID = createAsyncThunk('receipt/getReceiptByID', async (
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    throw error;
+    throw error.message;
   }
 });
 
 export const getClientReceipts = createAsyncThunk('receipt/getClientReceipts', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().client;
+  const { stripe_customer_id } = getState().accountsClient;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/receipts/client/${stripe_customer_id}`, {
@@ -187,13 +186,9 @@ export const accountsReceiptSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getPaymentMethod.pending, (state) => {
-        state.loading = true;
-        state.receiptError = '';
-      })
       .addCase(getPaymentMethod.fulfilled, (state, action) => {
-        state.loading = false;
-        state.receiptError = null;
+        state.receiptLoading = false;
+        state.receiptError = '';
         state.payment_method_id = action.payload.id;
         state.billing_details = action.payload.billing_details;
         state.card = action.payload.card;
@@ -203,30 +198,14 @@ export const accountsReceiptSlice = createSlice({
         state.metadata = action.payload.metadata;
         state.type = action.payload.type;
       })
-      .addCase(getPaymentMethod.rejected, (state, action) => {
-        state.loading = false;
-        state.receiptError = action.error.message;
-      })
-      .addCase(postReceipt.pending, (state) => {
-        state.loading = true;
-        state.receiptError = '';
-      })
       .addCase(postReceipt.fulfilled, (state, action) => {
-        state.loading = false;
-        state.receiptError = null;
+        state.receiptLoading = false;
+        state.receiptError = '';
         state.receipt_id = action.payload;
       })
-      .addCase(postReceipt.rejected, (state, action) => {
-        state.loading = false;
-        state.receiptError = action.error.message;
-      })
-      .addCase(getReceipt.pending, (state) => {
-        state.loading = true;
-        state.receiptError = '';
-      })
       .addCase(getReceipt.fulfilled, (state, action) => {
-        state.loading = false;
-        state.receiptError = null;
+        state.receiptLoading = false;
+        state.receiptError = '';
         state.receipt_id = action.payload.id;
         state.created_at = action.payload.created_at;
         state.stripe_invoice_id = action.payload.stripe_invoice_id;
@@ -238,18 +217,10 @@ export const accountsReceiptSlice = createSlice({
         state.payment_method = action.payload.payment_method;
         state.first_name = action.payload.first_name;
         state.last_name = action.payload.last_name;
-      })
-      .addCase(getReceipt.rejected, (state, action) => {
-        state.loading = false;
-        state.receiptError = action.error.message;
-      })
-      .addCase(getReceiptByID.pending, (state) => {
-        state.loading = true;
-        state.receiptError = '';
       })
       .addCase(getReceiptByID.fulfilled, (state, action) => {
-        state.loading = false;
-        state.receiptError = null;
+        state.receiptLoading = false;
+        state.receiptError = '';
         state.receipt_id = action.payload.id;
         state.created_at = action.payload.created_at;
         state.stripe_invoice_id = action.payload.stripe_invoice_id;
@@ -262,22 +233,31 @@ export const accountsReceiptSlice = createSlice({
         state.first_name = action.payload.first_name;
         state.last_name = action.payload.last_name;
       })
-      .addCase(getReceiptByID.rejected, (state, action) => {
-        state.loading = false;
-        state.receiptError = action.error.message;
-      })
-      .addCase(getClientReceipts.pending, (state) => {
-        state.loading = true;
-        state.receiptError = '';
-      })
       .addCase(getClientReceipts.fulfilled, (state, action) => {
-        state.loading = false;
+        state.receiptLoading = false;
+        state.receiptError = '';
         state.receipts = action.payload;
+      })
+      .addMatcher(isAnyOf(
+        getPaymentMethod.pending,
+        postReceipt.pending,
+        getReceipt.pending,
+        getReceiptByID.pending,
+        getClientReceipts.pending,
+      ), (state) => {
+        state.receiptLoading = true;
         state.receiptError = null;
       })
-      .addCase(getClientReceipts.rejected, (state, action) => {
-        state.loading = false;
-        state.receiptError = action.error.message;
-      });
+      .addMatcher(isAnyOf(
+        getPaymentMethod.pending,
+        postReceipt.rejected,
+        getReceipt.rejected,
+        getReceiptByID.rejected,
+        getClientReceipts.rejected,
+      ),
+        (state, action) => {
+          state.receiptLoading = false;
+          state.receiptError = action.error.message;
+        });
   }
 });

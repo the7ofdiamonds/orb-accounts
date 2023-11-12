@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
   invoiceLoading: false,
@@ -65,8 +65,8 @@ export const saveInvoice = createAsyncThunk('invoice/saveInvoice', async (stripe
 });
 
 export const getInvoice = createAsyncThunk('invoice/getInvoice', async (stripeInvoiceID, { getState }) => {
-  const { stripe_customer_id } = getState().client;
-  const { stripe_invoice_id } = getState().invoice;
+  const { stripe_customer_id } = getState().accountsClient;
+  const { stripe_invoice_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/invoice/${stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id}`, {
@@ -94,7 +94,7 @@ export const getInvoice = createAsyncThunk('invoice/getInvoice', async (stripeIn
 });
 
 export const getInvoiceByID = createAsyncThunk('invoice/getInvoiceByID', async (id, { getState }) => {
-  const { stripe_customer_id } = getState().client;
+  const { stripe_customer_id } = getState().accountsClient;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/invoice/${id}/id`, {
@@ -121,7 +121,7 @@ export const getInvoiceByID = createAsyncThunk('invoice/getInvoiceByID', async (
 });
 
 export const getInvoiceByQuoteID = createAsyncThunk('invoice/getInvoiceByQuoteID', async (quoteID, { getState }) => {
-  const { stripe_customer_id } = getState().client;
+  const { stripe_customer_id } = getState().accountsClient;
   const { quote_id } = getState().quote;
 
   try {
@@ -173,8 +173,8 @@ export const deleteInvoice = createAsyncThunk('invoice/deleteInvoice', async (st
 });
 
 export const updateInvoice = createAsyncThunk('invoice/updateInvoice', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().client;
-  const { invoice_id, stripe_invoice_id } = getState().invoice;
+  const { stripe_customer_id } = getState().accountsClient;
+  const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/invoice/${invoice_id}`, {
@@ -202,8 +202,8 @@ export const updateInvoice = createAsyncThunk('invoice/updateInvoice', async (_,
 });
 
 export const updateInvoiceStatus = createAsyncThunk('invoice/updateInvoiceStatus', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().client;
-  const { invoice_id, stripe_invoice_id } = getState().invoice;
+  const { stripe_customer_id } = getState().accountsClient;
+  const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/invoice/status/${invoice_id}`, {
@@ -254,7 +254,7 @@ export const getStripeInvoice = createAsyncThunk('invoice/getStripeInvoice', asy
 });
 
 export const pdfInvoice = createAsyncThunk('invoice/pdfInvoice', async (_, { getState }) => {
-  const { stripe_invoice_id } = getState().invoice;
+  const { stripe_invoice_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/invoice/${stripe_invoice_id}/pdf`, {
@@ -278,7 +278,7 @@ export const pdfInvoice = createAsyncThunk('invoice/pdfInvoice', async (_, { get
 });
 
 export const getClientInvoices = createAsyncThunk('invoice/getClientInvoices', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().client;
+  const { stripe_customer_id } = getState().accountsClient;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/invoices/client/${stripe_customer_id}`, {
@@ -302,8 +302,8 @@ export const getClientInvoices = createAsyncThunk('invoice/getClientInvoices', a
 });
 
 export const finalizeInvoice = createAsyncThunk('invoice/finalizeInvoice', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().client;
-  const { stripe_invoice_id } = getState().invoice;
+  const { stripe_customer_id } = getState().accountsClient;
+  const { stripe_invoice_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/stripe/invoices/${stripe_invoice_id}/finalize`, {
@@ -339,21 +339,9 @@ export const accountsInvoiceSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(saveInvoice.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
-      })
       .addCase(saveInvoice.fulfilled, (state, action) => {
         state.invoiceLoading = false;
         state.invoice_id = action.payload;
-      })
-      .addCase(saveInvoice.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(getInvoice.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = null;
       })
       .addCase(getInvoice.fulfilled, (state, action) => {
         state.invoiceLoading = false
@@ -368,14 +356,6 @@ export const accountsInvoiceSlice = createSlice({
         state.subtotal = action.payload.subtotal;
         state.invoice_pdf = action.payload.invoice_pdf_URL;
       })
-      .addCase(getInvoice.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(getInvoiceByID.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
-      })
       .addCase(getInvoiceByID.fulfilled, (state, action) => {
         state.invoiceLoading = false
         state.invoiceError = null;
@@ -388,14 +368,6 @@ export const accountsInvoiceSlice = createSlice({
         state.client_secret = action.payload.client_secret;
         state.subtotal = action.payload.subtotal;
         state.invoice_pdf = action.payload.invoice_pdf_URL;
-      })
-      .addCase(getInvoiceByID.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(getInvoiceByQuoteID.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
       })
       .addCase(getInvoiceByQuoteID.fulfilled, (state, action) => {
         state.invoiceLoading = false
@@ -410,35 +382,11 @@ export const accountsInvoiceSlice = createSlice({
         state.subtotal = action.payload.subtotal;
         state.invoice_pdf = action.payload.invoice_pdf_URL;
       })
-      .addCase(getInvoiceByQuoteID.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(updateInvoice.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
-      })
       .addCase(updateInvoice.fulfilled, (state, action) => {
         state.invoiceLoading = false;
       })
-      .addCase(updateInvoice.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(updateInvoiceStatus.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
-      })
       .addCase(updateInvoiceStatus.fulfilled, (state, action) => {
         state.status = action.payload;
-      })
-      .addCase(updateInvoiceStatus.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(getStripeInvoice.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
       })
       .addCase(getStripeInvoice.fulfilled, (state, action) => {
         state.invoiceLoading = false;
@@ -470,26 +418,10 @@ export const accountsInvoiceSlice = createSlice({
         state.invoice_pdf = action.payload.invoice_pdf;
         state.items = action.payload.lines.data;
       })
-      .addCase(getStripeInvoice.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(getClientInvoices.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = null;
-      })
       .addCase(getClientInvoices.fulfilled, (state, action) => {
         state.invoiceLoading = false;
         state.invoiceError = '';
         state.invoices = action.payload;
-      })
-      .addCase(getClientInvoices.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      })
-      .addCase(finalizeInvoice.pending, (state) => {
-        state.invoiceLoading = true;
-        state.invoiceError = '';
       })
       .addCase(finalizeInvoice.fulfilled, (state, action) => {
         state.invoiceLoading = false;
@@ -498,10 +430,33 @@ export const accountsInvoiceSlice = createSlice({
         state.status = action.payload.status;
         state.invoiceError = null;
       })
-      .addCase(finalizeInvoice.rejected, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = action.error.message;
-      });
+      .addMatcher(isAnyOf(
+        saveInvoice.pending,
+        getInvoice.pending,
+        getInvoiceByID.pending,
+        getStripeInvoice.pending,
+        updateInvoice.pending,
+        updateInvoiceStatus.pending,
+        getClientInvoices.pending,
+        finalizeInvoice.pending,
+      ), (state) => {
+        state.invoiceLoading = true;
+        state.invoiceError = null;
+      })
+      .addMatcher(isAnyOf(
+        saveInvoice.rejected,
+        getInvoice.rejected,
+        getInvoiceByID.rejected,
+        getStripeInvoice.rejected,
+        updateInvoice.rejected,
+        updateInvoiceStatus.rejected,
+        getClientInvoices.rejected,
+        finalizeInvoice.rejected,
+      ),
+        (state, action) => {
+          state.invoiceLoading = false;
+          state.invoiceError = action.error.message;
+        });
   }
 });
 

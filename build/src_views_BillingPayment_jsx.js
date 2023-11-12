@@ -18,6 +18,7 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
+  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -94,19 +95,19 @@ function PaymentComponent() {
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const {
     user_email
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.client);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
   const {
     stripe_invoice_id,
     status,
     amount_remaining
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.invoice);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsInvoice);
   const {
     paymentLoading,
     paymentError
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.payment);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsPayment);
   const {
     receipt_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.receipt);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsReceipt);
   const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {

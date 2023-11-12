@@ -1,6 +1,34 @@
 "use strict";
 (globalThis["webpackChunkorb_accounts"] = globalThis["webpackChunkorb_accounts"] || []).push([["src_views_ClientSelections_jsx"],{
 
+/***/ "./src/error/ErrorComponent.jsx":
+/*!**************************************!*\
+  !*** ./src/error/ErrorComponent.jsx ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function ErrorComponent(props) {
+  const {
+    error
+  } = props;
+  console.log(error);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
+    className: "error"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "status-bar card error"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, error)));
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ErrorComponent);
+
+/***/ }),
+
 /***/ "./src/loading/LoadingComponent.jsx":
 /*!******************************************!*\
   !*** ./src/loading/LoadingComponent.jsx ***!
@@ -40,7 +68,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
 /* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
 /* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
-/* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
+/* harmony import */ var _error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../error/ErrorComponent.jsx */ "./src/error/ErrorComponent.jsx");
+/* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
+
 
 
 
@@ -56,12 +86,13 @@ function SelectionsComponent() {
   const [checkedItems, setCheckedItems] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]);
   const {
     servicesLoading,
+    servicesError,
     services
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.services);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsServices);
   const {
     user_email,
     stripe_customer_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.client);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
   const {
     loading,
     quotes,
@@ -71,7 +102,7 @@ function SelectionsComponent() {
     selections,
     total,
     stripe_quote_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.quote);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsQuote);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
       dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_3__.getClient)()).then(response => {
@@ -203,6 +234,11 @@ function SelectionsComponent() {
   if (servicesLoading) {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], null);
   }
+  if (servicesError) {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      error: servicesError
+    });
+  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
     className: "selections"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "SELECTIONS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -250,7 +286,7 @@ function SelectionsComponent() {
   }, new Intl.NumberFormat('us', {
     style: 'currency',
     currency: 'USD'
-  }).format(total))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }).format(total))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], {
     message: message,
     messageType: messageType
   }), Array.isArray(selections) && selections.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {

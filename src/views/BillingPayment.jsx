@@ -23,14 +23,14 @@ function PaymentComponent() {
   const [messageType, setMessageType] = useState('');
   const [message, setMessage] = useState('');
 
-  const { user_email } = useSelector((state) => state.client);
+  const { user_email } = useSelector((state) => state.accountsClient);
   const { stripe_invoice_id, status, amount_remaining } = useSelector(
-    (state) => state.invoice
+    (state) => state.accountsInvoice
   );
   const { paymentLoading, paymentError } = useSelector(
-    (state) => state.payment
+    (state) => state.accountsPayment
   );
-  const { receipt_id } = useSelector((state) => state.receipt);
+  const { receipt_id } = useSelector((state) => state.accountsReceipt);
 
   const dispatch = useDispatch();
 

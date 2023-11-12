@@ -46,9 +46,9 @@ function App() {
               element={<Wallet />}
             />
             <Route path="billing/quote/:id" element={<Quote />} />
-            {/* <Route path="billing/quotes" element={<Quotes />} /> */}
+            <Route path="billing/quotes" element={<Quotes />} />
             <Route path="billing/receipt/:id" element={<Receipt />} />
-            {/* <Route path="billing/receipts" element={<Receipts />} /> */}
+            <Route path="billing/receipts" element={<Receipts />} />
             <Route path="client" element={<Client />} />
             <Route path="client/selections" element={<Selections />} />
             <Route path="client/start" element={<Start />} />

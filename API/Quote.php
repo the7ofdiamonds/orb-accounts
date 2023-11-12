@@ -340,7 +340,7 @@ class Quote
             $body = json_decode($request_body, true);
             $selections = $body['selections'];
 
-           if (empty($selections)) {
+            if (empty($selections)) {
                 $msg = 'Selections are required';
                 $code = 404;
 
@@ -517,7 +517,6 @@ class Quote
 
             return rest_ensure_response($this->database_quote->getClientQuotes($stripe_customer_id));
         } catch (Exception $e) {
-
             $error_message = $e->getMessage();
             $status_code = $e->getCode();
 
@@ -528,7 +527,7 @@ class Quote
 
             $response = rest_ensure_response($response_data);
             $response->set_status($status_code);
-
+            error_log(print_r($response, true));
             return $response;
         }
     }

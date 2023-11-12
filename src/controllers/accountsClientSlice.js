@@ -10,8 +10,8 @@ const initialState = {
     last_name: '',
 };
 
-export const addClient = createAsyncThunk('client/addClient', async (_, { getState }) => {
-    const { user_email } = getState().client;
+export const addClient = createAsyncThunk('accountsClient/addClient', async (_, { getState }) => {
+    const { user_email } = getState().accountsClient;
     const {
         company_name,
         tax_id,
@@ -24,7 +24,7 @@ export const addClient = createAsyncThunk('client/addClient', async (_, { getSta
         state,
         zipcode,
         country
-    } = getState().customer;
+    } = getState().accountsCustomer;
 
     try {
         const response = await fetch('/wp-json/orb/v1/users/clients', {
@@ -61,8 +61,8 @@ export const addClient = createAsyncThunk('client/addClient', async (_, { getSta
     }
 });
 
-export const getClient = createAsyncThunk('client/getClient', async (_, { getState }) => {
-    const { user_email } = getState().client;
+export const getClient = createAsyncThunk('accountsClient/getClient', async (_, { getState }) => {
+    const { user_email } = getState().accountsClient;
     const encodedEmail = encodeURIComponent(user_email);
 
     try {
@@ -87,7 +87,7 @@ export const getClient = createAsyncThunk('client/getClient', async (_, { getSta
 });
 
 export const accountsClientSlice = createSlice({
-    name: 'client',
+    name: 'accountsClient',
     initialState,
     extraReducers: (builder) => {
         builder

@@ -4,14 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getClient } from '../controllers/accountsClientSlice';
 import { getClientReceipts } from '../controllers/accountsReceiptSlice';
 
+import LoadingComponent from '../loading/LoadingComponent.jsx';
+import ErrorComponent from '../error/ErrorComponent.jsx';
+
 function BillingReceipts() {
   const dispatch = useDispatch();
 
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
-  const { loading, receiptError, receipts } = useSelector(
-    (state) => state.receipt
+  const { receiptLoading, receiptError, receipts } = useSelector(
+    (state) => state.accountsReceipt
   );
 
   useEffect(() => {
@@ -26,20 +29,14 @@ function BillingReceipts() {
     }
   }, [stripe_customer_id, dispatch]);
 
-  if (receiptError) {
-    return (
-      <>
-        <div className="status-bar card error">
-          <span>
-            <h4>{receiptError}</h4>
-          </span>
-        </div>
-      </>
-    );
+  if (receiptLoading) {
+    return <LoadingComponent />;
   }
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (receiptError) {
+    console.log(receiptError);
+
+    return <ErrorComponent error={receiptError} />;
   }
 
   const now = new Date().getTime();

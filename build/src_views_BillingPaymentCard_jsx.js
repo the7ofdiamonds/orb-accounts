@@ -18,6 +18,7 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
+  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -181,7 +182,7 @@ const CardPaymentComponent = () => {
     first_name,
     last_name,
     stripe_customer_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.client);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
   const {
     stripe_invoice_id,
     payment_intent_id,
@@ -191,16 +192,16 @@ const CardPaymentComponent = () => {
     amount_due,
     amount_paid,
     remaining_balance
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.invoice);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsInvoice);
   const {
     paymentLoading,
     paymentError,
     client_secret
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.payment);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsPayment);
   const {
     receipt_id,
     payment_method
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.receipt);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsReceipt);
   const [cardNumber, setCardNumber] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [expMonth, setExpMonth] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [expYear, setExpYear] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');

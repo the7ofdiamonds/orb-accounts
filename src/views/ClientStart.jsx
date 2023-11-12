@@ -18,8 +18,9 @@ import {
   updateStripeCustomer,
 } from '../controllers/accountsCustomerSlice.js';
 
-import LoadingComponent from '../loading/LoadingComponent';
-import StatusBar from './components/StatusBar';
+import LoadingComponent from '../loading/LoadingComponent.jsx';
+import ErrorComponent from '../error/ErrorComponent.jsx';
+import StatusBar from './components/StatusBar.jsx';
 
 function ClientComponent() {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ function ClientComponent() {
   );
 
   const { user_email, first_name, last_name, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
   const {
     customerLoading,
@@ -43,7 +44,7 @@ function ClientComponent() {
     state,
     zipcode,
     phone,
-  } = useSelector((state) => state.customer);
+  } = useSelector((state) => state.accountsCustomer);
 
   const handleCompanyNameChange = (event) => {
     dispatch(updateCompanyName(event.target.value));

@@ -147,13 +147,6 @@ class DatabaseQuote
 
     public function getClientQuotes($stripe_customer_id)
     {
-        if (empty($stripe_customer_id)) {
-            $msg = 'Stripe Customer ID is required.';
-            $code = 400;
-
-            throw new Exception($msg, $code);
-        }
-
         $quotes = $this->wpdb->get_results(
             $this->wpdb->prepare(
                 "SELECT * FROM $this->table_name WHERE stripe_customer_id = %s",

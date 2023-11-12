@@ -26,7 +26,7 @@ function QuoteComponent() {
     'To receive an invoice for the selected services, you must accept the quote above.'
   );
 
-  const { user_email } = useSelector((state) => state.client);
+  const { user_email } = useSelector((state) => state.accountsClient);
   const {
     quoteLoading,
     quoteError,
@@ -36,8 +36,8 @@ function QuoteComponent() {
     total,
     selections,
     stripe_invoice_id,
-  } = useSelector((state) => state.quote);
-  const { invoice_id } = useSelector((state) => state.invoice);
+  } = useSelector((state) => state.accountsQuote);
+  const { invoice_id } = useSelector((state) => state.accountsInvoice);
 
   const dispatch = useDispatch();
 

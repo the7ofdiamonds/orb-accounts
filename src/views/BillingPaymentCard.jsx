@@ -34,7 +34,7 @@ const CardPaymentComponent = () => {
   );
 
   const { user_email, first_name, last_name, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
   const {
     stripe_invoice_id,
@@ -45,11 +45,11 @@ const CardPaymentComponent = () => {
     amount_due,
     amount_paid,
     remaining_balance,
-  } = useSelector((state) => state.invoice);
+  } = useSelector((state) => state.accountsInvoice);
   const { paymentLoading, paymentError, client_secret } = useSelector(
-    (state) => state.payment
+    (state) => state.accountsPayment
   );
-  const { receipt_id, payment_method } = useSelector((state) => state.receipt);
+  const { receipt_id, payment_method } = useSelector((state) => state.accountsReceipt);
 
   const [cardNumber, setCardNumber] = useState('');
   const [expMonth, setExpMonth] = useState('');

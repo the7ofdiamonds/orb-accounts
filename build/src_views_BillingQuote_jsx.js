@@ -18,6 +18,7 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
+  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -88,7 +89,7 @@ function QuoteComponent() {
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('To receive an invoice for the selected services, you must accept the quote above.');
   const {
     user_email
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.client);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
   const {
     quoteLoading,
     quoteError,
@@ -98,10 +99,10 @@ function QuoteComponent() {
     total,
     selections,
     stripe_invoice_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.quote);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsQuote);
   const {
     invoice_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.invoice);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsInvoice);
   const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {

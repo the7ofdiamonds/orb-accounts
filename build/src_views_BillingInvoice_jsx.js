@@ -18,6 +18,7 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
+  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -92,7 +93,7 @@ function InvoiceComponent() {
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('To start receiving the services listed above, please use the payment button below.');
   const {
     user_email
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.client);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
   const {
     invoiceLoading,
     invoiceError,
@@ -117,10 +118,10 @@ function InvoiceComponent() {
   const {
     paymentStatus,
     client_secret
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.payment);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsPayment);
   const {
     receipt_id
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.receipt);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsReceipt);
   const dueDate = new Date(due_date * 1000).toLocaleString();
   const amountDue = amount_due / 100;
   const subTotal = subtotal / 100;

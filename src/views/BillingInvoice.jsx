@@ -27,7 +27,7 @@ function InvoiceComponent() {
     'To start receiving the services listed above, please use the payment button below.'
   );
 
-  const { user_email } = useSelector((state) => state.client);
+  const { user_email } = useSelector((state) => state.accountsClient);
   const {
     invoiceLoading,
     invoiceError,
@@ -50,9 +50,9 @@ function InvoiceComponent() {
     items,
   } = useSelector((state) => state.invoice);
   const { paymentStatus, client_secret } = useSelector(
-    (state) => state.payment
+    (state) => state.accountsPayment
   );
-  const { receipt_id } = useSelector((state) => state.receipt);
+  const { receipt_id } = useSelector((state) => state.accountsReceipt);
 
   const dueDate = new Date(due_date * 1000).toLocaleString();
   const amountDue = amount_due / 100;

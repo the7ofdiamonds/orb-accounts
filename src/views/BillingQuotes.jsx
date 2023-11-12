@@ -4,18 +4,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getClient } from '../controllers/accountsClientSlice';
 import { getClientQuotes } from '../controllers/accountsQuoteSlice';
 
+import LoadingComponent from '../loading/LoadingComponent.jsx';
+import ErrorComponent from '../error/ErrorComponent.jsx';
+
 function BillingQuotes() {
   const dispatch = useDispatch();
 
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
   const { quoteLoading, quoteError, quotes, pdf } = useSelector(
-    (state) => state.quote
+    (state) => state.accountsQuote
   );
 
   useEffect(() => {
     if (user_email) {
+      console.log(user_email);
+
       dispatch(getClient());
     }
   }, [user_email, dispatch]);
@@ -25,22 +30,16 @@ function BillingQuotes() {
       dispatch(getClientQuotes());
     }
   }, [stripe_customer_id, dispatch]);
-  console.log(quoteError);
 
   if (quoteLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
+  console.log(quoteError);
 
   if (quoteError) {
-    return (
-      <>
-        <div className="status-bar card error">
-          <span>
-            <h4>{quoteError}</h4>
-          </span>
-        </div>
-      </>
-    );
+    console.log(quoteError);
+
+    return <ErrorComponent error={quoteError} />;
   }
 
   const now = new Date().getTime();

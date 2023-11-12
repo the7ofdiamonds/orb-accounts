@@ -7,14 +7,17 @@ import {
   deleteInvoice,
 } from '../controllers/accountsInvoiceSlice';
 
+import LoadingComponent from '../loading/LoadingComponent.jsx';
+import ErrorComponent from '../error/ErrorComponent.jsx';
+
 function BillingInvoices() {
   const dispatch = useDispatch();
 
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
   const { invoiceLoading, invoiceError, invoices } = useSelector(
-    (state) => state.invoice
+    (state) => state.accountsInvoice
   );
 
   useEffect(() => {
@@ -30,19 +33,13 @@ function BillingInvoices() {
   }, [stripe_customer_id, dispatch]);
 
   if (invoiceLoading) {
-    return <div>Loading...</div>;
+    return <LoadingComponent />;
   }
 
   if (invoiceError) {
-    return (
-      <>
-        <div className="status-bar card error">
-          <span>
-            <h4>{invoiceError}</h4>
-          </span>
-        </div>
-      </>
-    );
+    console.log(invoiceError);
+
+    return <ErrorComponent error={invoiceError} />;
   }
 
   const now = new Date().getTime();

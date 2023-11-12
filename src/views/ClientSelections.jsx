@@ -14,6 +14,7 @@ import {
 } from '../controllers/accountsQuoteSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
+import ErrorComponent from '../error/ErrorComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';
 
 function SelectionsComponent() {
@@ -25,9 +26,9 @@ function SelectionsComponent() {
   );
   const [checkedItems, setCheckedItems] = useState([]);
 
-  const { servicesLoading, services } = useSelector((state) => state.services);
+  const { servicesLoading, servicesError, services } = useSelector((state) => state.accountsServices);
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.client
+    (state) => state.accountsClient
   );
   const {
     loading,
@@ -38,7 +39,7 @@ function SelectionsComponent() {
     selections,
     total,
     stripe_quote_id,
-  } = useSelector((state) => state.quote);
+  } = useSelector((state) => state.accountsQuote);
 
   useEffect(() => {
     if (user_email) {
@@ -188,6 +189,10 @@ function SelectionsComponent() {
 
   if (servicesLoading) {
     return <LoadingComponent />;
+  }
+
+  if (servicesError) {
+    return <ErrorComponent error={servicesError} />;
   }
 
   return (

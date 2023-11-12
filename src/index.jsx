@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
 
@@ -7,8 +7,6 @@ import store from './model/store.js';
 
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-
-const LoadingComponent = lazy(() => import('./loading/LoadingComponent.jsx'));
 
 // Add to backend to make changes more easily
 const stripe = loadStripe(
