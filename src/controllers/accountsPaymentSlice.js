@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
   paymentLoading: false,
@@ -20,7 +20,7 @@ export const updateClientSecret = (clientSecret) => {
 };
 
 export const getPaymentIntent = createAsyncThunk('payment/getPaymentIntent', async (paymentIntentID, { getState }) => {
-  const { payment_intent_id } = getState().invoice;
+  const { payment_intent_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/stripe/payment_intents/${paymentIntentID ? paymentIntentID : payment_intent_id}`, {
@@ -39,13 +39,13 @@ export const getPaymentIntent = createAsyncThunk('payment/getPaymentIntent', asy
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    throw error;
+    throw error.message;
   }
 }
 );
 
 export const accountsPaymentSlice = createSlice({
-  name: 'payment',
+  name: 'accountsPayment',
   initialState,
   reducers: {
     updateClientSecret: (state, action) => {
@@ -54,20 +54,25 @@ export const accountsPaymentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getPaymentIntent.pending, (state) => {
-        state.loading = true;
-        state.paymentError = '';
-      })
       .addCase(getPaymentIntent.fulfilled, (state, action) => {
         state.loading = false
-        state.paymentError = null
+        state.paymentError = ''
         state.client_secret = action.payload.client_secret
         state.paymentStatus = action.payload.status
         state.payment_method_id = action.payload.payment_method
       })
-      .addCase(getPaymentIntent.rejected, (state, action) => {
-        state.loading = false;
-        state.paymentError = action.error.message;
+      .addMatcher(isAnyOf(
+        getPaymentIntent.pending,
+      ), (state) => {
+        state.paymentLoading = true;
+        state.paymentError = null;
       })
+      .addMatcher(isAnyOf(
+        getPaymentIntent.rejected,
+      ),
+        (state, action) => {
+          state.paymentLoading = false;
+          state.paymentError = action.error.message;
+        });
   }
 });

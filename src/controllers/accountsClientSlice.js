@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
     clientLoading: false,
@@ -57,7 +57,7 @@ export const addClient = createAsyncThunk('accountsClient/addClient', async (_, 
         const responseData = await response.json();
         return responseData;
     } catch (error) {
-        throw error;
+        throw error.message;
     }
 });
 
@@ -82,7 +82,7 @@ export const getClient = createAsyncThunk('accountsClient/getClient', async (_, 
         const responseData = await response.json();
         return responseData;
     } catch (error) {
-        throw error;
+        throw error.message;
     }
 });
 
@@ -91,36 +91,35 @@ export const accountsClientSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
-            .addCase(addClient.pending, (state) => {
-                state.clientLoading = true
-                state.clientError = ''
-            })
             .addCase(addClient.fulfilled, (state, action) => {
                 state.clientLoading = false
-                state.clientError = null
+                state.clientError = ''
                 state.client_id = action.payload.client_id
                 state.stripe_customer_id = action.payload.stripe_customer_id
             })
-            .addCase(addClient.rejected, (state, action) => {
-                state.clientLoading = false
-                state.clientError = action.error.message
-            })
-            .addCase(getClient.pending, (state) => {
-                state.clientLoading = true
-                state.clientError = ''
-            })
             .addCase(getClient.fulfilled, (state, action) => {
                 state.clientLoading = false;
-                state.clientError = null;
+                state.clientError = '';
                 state.client_id = action.payload.id
                 state.first_name = action.payload.first_name
                 state.last_name = action.payload.last_name
                 state.stripe_customer_id = action.payload.stripe_customer_id
             })
-            .addCase(getClient.rejected, (state, action) => {
-                state.clientLoading = false
-                state.clientError = action.error.message
+            .addMatcher(isAnyOf(
+                addClient.pending,
+                getClient.pending,
+            ), (state) => {
+                state.clientLoading = true;
+                state.clientError = null;
             })
+            .addMatcher(isAnyOf(
+                addClient.rejected,
+                getClient.rejected,
+            ),
+                (state, action) => {
+                    state.clientLoading = false;
+                    state.clientError = action.error.message;
+                });
     }
 })
 

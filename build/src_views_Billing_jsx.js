@@ -18,7 +18,6 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
-  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -131,7 +130,6 @@ function BillingInvoices() {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], null);
   }
   if (invoiceError) {
-    console.log(invoiceError);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
       error: invoiceError
     });
@@ -202,7 +200,6 @@ function BillingQuotes() {
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsQuote);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      console.log(user_email);
       dispatch((0,_controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_2__.getClient)());
     }
   }, [user_email, dispatch]);
@@ -214,9 +211,7 @@ function BillingQuotes() {
   if (quoteLoading) {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], null);
   }
-  console.log(quoteError);
   if (quoteError) {
-    console.log(quoteError);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
       error: quoteError
     });
@@ -292,7 +287,6 @@ function BillingReceipts() {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], null);
   }
   if (receiptError) {
-    console.log(receiptError);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
       error: receiptError
     });

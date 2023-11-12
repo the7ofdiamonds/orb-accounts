@@ -34,8 +34,6 @@ function BillingReceipts() {
   }
 
   if (receiptError) {
-    console.log(receiptError);
-
     return <ErrorComponent error={receiptError} />;
   }
 

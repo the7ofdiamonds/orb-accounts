@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit'
 
 const initialState = {
   servicesLoading: false,
@@ -25,7 +25,7 @@ export const fetchServices = createAsyncThunk('accountsServices/fetchServices', 
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    throw error;
+    throw error.message;
   }
 });
 
@@ -48,7 +48,7 @@ export const getAvailableServices = createAsyncThunk('accountsServices/getAvaila
     const responseData = await response.json();
     return responseData;
   } catch (error) {
-    throw error;
+    throw error.message;
   }
 });
 
@@ -57,31 +57,31 @@ export const accountsServicesSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(fetchServices.pending, (state) => {
-        state.servicesLoading = true
-        state.servicesError = null
-      })
       .addCase(fetchServices.fulfilled, (state, action) => {
         state.servicesLoading = false
         state.servicesError = ''
         state.services = action.payload
       })
-      .addCase(fetchServices.rejected, (state, action) => {
-        state.servicesLoading = false
-        state.servicesError = action.error.message
-      })
-      .addCase(getAvailableServices.pending, (state) => {
-        state.servicesLoading = true
-        state.servicesError = null
-      })
       .addCase(getAvailableServices.fulfilled, (state, action) => {
         state.servicesLoading = false
         state.availableServices = action.payload
       })
-      .addCase(getAvailableServices.rejected, (state, action) => {
-        state.servicesLoading = false
-        state.servicesError = action.error.message
+      .addMatcher(isAnyOf(
+        fetchServices.pending,
+        getAvailableServices.pending
+      ), (state) => {
+        state.servicesLoading = true
+        state.servicesError = null
       })
+      .addMatcher(isAnyOf(
+        fetchServices.rejected,
+        getAvailableServices.rejected
+      ),
+        (state, action) => {
+          state.servicesLoading = false
+          state.servicesError = action.error.message
+        });
+
   }
 })
 

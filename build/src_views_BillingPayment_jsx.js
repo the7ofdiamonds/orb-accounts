@@ -18,7 +18,6 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
-  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

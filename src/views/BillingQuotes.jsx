@@ -19,8 +19,6 @@ function BillingQuotes() {
 
   useEffect(() => {
     if (user_email) {
-      console.log(user_email);
-
       dispatch(getClient());
     }
   }, [user_email, dispatch]);
@@ -34,11 +32,8 @@ function BillingQuotes() {
   if (quoteLoading) {
     return <LoadingComponent />;
   }
-  console.log(quoteError);
 
   if (quoteError) {
-    console.log(quoteError);
-
     return <ErrorComponent error={quoteError} />;
   }
 

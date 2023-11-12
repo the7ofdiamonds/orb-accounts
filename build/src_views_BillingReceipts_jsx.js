@@ -18,7 +18,6 @@ function ErrorComponent(props) {
   const {
     error
   } = props;
-  console.log(error);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("main", {
     className: "error"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -100,7 +99,6 @@ function BillingReceipts() {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], null);
   }
   if (receiptError) {
-    console.log(receiptError);
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
       error: receiptError
     });

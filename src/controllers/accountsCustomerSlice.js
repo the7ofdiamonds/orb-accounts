@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
     customerLoading: false,
@@ -18,11 +18,11 @@ const initialState = {
     stripe_customer_id: '',
 };
 
-export const addStripeCustomer = createAsyncThunk('customer/addStripeCustomer', async (_, { getState }) => {
+export const addStripeCustomer = createAsyncThunk('accountsCustomer/addStripeCustomer', async (_, { getState }) => {
     const {
         client_id,
         user_email
-    } = getState().client;
+    } = getState().accountsClient;
     const {
         company_name,
         tax_id,
@@ -35,7 +35,7 @@ export const addStripeCustomer = createAsyncThunk('customer/addStripeCustomer', 
         state,
         zipcode,
         country
-    } = getState().customer;
+    } = getState().accountsCustomer;
 
     try {
         const response = await fetch('/wp-json/orb/v1/stripe/customers', {
@@ -69,12 +69,12 @@ export const addStripeCustomer = createAsyncThunk('customer/addStripeCustomer', 
         const responseData = await response.json();
         return responseData;
     } catch (error) {
-        throw error;
+        throw error.message;
     }
 });
 
-export const getStripeCustomer = createAsyncThunk('customer/getStripeCustomer', async (stripeCustomerID, { getState }) => {
-    const { stripe_customer_id } = getState().client;
+export const getStripeCustomer = createAsyncThunk('accountsCustomer/getStripeCustomer', async (stripeCustomerID, { getState }) => {
+    const { stripe_customer_id } = getState().accountsClient;
 
     try {
         const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
@@ -93,16 +93,16 @@ export const getStripeCustomer = createAsyncThunk('customer/getStripeCustomer', 
         const responseData = await response.json();
         return responseData;
     } catch (error) {
-        throw error;
+        throw error.message;
     }
 });
 
-export const updateStripeCustomer = createAsyncThunk('customer/updateStripeCustomer', async (_, { getState }) => {
+export const updateStripeCustomer = createAsyncThunk('accountsCustomer/updateStripeCustomer', async (_, { getState }) => {
     const {
         client_id,
         user_email,
         stripe_customer_id
-    } = getState().client;
+    } = getState().accountsClient;
     const {
         company_name,
         tax_id,
@@ -115,7 +115,7 @@ export const updateStripeCustomer = createAsyncThunk('customer/updateStripeCusto
         state,
         zipcode,
         country
-    } = getState().customer;
+    } = getState().accountsCustomer;
 
     try {
         const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripe_customer_id}`, {
@@ -149,12 +149,12 @@ export const updateStripeCustomer = createAsyncThunk('customer/updateStripeCusto
         const responseData = await response.json();
         return responseData;
     } catch (error) {
-        throw error;
+        throw error.message;
     }
 });
 
 export const accountsCustomerSlice = createSlice({
-    name: 'customer',
+    name: 'accounstCustomer',
     initialState,
     reducers: {
         updateCompanyName: (state, action) => {
@@ -193,22 +193,10 @@ export const accountsCustomerSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(addStripeCustomer.pending, (state) => {
-                state.customerLoading = true
-                state.customer_error = ''
-            })
             .addCase(addStripeCustomer.fulfilled, (state, action) => {
                 state.customerLoading = false
                 state.customer_error = null
                 state.stripe_customer_id = action.payload
-            })
-            .addCase(addStripeCustomer.rejected, (state, action) => {
-                state.customerLoading = false
-                state.customer_error = action.error.message
-            })
-            .addCase(getStripeCustomer.pending, (state) => {
-                state.customerLoading = true
-                state.customer_error = ''
             })
             .addCase(getStripeCustomer.fulfilled, (state, action) => {
                 state.customerLoading = false
@@ -225,14 +213,6 @@ export const accountsCustomerSlice = createSlice({
                 state.email = action.payload.email
                 state.phone = action.payload.phone
             })
-            .addCase(getStripeCustomer.rejected, (state, action) => {
-                state.customerLoading = false
-                state.customer_error = action.error.message
-            })
-            .addCase(updateStripeCustomer.pending, (state) => {
-                state.customerLoading = true
-                state.customer_error = ''
-            })
             .addCase(updateStripeCustomer.fulfilled, (state, action) => {
                 state.customerLoading = false
                 state.customer_error = null
@@ -248,11 +228,21 @@ export const accountsCustomerSlice = createSlice({
                 state.email = action.payload.email
                 state.phone = action.payload.phone
             })
-            .addCase(updateStripeCustomer.rejected, (state, action) => {
-                state.customerLoading = false
-                state.customer_error = action.error.message
+            .addMatcher(isAnyOf(
+                addStripeCustomer.pending,
+                getStripeCustomer.pending,
+            ), (state) => {
+                state.clientLoading = true;
+                state.clientError = null;
             })
-
+            .addMatcher(isAnyOf(
+                addStripeCustomer.rejected,
+                getStripeCustomer.rejected,
+            ),
+                (state, action) => {
+                    state.clientLoading = false;
+                    state.clientError = action.error.message;
+                });
     }
 })
 

@@ -37,8 +37,6 @@ function BillingInvoices() {
   }
 
   if (invoiceError) {
-    console.log(invoiceError);
-
     return <ErrorComponent error={invoiceError} />;
   }
 
