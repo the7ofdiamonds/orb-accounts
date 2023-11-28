@@ -5,71 +5,105 @@ namespace ORB\Accounts\Pages;
 class Pages
 {
     public $front_page_react;
+    public $custom_pages_list;
+    public $protected_pages_list;
+    public $pages_list;
     public $pages;
-    public $protected_pages;
     public $page_titles;
 
     public function __construct()
     {
         $this->front_page_react = [];
 
-        $this->pages = [];
+        $this->custom_pages_list = [];
 
-        $this->protected_pages = [
-            'billing',
-            'billing/invoice',
-            'billing/invoices',
-            'billing/payment',
-            'billing/payment/card',
-            'billing/payment/wallet',
-            'billing/quote',
-            'billing/quotes',
-            'billing/receipt',
-            'billing/receipts',
-            'client',
-            'client/selections',
-            'client/start'
+        $this->protected_pages_list = [
+            [
+                'regex' => '#^/billing/invoice/(?P<slug>[a-zA-Z0-9-_]+)#',
+                'file_name' => 'BillingInvoice',
+            ],
+            [
+                'regex' => '#^/billing/invoices/$#',
+                'file_name' => 'BillingInvoices',
+            ],
+            [
+                'regex' => '#^/billing/payment/(?P<slug>[a-zA-Z0-9-_]+)#',
+                'file_name' => 'BillingPayment',
+            ],
+            [
+                'regex' => '#^/billing/payment/card/(?P<slug>[a-zA-Z0-9-_]+)#',
+                'file_name' => 'BillingPaymentCard',
+            ],
+            [
+                'regex' => '#^/billing/payment/wallet/(?P<slug>[a-zA-Z0-9-_]+)#',
+                'file_name' => 'BillingPaymentWallet',
+            ],
+            [
+                'regex' => '#^/billing/quote/(?P<slug>[a-zA-Z0-9-_]+)#',
+                'file_name' => 'BillingQuote',
+            ],
+            [
+                'regex' => '#^/billing/quotes#',
+                'file_name' => 'BillingQuotes',
+            ],
+            [
+                'regex' => '#^/billing/receipt/(?P<slug>[a-zA-Z0-9-_]+)#',
+                'file_name' => 'BillingReceipt',
+            ],
+            [
+                'regex' => '#^/billing/receipts#',
+                'file_name' => 'BillingReceipts',
+            ],
+            [
+                'regex' => '#^/billing/$#',
+                'file_name' => 'Billing',
+            ],
+            [
+                'regex' => '#^/client#',
+                'file_name' => 'Client',
+            ],
+            [
+                'regex' => '#^/client/selections#',
+                'file_name' => 'ClientSelections',
+            ],
+            [
+                'regex' => '#^/client/start#',
+                'file_name' => 'ClientStart',
+            ]
         ];
+
+        $this->pages_list = [];
 
         $this->page_titles = [
-            ...$this->pages,
-            ...$this->protected_pages
+            ...$this->custom_pages_list,
+            ...$this->protected_pages_list,
+            ...$this->pages_list,
         ];
 
-        add_action('init', [$this, 'react_rewrite_rules']);
-
-        add_filter('query_vars', [$this, 'add_query_vars']);
-
-        add_action('init', [$this, 'is_user_logged_in']);
+        $this->pages = [];
     }
 
-    function react_rewrite_rules()
+    function add_pages()
     {
-        if (is_array($this->page_titles) && count($this->page_titles) > 0) {
+        global $wpdb;
 
-            foreach ($this->page_titles as $page_title) {
-                $url = explode('/', $page_title);
-                $segment = count($url) - 1;
+        foreach ($this->pages as $page) {
+            if (!empty($page['title'])) {
+                $page_exists = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_title = %s AND post_type = 'page'", $page['title']));
 
-                if (isset($url[$segment])) {
-                    add_rewrite_rule('^' . $page_title, 'index.php?' . $url[$segment] . '=$1', 'top');
+                if (!$page_exists) {
+                    $page_data = array(
+                        'post_title'   => $page['title'],
+                        'post_type'    => 'page',
+                        'post_content' => '',
+                        'post_status'  => 'publish',
+                    );
+
+                    wp_insert_post($page_data);
+
+                    error_log($page['title'] . ' page added.');
                 }
             }
-        }
-    }
-
-    function add_query_vars($query_vars)
-    {
-        if (is_array($this->page_titles) && count($this->page_titles) > 0) {
-
-            foreach ($this->page_titles as $page_title) {
-                $url = explode('/', $page_title);
-                $segment = count($url) - 1;
-
-                $query_vars[] = $url[$segment];
-            }
-
-            return $query_vars;
         }
     }
 

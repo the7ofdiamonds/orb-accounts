@@ -113,7 +113,7 @@ function InvoiceComponent() {
     tax,
     payment_intent_id,
     items
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.invoice);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsInvoice);
   const {
     paymentStatus,
     client_secret

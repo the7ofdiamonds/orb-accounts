@@ -4,18 +4,16 @@ namespace ORB\Accounts\Post_Types;
 
 class Post_Types
 {
-    public $post_types;
+    public $post_types_list;
 
     public function __construct()
     {
-        $this->post_types = [];
-
-        add_action('init', [$this, 'custom_post_type']);
+        $this->post_types_list = [];
     }
 
-    function custom_post_type()
+    function custom_post_types()
     {
-        foreach ($this->post_types as $post_type) {
+        foreach ($this->post_types_list as $post_type) {
             $labels = array(
                 'name' => $post_type['title'],
                 'singular_name' => $post_type['singular'],

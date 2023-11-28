@@ -48,7 +48,7 @@ function InvoiceComponent() {
     tax,
     payment_intent_id,
     items,
-  } = useSelector((state) => state.invoice);
+  } = useSelector((state) => state.accountsInvoice);
   const { paymentStatus, client_secret } = useSelector(
     (state) => state.accountsPayment
   );

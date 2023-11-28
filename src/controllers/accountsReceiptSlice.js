@@ -56,9 +56,9 @@ export const updatePaymentMethod = (paymentMethod) => {
 };
 
 export const postReceipt = createAsyncThunk('receipt/postReceipt', async (_, { getState }) => {
-  const { stripe_customer_id, first_name, last_name } = getState().client;
-  const { invoice_id, stripe_invoice_id } = getState().invoice;
-  const { payment_method_id, amount_paid, payment_date, balance, payment_method } = getState().receipt;
+  const { stripe_customer_id, first_name, last_name } = getState().accountsClient;
+  const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
+  const { payment_method_id, amount_paid, payment_date, balance, payment_method } = getState().accountsReceipt;
 
   try {
     const response = await fetch('/wp-json/orb/v1/receipt', {
@@ -95,8 +95,8 @@ export const postReceipt = createAsyncThunk('receipt/postReceipt', async (_, { g
 );
 
 export const getReceipt = createAsyncThunk('receipt/getReceipt', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().client;
-  const { stripe_invoice_id } = getState().invoice;
+  const { stripe_customer_id } = getState().accountsClient;
+  const { stripe_invoice_id } = getState().accountsInvoice;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/receipt/${stripe_invoice_id}`, {
@@ -123,7 +123,7 @@ export const getReceipt = createAsyncThunk('receipt/getReceipt', async (_, { get
 });
 
 export const getReceiptByID = createAsyncThunk('receipt/getReceiptByID', async (id, { getState }) => {
-  const { stripe_customer_id } = getState().client;
+  const { stripe_customer_id } = getState().accountsClient;
 
   try {
     const response = await fetch(`/wp-json/orb/v1/receipt/${id}/id`, {
@@ -249,7 +249,7 @@ export const accountsReceiptSlice = createSlice({
         state.receiptError = null;
       })
       .addMatcher(isAnyOf(
-        getPaymentMethod.pending,
+        getPaymentMethod.rejected,
         postReceipt.rejected,
         getReceipt.rejected,
         getReceiptByID.rejected,

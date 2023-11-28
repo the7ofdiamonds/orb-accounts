@@ -51,63 +51,66 @@ function BillingReceipts() {
 
   return (
     <>
-      {Array.isArray(sortedReceipts) && sortedReceipts.length > 0 ? (
-        <div className="card receipt">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  <h4>Receipt ID</h4>
-                </th>
-                <th>
-                  <h4>Amount Paid</h4>
-                </th>
-                <th>
-                  <h4>Balance</h4>
-                </th>
-                <th>
-                  <h4>Invoice ID</h4>
-                </th>
-                <th>
-                  <h4>PDF</h4>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedReceipts.map((receipt) => (
-                <>
-                  <tr key={receipt.id}>
-                    <td>{receipt.id}</td>
-                    <td>
-                      {/* add locales column & currency column Ex: invoice.currency */}
-                      {new Intl.NumberFormat('us', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(receipt.amount_paid)}
-                    </td>
-                    <td>
-                      {new Intl.NumberFormat('us', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(receipt.balance)}
-                    </td>
-                    <td>{receipt.invoice_id}</td>
-                    <td>
-                      <a href={receipt.receipt_pdf_url} target="_blank">
-                        <button>
-                          <h5>Download</h5>
-                        </button>
-                      </a>
-                    </td>
-                  </tr>
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        ''
-      )}
+      <section className="receipts">
+        <h2 className="title">Receipts</h2>
+        {Array.isArray(sortedReceipts) && sortedReceipts.length > 0 ? (
+          <div className="card receipt">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    <h4>Receipt ID</h4>
+                  </th>
+                  <th>
+                    <h4>Amount Paid</h4>
+                  </th>
+                  <th>
+                    <h4>Balance</h4>
+                  </th>
+                  <th>
+                    <h4>Invoice ID</h4>
+                  </th>
+                  <th>
+                    <h4>PDF</h4>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedReceipts.map((receipt) => (
+                  <>
+                    <tr key={receipt.id}>
+                      <td>{receipt.id}</td>
+                      <td>
+                        {/* add locales column & currency column Ex: invoice.currency */}
+                        {new Intl.NumberFormat('us', {
+                          style: 'currency',
+                          currency: 'USD',
+                        }).format(receipt.amount_paid)}
+                      </td>
+                      <td>
+                        {new Intl.NumberFormat('us', {
+                          style: 'currency',
+                          currency: 'USD',
+                        }).format(receipt.balance)}
+                      </td>
+                      <td>{receipt.invoice_id}</td>
+                      <td>
+                        <a href={receipt.receipt_pdf_url} target="_blank">
+                          <button>
+                            <h5>Download</h5>
+                          </button>
+                        </a>
+                      </td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          ''
+        )}
+      </section>
     </>
   );
 }

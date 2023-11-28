@@ -51,6 +51,8 @@ function BillingQuotes() {
 
   return (
     <>
+    <section className="quotes">
+      <h2 className="title">Quotes</h2>
       {Array.isArray(sortedQuotes) && sortedQuotes.length > 0 ? (
         <div className="card quote">
           <table>
@@ -102,6 +104,7 @@ function BillingQuotes() {
       ) : (
         ''
       )}
+      </section>
     </>
   );
 }

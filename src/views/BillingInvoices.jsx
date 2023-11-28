@@ -54,91 +54,94 @@ function BillingInvoices() {
 
   return (
     <>
-      {Array.isArray(sortedInvoices) && sortedInvoices.length > 0 ? (
-        <div className="card invoice">
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  <h4>Invoice ID</h4>
-                </th>
-                <th>
-                  <h4>Status</h4>
-                </th>
-                <th>
-                  <h4>Balance</h4>
-                </th>
-                <th>
-                  <h4>Due Date</h4>
-                </th>
-                <th>
-                  <h4>Quote ID</h4>
-                </th>
-                <th>
-                  <h4>Page</h4>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedInvoices.map((invoice) => (
-                <>
-                  <tr>
-                    <td>{invoice.id}</td>
-                    <td>{invoice.status}</td>
-                    <td>
-                      {/* add currency column using var invoice.currency */}
-                      {new Intl.NumberFormat('us', {
-                        style: 'currency',
-                        currency: 'USD',
-                      }).format(invoice.amount_remaining)}
-                    </td>
-                    <td>
-                      {invoice.due_date
-                        ? new Date(invoice.due_date * 1000).toLocaleString()
-                        : ''}
-                    </td>
-                    <td>{invoice.quote_id}</td>
-                    <td>
-                      {invoice.status === 'deleted' ? (
-                        <h5>Deleted</h5>
-                      ) : invoice.status === 'paid' ? (
-                        <a href={`/services/invoice/${invoice.id}`}>
-                          <button>
-                            <h5>View</h5>
-                          </button>
-                        </a>
-                      ) : invoice.status === 'void' ? (
-                        <h5>Void</h5>
-                      ) : invoice.status === 'uncollectible' ? (
-                        <h5>Uncollectible</h5>
-                      ) : invoice.status === 'open' ? (
-                        <a href={`/services/invoice/${invoice.id}`}>
-                          <h5>Continue</h5>
-                        </a>
-                      ) : (
-                        <a>
-                          <button
-                            onClick={async () =>
-                              await dispatch(
-                                deleteInvoice(invoice.stripe_invoice_id)
-                              ).then(() => {
-                                dispatch(getClientInvoices());
-                              })
-                            }>
-                            <h5>Delete</h5>
-                          </button>
-                        </a>
-                      )}
-                    </td>
-                  </tr>
-                </>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        ''
-      )}
+      <section className="invoices">
+        <h2 className="title">Invoices</h2>
+        {Array.isArray(sortedInvoices) && sortedInvoices.length > 0 ? (
+          <div className="card invoice">
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    <h4>Invoice ID</h4>
+                  </th>
+                  <th>
+                    <h4>Status</h4>
+                  </th>
+                  <th>
+                    <h4>Balance</h4>
+                  </th>
+                  <th>
+                    <h4>Due Date</h4>
+                  </th>
+                  <th>
+                    <h4>Quote ID</h4>
+                  </th>
+                  <th>
+                    <h4>Page</h4>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedInvoices.map((invoice) => (
+                  <>
+                    <tr>
+                      <td>{invoice.id}</td>
+                      <td>{invoice.status}</td>
+                      <td>
+                        {/* add currency column using var invoice.currency */}
+                        {new Intl.NumberFormat('us', {
+                          style: 'currency',
+                          currency: 'USD',
+                        }).format(invoice.amount_remaining)}
+                      </td>
+                      <td>
+                        {invoice.due_date
+                          ? new Date(invoice.due_date * 1000).toLocaleString()
+                          : ''}
+                      </td>
+                      <td>{invoice.quote_id}</td>
+                      <td>
+                        {invoice.status === 'deleted' ? (
+                          <h5>Deleted</h5>
+                        ) : invoice.status === 'paid' ? (
+                          <a href={`/services/invoice/${invoice.id}`}>
+                            <button>
+                              <h5>View</h5>
+                            </button>
+                          </a>
+                        ) : invoice.status === 'void' ? (
+                          <h5>Void</h5>
+                        ) : invoice.status === 'uncollectible' ? (
+                          <h5>Uncollectible</h5>
+                        ) : invoice.status === 'open' ? (
+                          <a href={`/services/invoice/${invoice.id}`}>
+                            <h5>Continue</h5>
+                          </a>
+                        ) : (
+                          <a>
+                            <button
+                              onClick={async () =>
+                                await dispatch(
+                                  deleteInvoice(invoice.stripe_invoice_id)
+                                ).then(() => {
+                                  dispatch(getClientInvoices());
+                                })
+                              }>
+                              <h5>Delete</h5>
+                            </button>
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          ''
+        )}
+      </section>
     </>
   );
 }

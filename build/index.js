@@ -9383,18 +9383,18 @@ const postReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
     stripe_customer_id,
     first_name,
     last_name
-  } = getState().client;
+  } = getState().accountsClient;
   const {
     invoice_id,
     stripe_invoice_id
-  } = getState().invoice;
+  } = getState().accountsInvoice;
   const {
     payment_method_id,
     amount_paid,
     payment_date,
     balance,
     payment_method
-  } = getState().receipt;
+  } = getState().accountsReceipt;
   try {
     const response = await fetch('/wp-json/orb/v1/receipt', {
       method: 'POST',
@@ -9430,10 +9430,10 @@ const getReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
 }) => {
   const {
     stripe_customer_id
-  } = getState().client;
+  } = getState().accountsClient;
   const {
     stripe_invoice_id
-  } = getState().invoice;
+  } = getState().accountsInvoice;
   try {
     const response = await fetch(`/wp-json/orb/v1/receipt/${stripe_invoice_id}`, {
       method: 'POST',
@@ -9460,7 +9460,7 @@ const getReceiptByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAs
 }) => {
   const {
     stripe_customer_id
-  } = getState().client;
+  } = getState().accountsClient;
   try {
     const response = await fetch(`/wp-json/orb/v1/receipt/${id}/id`, {
       method: 'POST',
@@ -9568,7 +9568,7 @@ const accountsReceiptSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
     }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getPaymentMethod.pending, postReceipt.pending, getReceipt.pending, getReceiptByID.pending, getClientReceipts.pending), state => {
       state.receiptLoading = true;
       state.receiptError = null;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getPaymentMethod.pending, postReceipt.rejected, getReceipt.rejected, getReceiptByID.rejected, getClientReceipts.rejected), (state, action) => {
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getPaymentMethod.rejected, postReceipt.rejected, getReceipt.rejected, getReceiptByID.rejected, getClientReceipts.rejected), (state, action) => {
       state.receiptLoading = false;
       state.receiptError = action.error.message;
     });

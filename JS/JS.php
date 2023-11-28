@@ -2,8 +2,7 @@
 
 namespace ORB\Accounts\JS;
 
-use ORB\Accounts\Pages\Pages;
-use ORB\Accounts\Post_Types\Post_Types;
+use Exception;
 
 class JS
 {
@@ -14,9 +13,6 @@ class JS
     private $buildDirURL;
     private $buildFilePrefix;
     private $buildFilePrefixURL;
-    private $front_page_react;
-    private $page_titles;
-    private $post_types;
     private $includes_url;
 
     public function __construct()
@@ -30,130 +26,146 @@ class JS
         $this->buildFilePrefix = $this->buildDir . 'src_views_';
         $this->buildFilePrefixURL = $this->buildDirURL . 'src_views_';
 
-        $pages = new Pages;
-        $posttypes = new Post_Types;
-
-        $this->page_titles = [
-            ...$pages->pages,
-            ...$pages->protected_pages
-        ];
-        $this->front_page_react = $pages->front_page_react;
-        $this->post_types = $posttypes->post_types;
-
         $this->includes_url = includes_url();
     }
 
-    function load_front_page_react()
+    function load_front_page_react($section)
     {
-        if ($_SERVER['REQUEST_URI'] === '/') {
-            if (!empty($this->front_page_react) && is_array($this->front_page_react) && count($this->front_page_react) > 0) {
-                foreach ($this->front_page_react as $section) {
-                    $fileName = ucwords($section);
-                    $filePath = $this->buildFilePrefix . $fileName . '_jsx.js';
-                    $filePathURL = $this->buildFilePrefixURL . $fileName . '_jsx.js';
-
-                    wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
-
-                    if (file_exists($filePath)) {
-                        wp_enqueue_script($this->handle_prefix . 'react_' . $fileName, $filePathURL, ['wp-element'], 1.0, true);
-                    } else {
-                        error_log($fileName . ' page has not been created in react JSX.');
-                    }
-
-                    wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
-                }
-            }
-        }
-    }
-
-    function load_pages_react()
-    {
-        if (is_array($this->page_titles) && !empty($this->page_titles)) {
-            foreach ($this->page_titles as $page) {
-                $full_url = explode('/', $page);
-                $full_path = explode('/', $_SERVER['REQUEST_URI']);
-
-                $full_url = array_filter($full_url, function ($value) {
-                    return $value !== "";
-                });
-
-                $full_path = array_filter($full_path, function ($value) {
-                    return $value !== "";
-                });
-
-                $full_url = array_values($full_url);
-                $full_path = array_values($full_path);
-
-                // $differences = array_diff_assoc($full_url, $full_path);
-
-                if ($full_url === $full_path) {
-
-                    $fileName = str_replace(' ', '', ucwords(str_replace('/', ' ', $page)));
-
-                    $filePath = $this->buildFilePrefix . $fileName . '_jsx.js';
-                    $filePathURL = $this->buildFilePrefixURL . $fileName . '_jsx.js';
-
-                    wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
-
-                    if (file_exists($filePath)) {
-                        wp_enqueue_script($this->handle_prefix . 'react_' . $fileName, $filePathURL, ['wp-element'], 1.0, true);
-                    } else {
-                        error_log($page . ' page has not been created in react JSX.');
-                    }
-
-                    wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
-
-                    break;
-                }
-            }
-        } else {
-            error_log('There are no page titles in the array at ' . $this->dir . ' Pages');
-        }
-    }
-
-    function load_post_types_archive_react()
-    {
-        foreach ($this->post_types as $post_type) {
-            if (is_array($post_type) && isset($post_type['name']) && isset($post_type['archive_page'])) {
-                $fileName = ucwords($post_type['archive_page']);
-                $filePath = $this->buildFilePrefix . $fileName . '_jsx.js';
-                $filePathURL = $this->buildFilePrefixURL . $fileName . '_jsx.js';
+        try {
+            if (!empty($section)) {
+                $filePath = $this->buildFilePrefix . $section . '_jsx.js';
+                $filePathURL = $this->buildFilePrefixURL . $section . '_jsx.js';
 
                 wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
                 if (file_exists($filePath)) {
-                    wp_enqueue_script($this->handle_prefix . 'react_' . $fileName, $filePathURL, ['wp-element'], 1.0, true);
+                    wp_enqueue_script($this->handle_prefix . 'react_' . $section, $filePathURL, ['wp-element'], 1.0, true);
                 } else {
-                    error_log('Post Type ' . $post_type['archive_page'] . ' page has not been created in react JSX.');
+                    throw new Exception($section . ' page has not been created in react JSX.', 404);
                 }
 
                 wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
-            } else {
-                error_log('There are no post types in the array at ' . $this->dir . ' Post_Types');
-            }
+            } 
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at load_front_page_react');
+
+            return $response;
         }
     }
 
-    function load_post_types_single_react()
+    function load_pages_react($page)
     {
-        foreach ($this->post_types as $post_type) {
-            if (is_array($post_type) && isset($post_type['name']) && isset($post_type['single_page'])) {
-                if (is_singular($post_type['name'])) {
-                    $fileName = ucwords($post_type['single_page']);
-                    $filePath = $this->buildFilePrefix . $fileName . '_jsx.js';
-                    $filePathURL = $this->buildFilePrefixURL . $fileName . '_jsx.js';
+        try {
+            if (!empty($page) && is_array($page)) {
+                $filePath = $this->buildFilePrefix . $page['file_name'] . '_jsx.js';
+                $filePathURL = $this->buildFilePrefixURL . $page['file_name'] . '_jsx.js';
 
-                    wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
+                wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
-                    if (file_exists($filePath)) {
-                        wp_enqueue_script($this->handle_prefix . 'react_' . $fileName, $filePathURL, ['wp-element'], 1.0, true);
-                    } else {
-                        error_log('Post Type ' . $post_type['single_page'] . ' page has not been created in react JSX.');
-                    }
-
-                    wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
+                if (file_exists($filePath)) {
+                    wp_enqueue_script($this->handle_prefix . 'react_' . $page['file_name'], $filePathURL, ['wp-element'], 1.0, true);
+                } else {
+                    throw new Exception($page['file_name'] . ' page has not been created in react JSX.');
                 }
+
+                wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
+            } 
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at load_pages_react');
+
+            return $response;
+        }
+    }
+
+    function load_taxonomies_react($taxonomy)
+    {
+        try {
+            if (!empty($taxonomy) && is_array($taxonomy) && is_tax($taxonomy['taxonomy'])) {
+                $filePath = $this->buildFilePrefix . $taxonomy['file_name'] . '_jsx.js';
+                $filePathURL = $this->buildFilePrefixURL . $taxonomy['file_name'] . '_jsx.js';
+
+                wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
+
+                if (file_exists($filePath)) {
+                    wp_enqueue_script($this->handle_prefix . 'react_' . $taxonomy['file_name'], $filePathURL, ['wp-element'], 1.0, true);
+                } else {
+                    throw new Exception('Taxonomy ' . ucfirst($taxonomy['name']) . ' page has not been created in react JSX.');
+                }
+
+                wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
             }
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at load_taxonomies_react');
+
+            return $response;
+        }
+    }
+
+    function load_post_types_archive_react($post_type)
+    {
+        try {
+            if (!empty($post_type) && is_array($post_type) && is_post_type_archive($post_type['name'])) {
+                $filePath = $this->buildFilePrefix . $post_type['archive_page'] . '_jsx.js';
+                $filePathURL = $this->buildFilePrefixURL . $post_type['archive_page'] . '_jsx.js';
+
+                wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
+
+                if (file_exists($filePath)) {
+                    wp_enqueue_script($this->handle_prefix . 'react_' . $post_type['archive_page'], $filePathURL, ['wp-element'], 1.0, true);
+                } else {
+                    throw new Exception('Post Type ' . ucfirst($post_type['name']) . ' page has not been created in react JSX.', 404);
+                }
+
+                wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
+            }
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at load_post_types_archive_react');
+
+            return $response;
+        }
+    }
+
+    function load_post_types_single_react($post_type)
+    {
+        try {
+            if (!empty($post_type) && is_array($post_type) && is_singular($post_type['name'])) {
+                $filePath = $this->buildFilePrefix . $post_type['single_page'] . '_jsx.js';
+                $filePathURL = $this->buildFilePrefixURL . $post_type['single_page'] . '_jsx.js';
+
+                wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
+
+                if (file_exists($filePath)) {
+                    wp_enqueue_script($this->handle_prefix . 'react_' . $post_type['single_page'], $filePathURL, ['wp-element'], 1.0, true);
+                } else {
+                    throw new Exception('Post Type ' . ucfirst($post_type['name']) . ' page has not been created in react JSX.');
+                }
+
+                wp_enqueue_script($this->handle_prefix . 'react_index', $this->buildDirURL . 'index.js', ['wp-element'], '1.0', true);
+            }
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at load_post_types_single_react');
+
+            return $response;
         }
     }
 }
