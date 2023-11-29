@@ -41,11 +41,14 @@ class Router
         try {
             $path = $_SERVER['REQUEST_URI'];
 
-            if (!empty($this->front_page_react)) {
-                foreach ($this->front_page_react as $section) {
-                    add_filter('frontpage_template', function ($frontpage_template) use ($section) {
-                        return $this->templates->get_front_page_template($frontpage_template, $section);
-                    });
+            if (preg_match('#^/$|^/index\.php(?:\?|$)#', $path)) {
+
+                if (!empty($this->front_page_react)) {
+                    foreach ($this->front_page_react as $section) {
+                        add_filter('frontpage_template', function ($frontpage_template) use ($section) {
+                            return $this->templates->get_front_page_template($frontpage_template, $section);
+                        });
+                    }
                 }
             }
 
@@ -114,7 +117,8 @@ class Router
         }
     }
 
-    function react_rewrite_rules(){
+    function react_rewrite_rules()
+    {
         add_rewrite_rule('^billing$', 'index.php?', 'top');
         add_rewrite_rule('^billing/invoice/(?P<slug>[a-zA-Z0-9-_]+)', 'index.php?', 'top');
         add_rewrite_rule('^billing/invoices$', 'index.php?', 'top');
@@ -129,5 +133,4 @@ class Router
         add_rewrite_rule('^client/selections$', 'index.php?', 'top');
         add_rewrite_rule('^client/start$', 'index.php?', 'top');
     }
-
 }

@@ -27,38 +27,6 @@ class Receipt
         $this->stripe_payment_intent = new StripePaymentIntents($stripeClient);
         $this->stripe_charges = new StripeCharges($stripeClient);
         $this->database_receipt = new DatabaseReceipt($stripeClient);
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/receipt', [
-                'methods' => 'POST',
-                'callback' => [$this, 'save_receipt'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/receipt/(?P<slug>[a-z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'get_receipt'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/receipt/(?P<slug>[a-z0-9-_]+)/id', [
-                'methods' => 'POST',
-                'callback' => [$this, 'get_receipt_by_id'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/receipts/client/(?P<slug>[a-z0-9-_]+)', [
-                'methods' => 'GET',
-                'callback' => [$this, 'get_client_receipts'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
     }
 
     public function save_receipt(WP_REST_Request $request)

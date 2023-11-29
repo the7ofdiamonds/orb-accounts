@@ -16,22 +16,6 @@ class Clients
 
     public function __construct($stripeClient)
     {
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/users/clients', array(
-                'methods' => 'POST',
-                'callback' => array($this, 'add_client'),
-                'permission_callback' => '__return_true',
-            ));
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/users/client/(?P<slug>[a-zA-Z0-9-_%.]+)', array(
-                'methods' => 'GET',
-                'callback' => array($this, 'get_client'),
-                'permission_callback' => '__return_true',
-            ));
-        });
-
         $this->stripe_customers = new StripeCustomers($stripeClient);
         $this->database_client = new DatabaseClient();
     }
@@ -180,8 +164,9 @@ class Clients
             $user_email = urldecode($user_email_encoded);
             $user = get_user_by('email', $user_email);
             $user_id = $user->id;
+            
             $client = $this->database_client->getClient($user_id);
-error_log($user_email);
+
             return rest_ensure_response($client);
         } catch (Exception $e) {
             $error_message = $e->getMessage();

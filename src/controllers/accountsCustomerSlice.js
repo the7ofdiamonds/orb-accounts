@@ -7,7 +7,7 @@ const initialState = {
     tax_id: '',
     first_name: '',
     last_name: '',
-    user_email: '',
+    user_email: sessionStorage.getItem('email'),
     phone: '',
     address_line_1: '',
     address_line_2: '',

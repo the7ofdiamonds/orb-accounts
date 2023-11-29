@@ -16,38 +16,6 @@ class Email
 
     public function __construct($stripeClient, $mailer)
     {
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/email/quote/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'send_quote_email'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/email/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'send_invoice_email'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/email/receipt/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'send_receipt_email'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/email/onboarding/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'POST',
-                'callback' => [$this, 'send_onboarding_email'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
         $this->stripeClient = $stripeClient;
         $this->mailer = $mailer;
     }

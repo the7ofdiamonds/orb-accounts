@@ -13,38 +13,6 @@ class Payment
     {
         $this->stripe_payment_intents = $stripe_payment_intents;
         $this->stripe_payment_methods = $stripe_payment_methods;
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/stripe/payment_intents', [
-                'methods' => 'POST',
-                'callback' => [$this, 'create_payment_intent'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/stripe/payment_intents/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'GET',
-                'callback' => [$this, 'get_payment_intent'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/stripe/payment_intents/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'PATCH',
-                'callback' => [$this, 'update_payment_intent'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
-
-        add_action('rest_api_init', function () {
-            register_rest_route('orb/v1', '/stripe/payment_methods/(?P<slug>[a-zA-Z0-9-_]+)', [
-                'methods' => 'GET',
-                'callback' => [$this, 'get_payment_method'],
-                'permission_callback' => '__return_true',
-            ]);
-        });
     }
 
     public function create_payment_intent(WP_REST_Request $request)

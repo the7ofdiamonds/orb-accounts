@@ -7895,7 +7895,7 @@ const initialState = {
   clientError: '',
   client_id: '',
   stripe_customer_id: '',
-  user_email: sessionStorage.getItem('user_email'),
+  user_email: sessionStorage.getItem('email'),
   first_name: '',
   last_name: ''
 };
@@ -7919,7 +7919,7 @@ const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
     country
   } = getState().accountsCustomer;
   try {
-    const response = await fetch('/wp-json/orb/v1/users/clients', {
+    const response = await fetch('/wp-json/orb/users/clients/v1/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -7958,7 +7958,7 @@ const getClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
   } = getState().accountsClient;
   const encodedEmail = encodeURIComponent(user_email);
   try {
-    const response = await fetch(`/wp-json/orb/v1/users/client/${encodedEmail}`, {
+    const response = await fetch(`/wp-json/orb/users/client/v1/${encodedEmail}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -8039,7 +8039,7 @@ const initialState = {
   tax_id: '',
   first_name: '',
   last_name: '',
-  user_email: '',
+  user_email: sessionStorage.getItem('email'),
   phone: '',
   address_line_1: '',
   address_line_2: '',

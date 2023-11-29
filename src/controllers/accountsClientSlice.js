@@ -5,7 +5,7 @@ const initialState = {
     clientError: '',
     client_id: '',
     stripe_customer_id: '',
-    user_email: sessionStorage.getItem('user_email'),
+    user_email: sessionStorage.getItem('email'),
     first_name: '',
     last_name: '',
 };
@@ -27,7 +27,7 @@ export const addClient = createAsyncThunk('accountsClient/addClient', async (_, 
     } = getState().accountsCustomer;
 
     try {
-        const response = await fetch('/wp-json/orb/v1/users/clients', {
+        const response = await fetch('/wp-json/orb/users/clients/v1/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ export const getClient = createAsyncThunk('accountsClient/getClient', async (_, 
     const encodedEmail = encodeURIComponent(user_email);
 
     try {
-        const response = await fetch(`/wp-json/orb/v1/users/client/${encodedEmail}`, {
+        const response = await fetch(`/wp-json/orb/users/client/v1/${encodedEmail}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

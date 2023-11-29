@@ -59,7 +59,7 @@ class Pages
                 'file_name' => 'Billing',
             ],
             [
-                'regex' => '#^/client#',
+                'regex' => '#^/client/$#',
                 'file_name' => 'Client',
             ],
             [
