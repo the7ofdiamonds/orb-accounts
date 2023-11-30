@@ -20,30 +20,6 @@ class Invoice
         $this->stripe_invoice = new StripeInvoice($stripeClient);
     }
 
-    public function create_stripe_invoice(WP_REST_Request $request)
-    {
-        try {
-            $stripe_customer_id = $request->get_param('slug');
-            $selections = $request['selections'];
-
-            return $this->stripe_invoice->createStripeInvoice($stripe_customer_id, $selections);
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
-
     public function save_invoice(WP_REST_Request $request)
     {
         try {
@@ -132,31 +108,6 @@ class Invoice
             $invoice = $this->database_invoice->getInvoiceByQuoteID($quote_id, $stripe_customer_id);
 
             return rest_ensure_response($invoice);
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
-
-    public function get_stripe_invoice(WP_REST_Request $request)
-    {
-        try {
-            $stripe_invoice_id = $request->get_param('slug');
-
-            $stripe_invoice = $this->stripe_invoice->getStripeInvoice($stripe_invoice_id);
-
-            return rest_ensure_response($stripe_invoice);
         } catch (Exception $e) {
 
             $error_message = $e->getMessage();

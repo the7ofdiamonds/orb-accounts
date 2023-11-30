@@ -21,7 +21,7 @@ class Quote
         $this->database_quote = new DatabaseQuote();
     }
 
-    public function create_stripe_quote(WP_REST_Request $request)
+    public function create_quote(WP_REST_Request $request)
     {
         try {
             $request_body = $request->get_body();
@@ -107,29 +107,6 @@ class Quote
         }
     }
 
-    public function get_stripe_quote(WP_REST_Request $request)
-    {
-        try {
-            $stripe_quote_id = $request->get_param('slug');
-
-            return rest_ensure_response($this->stripe_quote->getStripeQuote($stripe_quote_id));
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
-
     public function update_quote(WP_REST_Request $request)
     {
         try {
@@ -181,36 +158,6 @@ class Quote
         }
     }
 
-    public function update_stripe_quote(WP_REST_Request $request)
-    {
-        try {
-            $stripe_quote_id = $request->get_param('slug');
-            $selections = $request['selections'];
-
-            if (empty($selections)) {
-                $msg = 'Selections are required';
-                $code = 404;
-
-                throw new Exception($msg, $code);
-            }
-
-            return rest_ensure_response($this->stripe_quote->updateStripeQuote($stripe_quote_id, $selections));
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
 
     public function finalize_quote(WP_REST_Request $request)
     {
@@ -329,46 +276,6 @@ class Quote
         }
     }
 
-    public function pdf_quote(WP_REST_Request $request)
-    {
-        try {
-            // $pdf_data = '';
-
-            // $stripe_quote_id = $request->get_param('slug');
-
-            // $this->stripeClient->quotes->pdf($quote_id, function ($chunk) use (&$pdf_data) {
-            //     $pdf_data .= $chunk;
-            // });
-            // $myfile = fopen("/tmp/tmp.pdf", "w");
-
-            // $pdf = $this->stripeClient->quotes->pdf($stripe_quote_id, function ($chunk) use (&$myfile) {
-            //     fwrite($myfile, $chunk);
-            // });
-
-            // fclose($myfile);
-            // header('Content-Type: application/pdf');
-            // header('Content-Disposition: inline; filename="quote.pdf"');
-
-            // echo $pdf_data;
-
-            // return rest_ensure_response($pdf_data);
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
-
     public function get_quotes(WP_REST_Request $request)
     {
         try {
@@ -408,56 +315,6 @@ class Quote
             $response = rest_ensure_response($response_data);
             $response->set_status($status_code);
             error_log(print_r($response, true));
-            return $response;
-        }
-    }
-
-    public function get_stripe_quotes()
-    {
-        try {
-            return rest_ensure_response($this->stripe_quote->getStripeQuotes());
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
-
-    public function get_stripe_client_quotes(WP_REST_Request $request)
-    {
-        try {
-            $stripe_customer_id = $request->get_param('slug');
-
-            if (empty($stripe_customer_id)) {
-                $msg = 'Customer ID is required';
-                $code = 404;
-                throw new Exception($msg, $code);
-            }
-
-            return rest_ensure_response($this->stripe_quote->getStripeClientQuotes($stripe_customer_id));
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
             return $response;
         }
     }
