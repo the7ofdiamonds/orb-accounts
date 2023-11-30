@@ -19,33 +19,8 @@ export const updateClientSecret = (clientSecret) => {
   };
 };
 
-export const getPaymentIntent = createAsyncThunk('payment/getPaymentIntent', async (paymentIntentID, { getState }) => {
-  const { payment_intent_id } = getState().accountsInvoice;
-
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/payment_intents/${paymentIntentID ? paymentIntentID : payment_intent_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-}
-);
-
 export const accountsPaymentSlice = createSlice({
-  name: 'accountsPayment',
+  name: 'payment',
   initialState,
   reducers: {
     updateClientSecret: (state, action) => {

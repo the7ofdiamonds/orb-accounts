@@ -26,42 +26,14 @@ export const updateReceiptID = (receiptID) => {
   };
 };
 
-export const getPaymentMethod = createAsyncThunk('receipt/getPaymentMethod', async (payment_method_id) => {
+
+export const saveReceipt = createAsyncThunk('receipt/saveReceipt', async (_, { getState }) => {
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/payment_methods/${payment_method_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-
-export const updatePaymentMethod = (paymentMethod) => {
-  return {
-    type: 'receipt/updatePaymentMethod',
-    payload: paymentMethod
-  };
-};
-
-export const postReceipt = createAsyncThunk('receipt/postReceipt', async (_, { getState }) => {
-  const { stripe_customer_id, first_name, last_name } = getState().accountsClient;
-  const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
-  const { payment_method_id, amount_paid, payment_date, balance, payment_method } = getState().accountsReceipt;
-
-  try {
-    const response = await fetch('/wp-json/orb/v1/receipt', {
+    const { stripe_customer_id, first_name, last_name } = getState().accountsClient;
+    const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
+    const { payment_method_id, amount_paid, payment_date, balance, payment_method } = getState().accountsReceipt;
+  
+    const response = await fetch('/wp-json/orb/receipt/v1/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -91,15 +63,14 @@ export const postReceipt = createAsyncThunk('receipt/postReceipt', async (_, { g
   } catch (error) {
     throw error.message;
   }
-}
-);
+});
 
 export const getReceipt = createAsyncThunk('receipt/getReceipt', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().accountsClient;
-  const { stripe_invoice_id } = getState().accountsInvoice;
-
   try {
-    const response = await fetch(`/wp-json/orb/v1/receipt/${stripe_invoice_id}`, {
+    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_invoice_id } = getState().accountsInvoice;
+  
+    const response = await fetch(`/wp-json/orb/receipt/v1/${stripe_invoice_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -123,10 +94,10 @@ export const getReceipt = createAsyncThunk('receipt/getReceipt', async (_, { get
 });
 
 export const getReceiptByID = createAsyncThunk('receipt/getReceiptByID', async (id, { getState }) => {
-  const { stripe_customer_id } = getState().accountsClient;
-
   try {
-    const response = await fetch(`/wp-json/orb/v1/receipt/${id}/id`, {
+    const { stripe_customer_id } = getState().accountsClient;
+
+    const response = await fetch(`/wp-json/orb/receipt/v1/id/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -150,10 +121,10 @@ export const getReceiptByID = createAsyncThunk('receipt/getReceiptByID', async (
 });
 
 export const getClientReceipts = createAsyncThunk('receipt/getClientReceipts', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().accountsClient;
-
   try {
-    const response = await fetch(`/wp-json/orb/v1/receipts/client/${stripe_customer_id}`, {
+    const { stripe_customer_id } = getState().accountsClient;
+
+    const response = await fetch(`/wp-json/orb/receipt/v1/client/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

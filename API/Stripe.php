@@ -1,6 +1,6 @@
 <?php
 
-namespace ORB\Accounts\API\Stripe;
+namespace ORB\Accounts\API;
 
 use Exception;
 

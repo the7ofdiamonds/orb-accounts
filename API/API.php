@@ -9,7 +9,6 @@ use Stripe\StripeClient;
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-use ORB\Accounts\API\Stripe\Stripe;
 use ORB\Accounts\Email\EmailInvoice;
 use ORB\Accounts\Email\EmailQuote;
 use ORB\Accounts\Email\EmailReceipt;
@@ -243,13 +242,6 @@ class API
             'callback' => array($receipt, 'get_client_receipts'),
             'permission_callback' => '__return_true',
         ));
-
-        register_rest_route('orb/v1', '/stripe/invoices/create/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'POST',
-            'callback' => array($stripe, 'create_stripe_invoice'),
-            'permission_callback' => '__return_true',
-        ));
-
 
         register_rest_route('orb/v1', '/stripe/invoices/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',

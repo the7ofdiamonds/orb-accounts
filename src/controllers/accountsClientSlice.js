@@ -10,24 +10,24 @@ const initialState = {
     last_name: '',
 };
 
-export const addClient = createAsyncThunk('accountsClient/addClient', async (_, { getState }) => {
-    const { user_email } = getState().accountsClient;
-    const {
-        company_name,
-        tax_id,
-        first_name,
-        last_name,
-        phone,
-        address_line_1,
-        address_line_2,
-        city,
-        state,
-        zipcode,
-        country
-    } = getState().accountsCustomer;
-
+export const addClient = createAsyncThunk('client/addClient', async (_, { getState }) => {
     try {
-        const response = await fetch('/wp-json/orb/users/clients/v1/add', {
+        const { user_email } = getState().accountsClient;
+        const {
+            company_name,
+            tax_id,
+            first_name,
+            last_name,
+            phone,
+            address_line_1,
+            address_line_2,
+            city,
+            state,
+            zipcode,
+            country
+        } = getState().accountsCustomer;
+
+        const response = await fetch('/wp-json/orb/user/client/v1/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -61,12 +61,12 @@ export const addClient = createAsyncThunk('accountsClient/addClient', async (_, 
     }
 });
 
-export const getClient = createAsyncThunk('accountsClient/getClient', async (_, { getState }) => {
-    const { user_email } = getState().accountsClient;
-    const encodedEmail = encodeURIComponent(user_email);
-
+export const getClient = createAsyncThunk('client/getClient', async (_, { getState }) => {
     try {
-        const response = await fetch(`/wp-json/orb/users/client/v1/${encodedEmail}`, {
+        const { user_email } = getState().accountsClient;
+        const encodedEmail = encodeURIComponent(user_email);
+
+        const response = await fetch(`/wp-json/orb/user/client/v1/${encodedEmail}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -86,8 +86,10 @@ export const getClient = createAsyncThunk('accountsClient/getClient', async (_, 
     }
 });
 
+export const updateClient = createAsyncThunk('client/updateClient');
+
 export const accountsClientSlice = createSlice({
-    name: 'accountsClient',
+    name: 'client',
     initialState,
     extraReducers: (builder) => {
         builder
@@ -105,9 +107,25 @@ export const accountsClientSlice = createSlice({
                 state.last_name = action.payload.last_name
                 state.stripe_customer_id = action.payload.stripe_customer_id
             })
+            .addCase(updateClient.fulfilled, (state, action) => {
+                state.clientLoading = false;
+                state.clientError = '';
+                state.stripe_customer_id = action.payload.id;
+                state.company_name = action.payload.name;
+                state.first_name = action.payload.first_name;
+                state.last_name = action.payload.last_name;
+                state.address_line_1 = action.payload.address.line1
+                state.address_line_2 = action.payload.address.line2
+                state.city = action.payload.address.city
+                state.state = action.payload.address.state
+                state.zipcode = action.payload.address.postal_code
+                state.email = action.payload.email
+                state.phone = action.payload.phone
+             })
             .addMatcher(isAnyOf(
                 addClient.pending,
                 getClient.pending,
+                updateClient.pending
             ), (state) => {
                 state.clientLoading = true;
                 state.clientError = null;
@@ -115,6 +133,7 @@ export const accountsClientSlice = createSlice({
             .addMatcher(isAnyOf(
                 addClient.rejected,
                 getClient.rejected,
+                updateClient.rejected
             ),
                 (state, action) => {
                     state.clientLoading = false;

@@ -17,17 +17,17 @@ const initialState = {
 
 export const updateQuoteID = (stripe_quote_id) => {
   return {
-    type: 'accountsQuote/updateQuoteID',
+    type: 'quote/updateQuoteID',
     payload: stripe_quote_id
   };
 };
 
-export const createQuote = createAsyncThunk('accountsQuote/createQuote', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().accountsClient;
-  const { selections } = getState().accountsQuote;
-
+export const createQuote = createAsyncThunk('quote/createQuote', async (_, { getState }) => {
   try {
-    const response = await fetch('/wp-json/orb/v1/quote', {
+    const { stripe_customer_id } = getState().accountsClient;
+    const { selections } = getState().accountsQuote;
+  
+    const response = await fetch('/wp-json/orb/quote/v1/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -52,12 +52,12 @@ export const createQuote = createAsyncThunk('accountsQuote/createQuote', async (
 });
 
 
-export const getQuote = createAsyncThunk('accountsQuote/getQuote', async (stripeQuoteID, { getState }) => {
-  const { stripe_quote_id } = getState().accountsQuote;
-  const { stripe_customer_id } = getState().accountsClient;
-
+export const getQuote = createAsyncThunk('quote/getQuote', async (stripeQuoteID, { getState }) => {
   try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
+    const { stripe_quote_id } = getState().accountsQuote;
+    const { stripe_customer_id } = getState().accountsClient;
+  
+    const response = await fetch(`/wp-json/orb/quote/v1/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -80,12 +80,12 @@ export const getQuote = createAsyncThunk('accountsQuote/getQuote', async (stripe
   }
 });
 
-export const getQuoteByID = createAsyncThunk('accountsQuote/getQuoteByID', async (quoteID, { getState }) => {
-  const { quote_id } = getState().accountsQuote;
-  const { stripe_customer_id } = getState().accountsClient;
-
+export const getQuoteByID = createAsyncThunk('quote/getQuoteByID', async (quoteID, { getState }) => {
   try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${quoteID ? quoteID : quote_id}/id`, {
+    const { quote_id } = getState().accountsQuote;
+    const { stripe_customer_id } = getState().accountsClient;
+  
+    const response = await fetch(`/wp-json/orb/quote/v1/id/${quoteID ? quoteID : quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -108,35 +108,11 @@ export const getQuoteByID = createAsyncThunk('accountsQuote/getQuoteByID', async
   }
 });
 
-export const getStripeQuote = createAsyncThunk('accountsQuote/getStripeQuote', async (stripeQuoteID, { getState }) => {
-  const { stripe_quote_id } = getState().accountsQuote;
-
+export const updateQuote = createAsyncThunk('quote/updateQuote', async (_, { getState }) => {
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const { stripe_quote_id, selections } = getState().accountsQuote;
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-
-export const updateQuote = createAsyncThunk('accountsQuote/updateQuote', async (_, { getState }) => {
-  const { stripe_quote_id, selections } = getState().accountsQuote;
-
-  try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${stripe_quote_id}`, {
+    const response = await fetch(`/wp-json/orb/v1/quote/update/${stripe_quote_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -157,36 +133,10 @@ export const updateQuote = createAsyncThunk('accountsQuote/updateQuote', async (
   }
 });
 
-export const updateStripeQuote = createAsyncThunk('accountsQuote/updateStripeQuote', async (_, { getState }) => {
-  const { stripe_quote_id, selections } = getState().accountsQuote;
+export const finalizeQuote = createAsyncThunk('quote/finalizeQuote', async (_, { getState }) => {
 
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quote/${stripe_quote_id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(selections)
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-
-export const finalizeQuote = createAsyncThunk('accountsQuote/finalizeQuote', async (_, { getState }) => {
-  const { stripe_quote_id, selections } = getState().accountsQuote;
-
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_quote_id}/finalize`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/finalize/${stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -209,11 +159,11 @@ export const finalizeQuote = createAsyncThunk('accountsQuote/finalizeQuote', asy
   }
 });
 
-export const updateQuoteStatus = createAsyncThunk('accountsQuote/updateQuoteStatus', async (_, { getState }) => {
+export const updateQuoteStatus = createAsyncThunk('quote/updateQuoteStatus', async (_, { getState }) => {
   const { stripe_quote_id } = getState().accountsQuote;
 
   try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${stripe_quote_id}`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/update/status/${stripe_quote_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -233,11 +183,11 @@ export const updateQuoteStatus = createAsyncThunk('accountsQuote/updateQuoteStat
   }
 });
 
-export const acceptQuote = createAsyncThunk('accountsQuote/acceptQuote', async (_, { getState }) => {
+export const acceptQuote = createAsyncThunk('quote/acceptQuote', async (_, { getState }) => {
   const { stripe_quote_id } = getState().accountsQuote;
 
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_quote_id}/accept`, {
+    const response = await fetch(`/wp-json/orb/quotes/v1/accept/${stripe_quote_id}/accept`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -257,11 +207,11 @@ export const acceptQuote = createAsyncThunk('accountsQuote/acceptQuote', async (
   }
 });
 
-export const cancelQuote = createAsyncThunk('accountsQuote/cancelQuote', async (_, { getState }) => {
+export const cancelQuote = createAsyncThunk('quote/cancelQuote', async (_, { getState }) => {
   const { stripe_quote_id } = getState().accountsQuote;
 
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_quote_id}/cancel`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/cancel/${stripe_quote_id}/cancel`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -281,11 +231,11 @@ export const cancelQuote = createAsyncThunk('accountsQuote/cancelQuote', async (
   }
 });
 
-export const getClientQuotes = createAsyncThunk('accountsQuote/getClientQuotes', async (_, { getState }) => {
+export const getClientQuotes = createAsyncThunk('quote/getClientQuotes', async (_, { getState }) => {
   const { stripe_customer_id } = getState().accountsClient;
 
   try {
-    const response = await fetch(`/wp-json/orb/v1/quotes/client/${stripe_customer_id}`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/client/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -297,30 +247,6 @@ export const getClientQuotes = createAsyncThunk('accountsQuote/getClientQuotes',
       const errorMessage = errorData.message;
       throw new Error(errorMessage);
     }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-
-export const getStripeClientQuotes = createAsyncThunk('accountsQuote/getStripeClientQuotes', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().accountsClient;
-
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_customer_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -329,7 +255,7 @@ export const getStripeClientQuotes = createAsyncThunk('accountsQuote/getStripeCl
 });
 
 export const accountsQuoteSlice = createSlice({
-  name: 'accountsQuote',
+  name: 'quote',
   initialState,
   reducers: {
     addSelections: (state, action) => {

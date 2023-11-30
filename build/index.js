@@ -7886,7 +7886,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   accountsClientSlice: () => (/* binding */ accountsClientSlice),
 /* harmony export */   addClient: () => (/* binding */ addClient),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   getClient: () => (/* binding */ getClient)
+/* harmony export */   getClient: () => (/* binding */ getClient),
+/* harmony export */   updateClient: () => (/* binding */ updateClient)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
@@ -7899,27 +7900,27 @@ const initialState = {
   first_name: '',
   last_name: ''
 };
-const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsClient/addClient', async (_, {
+const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('client/addClient', async (_, {
   getState
 }) => {
-  const {
-    user_email
-  } = getState().accountsClient;
-  const {
-    company_name,
-    tax_id,
-    first_name,
-    last_name,
-    phone,
-    address_line_1,
-    address_line_2,
-    city,
-    state,
-    zipcode,
-    country
-  } = getState().accountsCustomer;
   try {
-    const response = await fetch('/wp-json/orb/users/clients/v1/add', {
+    const {
+      user_email
+    } = getState().accountsClient;
+    const {
+      company_name,
+      tax_id,
+      first_name,
+      last_name,
+      phone,
+      address_line_1,
+      address_line_2,
+      city,
+      state,
+      zipcode,
+      country
+    } = getState().accountsCustomer;
+    const response = await fetch('/wp-json/orb/user/client/v1/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -7950,15 +7951,15 @@ const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
     throw error.message;
   }
 });
-const getClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsClient/getClient', async (_, {
+const getClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('client/getClient', async (_, {
   getState
 }) => {
-  const {
-    user_email
-  } = getState().accountsClient;
-  const encodedEmail = encodeURIComponent(user_email);
   try {
-    const response = await fetch(`/wp-json/orb/users/client/v1/${encodedEmail}`, {
+    const {
+      user_email
+    } = getState().accountsClient;
+    const encodedEmail = encodeURIComponent(user_email);
+    const response = await fetch(`/wp-json/orb/user/client/v1/${encodedEmail}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -7975,8 +7976,9 @@ const getClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
     throw error.message;
   }
 });
+const updateClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('client/updateClient');
 const accountsClientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-  name: 'accountsClient',
+  name: 'client',
   initialState,
   extraReducers: builder => {
     builder.addCase(addClient.fulfilled, (state, action) => {
@@ -7991,10 +7993,24 @@ const accountsClientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cre
       state.first_name = action.payload.first_name;
       state.last_name = action.payload.last_name;
       state.stripe_customer_id = action.payload.stripe_customer_id;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addClient.pending, getClient.pending), state => {
+    }).addCase(updateClient.fulfilled, (state, action) => {
+      state.clientLoading = false;
+      state.clientError = '';
+      state.stripe_customer_id = action.payload.id;
+      state.company_name = action.payload.name;
+      state.first_name = action.payload.first_name;
+      state.last_name = action.payload.last_name;
+      state.address_line_1 = action.payload.address.line1;
+      state.address_line_2 = action.payload.address.line2;
+      state.city = action.payload.address.city;
+      state.state = action.payload.address.state;
+      state.zipcode = action.payload.address.postal_code;
+      state.email = action.payload.email;
+      state.phone = action.payload.phone;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addClient.pending, getClient.pending, updateClient.pending), state => {
       state.clientLoading = true;
       state.clientError = null;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addClient.rejected, getClient.rejected), (state, action) => {
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addClient.rejected, getClient.rejected, updateClient.rejected), (state, action) => {
       state.clientLoading = false;
       state.clientError = action.error.message;
     });
@@ -8014,19 +8030,19 @@ const accountsClientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cre
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   accountsCustomerSlice: () => (/* binding */ accountsCustomerSlice),
-/* harmony export */   addStripeCustomer: () => (/* binding */ addStripeCustomer),
+/* harmony export */   addCustomer: () => (/* binding */ addCustomer),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   getStripeCustomer: () => (/* binding */ getStripeCustomer),
+/* harmony export */   getCustomer: () => (/* binding */ getCustomer),
 /* harmony export */   updateAddress: () => (/* binding */ updateAddress),
 /* harmony export */   updateAddress2: () => (/* binding */ updateAddress2),
 /* harmony export */   updateCity: () => (/* binding */ updateCity),
 /* harmony export */   updateCompanyName: () => (/* binding */ updateCompanyName),
+/* harmony export */   updateCustomer: () => (/* binding */ updateCustomer),
 /* harmony export */   updateEmail: () => (/* binding */ updateEmail),
 /* harmony export */   updateFirstName: () => (/* binding */ updateFirstName),
 /* harmony export */   updateLastName: () => (/* binding */ updateLastName),
 /* harmony export */   updatePhone: () => (/* binding */ updatePhone),
 /* harmony export */   updateState: () => (/* binding */ updateState),
-/* harmony export */   updateStripeCustomer: () => (/* binding */ updateStripeCustomer),
 /* harmony export */   updateTaxID: () => (/* binding */ updateTaxID),
 /* harmony export */   updateZipcode: () => (/* binding */ updateZipcode)
 /* harmony export */ });
@@ -8049,28 +8065,28 @@ const initialState = {
   country: '',
   stripe_customer_id: ''
 };
-const addStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsCustomer/addStripeCustomer', async (_, {
+const addCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/addCustomer', async (_, {
   getState
 }) => {
-  const {
-    client_id,
-    user_email
-  } = getState().accountsClient;
-  const {
-    company_name,
-    tax_id,
-    first_name,
-    last_name,
-    phone,
-    address_line_1,
-    address_line_2,
-    city,
-    state,
-    zipcode,
-    country
-  } = getState().accountsCustomer;
   try {
-    const response = await fetch('/wp-json/orb/v1/stripe/customers', {
+    const {
+      client_id,
+      user_email
+    } = getState().accountsClient;
+    const {
+      company_name,
+      tax_id,
+      first_name,
+      last_name,
+      phone,
+      address_line_1,
+      address_line_2,
+      city,
+      state,
+      zipcode,
+      country
+    } = getState().accountsCustomer;
+    const response = await fetch('/wp-json/orb/customer/v1/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8102,14 +8118,14 @@ const addStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
     throw error.message;
   }
 });
-const getStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsCustomer/getStripeCustomer', async (stripeCustomerID, {
+const getCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/getCustomer', async (stripeCustomerID, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/customer/v1/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -8126,29 +8142,29 @@ const getStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
     throw error.message;
   }
 });
-const updateStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsCustomer/updateStripeCustomer', async (_, {
+const updateCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/updateCustomer', async (_, {
   getState
 }) => {
-  const {
-    client_id,
-    user_email,
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    company_name,
-    tax_id,
-    first_name,
-    last_name,
-    phone,
-    address_line_1,
-    address_line_2,
-    city,
-    state,
-    zipcode,
-    country
-  } = getState().accountsCustomer;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripe_customer_id}`, {
+    const {
+      client_id,
+      user_email,
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      company_name,
+      tax_id,
+      first_name,
+      last_name,
+      phone,
+      address_line_1,
+      address_line_2,
+      city,
+      state,
+      zipcode,
+      country
+    } = getState().accountsCustomer;
+    const response = await fetch(`/wp-json/orb/customers/v1/update/${stripe_customer_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -8181,7 +8197,7 @@ const updateStripeCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
   }
 });
 const accountsCustomerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-  name: 'accounstCustomer',
+  name: 'customer',
   initialState,
   reducers: {
     updateCompanyName: (state, action) => {
@@ -8219,11 +8235,11 @@ const accountsCustomerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
     }
   },
   extraReducers: builder => {
-    builder.addCase(addStripeCustomer.fulfilled, (state, action) => {
+    builder.addCase(addCustomer.fulfilled, (state, action) => {
       state.customerLoading = false;
       state.customer_error = null;
       state.stripe_customer_id = action.payload;
-    }).addCase(getStripeCustomer.fulfilled, (state, action) => {
+    }).addCase(getCustomer.fulfilled, (state, action) => {
       state.customerLoading = false;
       state.customer_error = null;
       state.stripe_customer_id = action.payload.id;
@@ -8237,7 +8253,7 @@ const accountsCustomerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
       state.zipcode = action.payload.address.postal_code;
       state.email = action.payload.email;
       state.phone = action.payload.phone;
-    }).addCase(updateStripeCustomer.fulfilled, (state, action) => {
+    }).addCase(updateCustomer.fulfilled, (state, action) => {
       state.customerLoading = false;
       state.customer_error = null;
       state.stripe_customer_id = action.payload.id;
@@ -8251,10 +8267,10 @@ const accountsCustomerSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
       state.zipcode = action.payload.address.postal_code;
       state.email = action.payload.email;
       state.phone = action.payload.phone;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addStripeCustomer.pending, getStripeCustomer.pending), state => {
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addCustomer.pending, getCustomer.pending, updateCustomer.pending), state => {
       state.clientLoading = true;
       state.clientError = null;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addStripeCustomer.rejected, getStripeCustomer.rejected), (state, action) => {
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(addCustomer.rejected, getCustomer.rejected, updateCustomer.rejected), (state, action) => {
       state.clientLoading = false;
       state.clientError = action.error.message;
     });
@@ -8288,14 +8304,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   accountsInvoiceSlice: () => (/* binding */ accountsInvoiceSlice),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   deleteInvoice: () => (/* binding */ deleteInvoice),
 /* harmony export */   finalizeInvoice: () => (/* binding */ finalizeInvoice),
 /* harmony export */   getClientInvoices: () => (/* binding */ getClientInvoices),
 /* harmony export */   getInvoice: () => (/* binding */ getInvoice),
 /* harmony export */   getInvoiceByID: () => (/* binding */ getInvoiceByID),
 /* harmony export */   getInvoiceByQuoteID: () => (/* binding */ getInvoiceByQuoteID),
-/* harmony export */   getStripeInvoice: () => (/* binding */ getStripeInvoice),
-/* harmony export */   pdfInvoice: () => (/* binding */ pdfInvoice),
 /* harmony export */   saveInvoice: () => (/* binding */ saveInvoice),
 /* harmony export */   updateInvoice: () => (/* binding */ updateInvoice),
 /* harmony export */   updateInvoiceStatus: () => (/* binding */ updateInvoiceStatus)
@@ -8341,12 +8354,12 @@ const initialState = {
 const saveInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/saveInvoice', async (stripeInvoiceID, {
   getState
 }) => {
-  const {
-    quote_id,
-    stripe_invoice_id
-  } = getState().quote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/${stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id}`, {
+    const {
+      quote_id,
+      stripe_invoice_id
+    } = getState().quote;
+    const response = await fetch(`/wp-json/orb/invoice/v1/save/${stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8369,14 +8382,14 @@ const saveInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
 const getInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/getInvoice', async (stripeInvoiceID, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    stripe_invoice_id
-  } = getState().accountsInvoice;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/${stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const response = await fetch(`/wp-json/orb/invoice/v1/${stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8390,7 +8403,6 @@ const getInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
       const errorMessage = errorData.message;
       throw new Error(errorMessage);
     }
-    console.log(response);
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -8400,11 +8412,11 @@ const getInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
 const getInvoiceByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/getInvoiceByID', async (id, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/${id}/id`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/invoice/v1/id/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8427,14 +8439,14 @@ const getInvoiceByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAs
 const getInvoiceByQuoteID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/getInvoiceByQuoteID', async (quoteID, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    quote_id
-  } = getState().quote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/${quoteID ? quoteID : quote_id}/quoteid`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      quote_id
+    } = getState().quote;
+    const response = await fetch(`/wp-json/orb/invoice/v1/quoteid/${quoteID ? quoteID : quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8454,38 +8466,18 @@ const getInvoiceByQuoteID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cre
     throw error;
   }
 });
-const deleteInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/deleteInvoice', async stripe_invoice_id => {
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/invoices/${stripe_invoice_id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      console.log(errorMessage);
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error;
-  }
-});
 const updateInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/updateInvoice', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    invoice_id,
-    stripe_invoice_id
-  } = getState().accountsInvoice;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/${invoice_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      invoice_id,
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const response = await fetch(`/wp-json/orb/v1/invoice/update/${invoice_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -8509,15 +8501,15 @@ const updateInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsy
 const updateInvoiceStatus = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/updateInvoiceStatus', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    invoice_id,
-    stripe_invoice_id
-  } = getState().accountsInvoice;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/status/${invoice_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      invoice_id,
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const response = await fetch(`/wp-json/orb/invoice/v1/update/status/${invoice_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -8538,57 +8530,14 @@ const updateInvoiceStatus = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cre
     throw error;
   }
 });
-const getStripeInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/getStripeInvoice', async stripe_invoice_id => {
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/invoices/${stripe_invoice_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error;
-  }
-});
-const pdfInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/pdfInvoice', async (_, {
-  getState
-}) => {
-  const {
-    stripe_invoice_id
-  } = getState().accountsInvoice;
-  try {
-    const response = await fetch(`/wp-json/orb/v1/invoice/${stripe_invoice_id}/pdf`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error;
-  }
-});
 const getClientInvoices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/getClientInvoices', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/invoices/client/${stripe_customer_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/invoice/v1/client/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -8608,14 +8557,14 @@ const getClientInvoices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
 const finalizeInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/finalizeInvoice', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    stripe_invoice_id
-  } = getState().accountsInvoice;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/invoices/${stripe_invoice_id}/finalize`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const response = await fetch(`/wp-json/orb/invoice/v1/finalize/${stripe_invoice_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8749,7 +8698,6 @@ const accountsInvoiceSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   accountsPaymentSlice: () => (/* binding */ accountsPaymentSlice),
-/* harmony export */   getPaymentIntent: () => (/* binding */ getPaymentIntent),
 /* harmony export */   updateClientSecret: () => (/* binding */ updateClientSecret)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
@@ -8771,32 +8719,8 @@ const updateClientSecret = clientSecret => {
     payload: clientSecret
   };
 };
-const getPaymentIntent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('payment/getPaymentIntent', async (paymentIntentID, {
-  getState
-}) => {
-  const {
-    payment_intent_id
-  } = getState().accountsInvoice;
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/payment_intents/${paymentIntentID ? paymentIntentID : payment_intent_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
 const accountsPaymentSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-  name: 'accountsPayment',
+  name: 'payment',
   initialState,
   reducers: {
     updateClientSecret: (state, action) => {
@@ -8842,12 +8766,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getClientQuotes: () => (/* binding */ getClientQuotes),
 /* harmony export */   getQuote: () => (/* binding */ getQuote),
 /* harmony export */   getQuoteByID: () => (/* binding */ getQuoteByID),
-/* harmony export */   getStripeClientQuotes: () => (/* binding */ getStripeClientQuotes),
-/* harmony export */   getStripeQuote: () => (/* binding */ getStripeQuote),
 /* harmony export */   updateQuote: () => (/* binding */ updateQuote),
 /* harmony export */   updateQuoteID: () => (/* binding */ updateQuoteID),
-/* harmony export */   updateQuoteStatus: () => (/* binding */ updateQuoteStatus),
-/* harmony export */   updateStripeQuote: () => (/* binding */ updateStripeQuote)
+/* harmony export */   updateQuoteStatus: () => (/* binding */ updateQuoteStatus)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
@@ -8867,21 +8788,21 @@ const initialState = {
 };
 const updateQuoteID = stripe_quote_id => {
   return {
-    type: 'accountsQuote/updateQuoteID',
+    type: 'quote/updateQuoteID',
     payload: stripe_quote_id
   };
 };
-const createQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/createQuote', async (_, {
+const createQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/createQuote', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    selections
-  } = getState().accountsQuote;
   try {
-    const response = await fetch('/wp-json/orb/v1/quote', {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      selections
+    } = getState().accountsQuote;
+    const response = await fetch('/wp-json/orb/quote/v1/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8902,17 +8823,17 @@ const createQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
     throw error.message;
   }
 });
-const getQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getQuote', async (stripeQuoteID, {
+const getQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/getQuote', async (stripeQuoteID, {
   getState
 }) => {
-  const {
-    stripe_quote_id
-  } = getState().accountsQuote;
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
+    const {
+      stripe_quote_id
+    } = getState().accountsQuote;
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/quote/v1/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8932,17 +8853,17 @@ const getQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThu
     throw error.message;
   }
 });
-const getQuoteByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getQuoteByID', async (quoteID, {
+const getQuoteByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/getQuoteByID', async (quoteID, {
   getState
 }) => {
-  const {
-    quote_id
-  } = getState().accountsQuote;
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${quoteID ? quoteID : quote_id}/id`, {
+    const {
+      quote_id
+    } = getState().accountsQuote;
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/quote/v1/id/${quoteID ? quoteID : quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -8962,39 +8883,15 @@ const getQuoteByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyn
     throw error.message;
   }
 });
-const getStripeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getStripeQuote', async (stripeQuoteID, {
+const updateQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/updateQuote', async (_, {
   getState
 }) => {
-  const {
-    stripe_quote_id
-  } = getState().accountsQuote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-const updateQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/updateQuote', async (_, {
-  getState
-}) => {
-  const {
-    stripe_quote_id,
-    selections
-  } = getState().accountsQuote;
-  try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${stripe_quote_id}`, {
+    const {
+      stripe_quote_id,
+      selections
+    } = getState().accountsQuote;
+    const response = await fetch(`/wp-json/orb/v1/quote/update/${stripe_quote_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -9012,41 +8909,11 @@ const updateQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
     throw error.message;
   }
 });
-const updateStripeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/updateStripeQuote', async (_, {
+const finalizeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/finalizeQuote', async (_, {
   getState
 }) => {
-  const {
-    stripe_quote_id,
-    selections
-  } = getState().accountsQuote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quote/${stripe_quote_id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(selections)
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-const finalizeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/finalizeQuote', async (_, {
-  getState
-}) => {
-  const {
-    stripe_quote_id,
-    selections
-  } = getState().accountsQuote;
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_quote_id}/finalize`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/finalize/${stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -9066,14 +8933,14 @@ const finalizeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsy
     throw error.message;
   }
 });
-const updateQuoteStatus = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/updateQuoteStatus', async (_, {
+const updateQuoteStatus = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/updateQuoteStatus', async (_, {
   getState
 }) => {
   const {
     stripe_quote_id
   } = getState().accountsQuote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/quote/${stripe_quote_id}`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/update/status/${stripe_quote_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -9090,14 +8957,14 @@ const updateQuoteStatus = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
     throw error.message;
   }
 });
-const acceptQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/acceptQuote', async (_, {
+const acceptQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/acceptQuote', async (_, {
   getState
 }) => {
   const {
     stripe_quote_id
   } = getState().accountsQuote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_quote_id}/accept`, {
+    const response = await fetch(`/wp-json/orb/quotes/v1/accept/${stripe_quote_id}/accept`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -9114,14 +8981,14 @@ const acceptQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
     throw error.message;
   }
 });
-const cancelQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/cancelQuote', async (_, {
+const cancelQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/cancelQuote', async (_, {
   getState
 }) => {
   const {
     stripe_quote_id
   } = getState().accountsQuote;
   try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_quote_id}/cancel`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/cancel/${stripe_quote_id}/cancel`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -9138,38 +9005,14 @@ const cancelQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
     throw error.message;
   }
 });
-const getClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getClientQuotes', async (_, {
+const getClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('quote/getClientQuotes', async (_, {
   getState
 }) => {
   const {
     stripe_customer_id
   } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/quotes/client/${stripe_customer_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-const getStripeClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getStripeClientQuotes', async (_, {
-  getState
-}) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_customer_id}`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/client/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -9187,7 +9030,7 @@ const getStripeClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
   }
 });
 const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-  name: 'accountsQuote',
+  name: 'quote',
   initialState,
   reducers: {
     addSelections: (state, action) => {
@@ -9318,11 +9161,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   accountsReceiptSlice: () => (/* binding */ accountsReceiptSlice),
 /* harmony export */   getClientReceipts: () => (/* binding */ getClientReceipts),
-/* harmony export */   getPaymentMethod: () => (/* binding */ getPaymentMethod),
 /* harmony export */   getReceipt: () => (/* binding */ getReceipt),
 /* harmony export */   getReceiptByID: () => (/* binding */ getReceiptByID),
-/* harmony export */   postReceipt: () => (/* binding */ postReceipt),
-/* harmony export */   updatePaymentMethod: () => (/* binding */ updatePaymentMethod),
+/* harmony export */   saveReceipt: () => (/* binding */ saveReceipt),
 /* harmony export */   updateReceiptID: () => (/* binding */ updateReceiptID)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
@@ -9351,52 +9192,27 @@ const updateReceiptID = receiptID => {
     payload: receiptID
   };
 };
-const getPaymentMethod = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/getPaymentMethod', async payment_method_id => {
-  try {
-    const response = await fetch(`/wp-json/orb/v1/stripe/payment_methods/${payment_method_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message;
-      throw new Error(errorMessage);
-    }
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    throw error.message;
-  }
-});
-const updatePaymentMethod = paymentMethod => {
-  return {
-    type: 'receipt/updatePaymentMethod',
-    payload: paymentMethod
-  };
-};
-const postReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/postReceipt', async (_, {
+const saveReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/saveReceipt', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id,
-    first_name,
-    last_name
-  } = getState().accountsClient;
-  const {
-    invoice_id,
-    stripe_invoice_id
-  } = getState().accountsInvoice;
-  const {
-    payment_method_id,
-    amount_paid,
-    payment_date,
-    balance,
-    payment_method
-  } = getState().accountsReceipt;
   try {
-    const response = await fetch('/wp-json/orb/v1/receipt', {
+    const {
+      stripe_customer_id,
+      first_name,
+      last_name
+    } = getState().accountsClient;
+    const {
+      invoice_id,
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const {
+      payment_method_id,
+      amount_paid,
+      payment_date,
+      balance,
+      payment_method
+    } = getState().accountsReceipt;
+    const response = await fetch('/wp-json/orb/receipt/v1/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -9428,14 +9244,14 @@ const postReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
 const getReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/getReceipt', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
-  const {
-    stripe_invoice_id
-  } = getState().accountsInvoice;
   try {
-    const response = await fetch(`/wp-json/orb/v1/receipt/${stripe_invoice_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const response = await fetch(`/wp-json/orb/receipt/v1/${stripe_invoice_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -9458,11 +9274,11 @@ const getReceipt = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
 const getReceiptByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/getReceiptByID', async (id, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/receipt/${id}/id`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/receipt/v1/id/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -9485,11 +9301,11 @@ const getReceiptByID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAs
 const getClientReceipts = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/getClientReceipts', async (_, {
   getState
 }) => {
-  const {
-    stripe_customer_id
-  } = getState().accountsClient;
   try {
-    const response = await fetch(`/wp-json/orb/v1/receipts/client/${stripe_customer_id}`, {
+    const {
+      stripe_customer_id
+    } = getState().accountsClient;
+    const response = await fetch(`/wp-json/orb/receipt/v1/client/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -9599,7 +9415,7 @@ const initialState = {
   services: [],
   availableServices: []
 };
-const fetchServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsServices/fetchServices', async () => {
+const fetchServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('services/fetchServices', async () => {
   try {
     const response = await fetch(`/wp-json/orb/v1/services`, {
       method: 'GET',
@@ -9618,7 +9434,7 @@ const fetchServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsy
     throw error.message;
   }
 });
-const getAvailableServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsServices/getAvailableServices', async () => {
+const getAvailableServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('services/getAvailableServices', async () => {
   try {
     const response = await fetch(`/wp-json/orb/v1/services/available`, {
       method: 'GET',
@@ -9638,7 +9454,7 @@ const getAvailableServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
   }
 });
 const accountsServicesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-  name: 'accountsServices',
+  name: 'services',
   initialState,
   extraReducers: builder => {
     builder.addCase(fetchServices.fulfilled, (state, action) => {

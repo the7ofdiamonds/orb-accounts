@@ -7,7 +7,7 @@ const initialState = {
   availableServices: []
 }
 
-export const fetchServices = createAsyncThunk('accountsServices/fetchServices', async () => {
+export const fetchServices = createAsyncThunk('services/fetchServices', async () => {
   try {
     const response = await fetch(`/wp-json/orb/v1/services`, {
       method: 'GET',
@@ -29,7 +29,7 @@ export const fetchServices = createAsyncThunk('accountsServices/fetchServices', 
   }
 });
 
-export const getAvailableServices = createAsyncThunk('accountsServices/getAvailableServices', async () => {
+export const getAvailableServices = createAsyncThunk('services/getAvailableServices', async () => {
 
   try {
     const response = await fetch(`/wp-json/orb/v1/services/available`, {
@@ -53,7 +53,7 @@ export const getAvailableServices = createAsyncThunk('accountsServices/getAvaila
 });
 
 export const accountsServicesSlice = createSlice({
-  name: 'accountsServices',
+  name: 'services',
   initialState,
   extraReducers: (builder) => {
     builder

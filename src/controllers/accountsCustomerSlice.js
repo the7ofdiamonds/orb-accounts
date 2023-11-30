@@ -18,27 +18,27 @@ const initialState = {
     stripe_customer_id: '',
 };
 
-export const addStripeCustomer = createAsyncThunk('accountsCustomer/addStripeCustomer', async (_, { getState }) => {
-    const {
-        client_id,
-        user_email
-    } = getState().accountsClient;
-    const {
-        company_name,
-        tax_id,
-        first_name,
-        last_name,
-        phone,
-        address_line_1,
-        address_line_2,
-        city,
-        state,
-        zipcode,
-        country
-    } = getState().accountsCustomer;
-
+export const addCustomer = createAsyncThunk('customer/addCustomer', async (_, { getState }) => {
     try {
-        const response = await fetch('/wp-json/orb/v1/stripe/customers', {
+        const {
+            client_id,
+            user_email
+        } = getState().accountsClient;
+        const {
+            company_name,
+            tax_id,
+            first_name,
+            last_name,
+            phone,
+            address_line_1,
+            address_line_2,
+            city,
+            state,
+            zipcode,
+            country
+        } = getState().accountsCustomer;
+
+        const response = await fetch('/wp-json/orb/customer/v1/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -73,17 +73,17 @@ export const addStripeCustomer = createAsyncThunk('accountsCustomer/addStripeCus
     }
 });
 
-export const getStripeCustomer = createAsyncThunk('accountsCustomer/getStripeCustomer', async (stripeCustomerID, { getState }) => {
-    const { stripe_customer_id } = getState().accountsClient;
-
+export const getCustomer = createAsyncThunk('customer/getCustomer', async (stripeCustomerID, { getState }) => {
     try {
-        const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
+        const { stripe_customer_id } = getState().accountsClient;
+
+        const response = await fetch(`/wp-json/orb/customer/v1/${stripeCustomerID ? stripeCustomerID : stripe_customer_id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
         });
-        
+
         if (!response.ok) {
             const errorData = await response.json();
             const errorMessage = errorData.message;
@@ -97,28 +97,28 @@ export const getStripeCustomer = createAsyncThunk('accountsCustomer/getStripeCus
     }
 });
 
-export const updateStripeCustomer = createAsyncThunk('accountsCustomer/updateStripeCustomer', async (_, { getState }) => {
-    const {
-        client_id,
-        user_email,
-        stripe_customer_id
-    } = getState().accountsClient;
-    const {
-        company_name,
-        tax_id,
-        first_name,
-        last_name,
-        phone,
-        address_line_1,
-        address_line_2,
-        city,
-        state,
-        zipcode,
-        country
-    } = getState().accountsCustomer;
-
+export const updateCustomer = createAsyncThunk('customer/updateCustomer', async (_, { getState }) => {
     try {
-        const response = await fetch(`/wp-json/orb/v1/stripe/customers/${stripe_customer_id}`, {
+        const {
+            client_id,
+            user_email,
+            stripe_customer_id
+        } = getState().accountsClient;
+        const {
+            company_name,
+            tax_id,
+            first_name,
+            last_name,
+            phone,
+            address_line_1,
+            address_line_2,
+            city,
+            state,
+            zipcode,
+            country
+        } = getState().accountsCustomer;
+
+        const response = await fetch(`/wp-json/orb/customers/v1/update/${stripe_customer_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -154,7 +154,7 @@ export const updateStripeCustomer = createAsyncThunk('accountsCustomer/updateStr
 });
 
 export const accountsCustomerSlice = createSlice({
-    name: 'accounstCustomer',
+    name: 'customer',
     initialState,
     reducers: {
         updateCompanyName: (state, action) => {
@@ -193,12 +193,12 @@ export const accountsCustomerSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(addStripeCustomer.fulfilled, (state, action) => {
+            .addCase(addCustomer.fulfilled, (state, action) => {
                 state.customerLoading = false
                 state.customer_error = null
                 state.stripe_customer_id = action.payload
             })
-            .addCase(getStripeCustomer.fulfilled, (state, action) => {
+            .addCase(getCustomer.fulfilled, (state, action) => {
                 state.customerLoading = false
                 state.customer_error = null;
                 state.stripe_customer_id = action.payload.id;
@@ -213,7 +213,7 @@ export const accountsCustomerSlice = createSlice({
                 state.email = action.payload.email
                 state.phone = action.payload.phone
             })
-            .addCase(updateStripeCustomer.fulfilled, (state, action) => {
+            .addCase(updateCustomer.fulfilled, (state, action) => {
                 state.customerLoading = false
                 state.customer_error = null
                 state.stripe_customer_id = action.payload.id;
@@ -229,15 +229,17 @@ export const accountsCustomerSlice = createSlice({
                 state.phone = action.payload.phone
             })
             .addMatcher(isAnyOf(
-                addStripeCustomer.pending,
-                getStripeCustomer.pending,
+                addCustomer.pending,
+                getCustomer.pending,
+                updateCustomer.pending
             ), (state) => {
                 state.clientLoading = true;
                 state.clientError = null;
             })
             .addMatcher(isAnyOf(
-                addStripeCustomer.rejected,
-                getStripeCustomer.rejected,
+                addCustomer.rejected,
+                getCustomer.rejected,
+                updateCustomer.rejected
             ),
                 (state, action) => {
                     state.clientLoading = false;
