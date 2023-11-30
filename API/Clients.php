@@ -61,7 +61,7 @@ class Clients
                 'country' => $country
             ];
 
-            if (!isset($shipping)) {
+            if (!empty($shipping)) {
                 $shipping = [
                     'line1' => $address_line_1,
                     'line2' => $address_line_2,
@@ -163,10 +163,12 @@ class Clients
             $user_email_encoded = $request->get_param('slug');
             $user_email = urldecode($user_email_encoded);
             $user = get_user_by('email', $user_email);
-            $user_id = $user->id;
-            
-            $client = $this->database_client->getClient($user_id);
+            $client_id = $user->id;
 
+            $client = $this->database_client->getClient($client_id);
+
+            $client = $this->stripe_customers->getCustomer($client['stripe_customer_id']);
+            
             return rest_ensure_response($client);
         } catch (Exception $e) {
             $error_message = $e->getMessage();
@@ -188,11 +190,93 @@ class Clients
     {
         try {
             $stripe_customer_id = $request->get_param('slug');
+            $tax_id = $request['tax_id'];
+            $client_id = $request['client_id'];
             $company_name = $request['company_name'];
             $first_name = $request['first_name'];
             $last_name = $request['last_name'];
+            $email = $request['user_email'];
+            $phone = $request['phone'];
+            $address_line_1 = $request['address_line_1'];
+            $address_line_2 = $request['address_line_2'];
+            $city = $request['city'];
+            $state = $request['state'];
+            $zipcode = $request['zipcode'];
+            $country = $request['country'];
+            $metadata = $request['metadata'];
+            $payment_method_id = $request['payment_method_id'];
+            $description = $request['description'];
+            $balance = $request['balance'];
+            $cash_balance = $request['cash_balance'];
+            $coupon = $request['coupon'];
+            $invoice_prefix = $request['invoice_prefix'];
+            $invoice_settings = $request['invoice_settings'];
+            $next_invoice_sequence = $request['next_invoice_sequence'];
+            $preferred_locales = $request['preferred_locales'];
+            $promotion_code = $request['promotion_code'];
+            $source = $request['source'];
+            $tax = $request['tax'];
+            $tax_id_type = $request['tax_id_type'];
+            $tax_exempt = $request['tax_exempt'];
+            $test_clock = $request['test_clock'];
+
+            $address = [
+                'line1' => $address_line_1,
+                'line2' => $address_line_2,
+                'city' => $city,
+                'state' => $state,
+                'postal_code' => $zipcode,
+                'country' => $country
+            ];
+
+            if (!empty($shipping)) {
+                $shipping = [
+                    'line1' => $address_line_1,
+                    'line2' => $address_line_2,
+                    'city' => $city,
+                    'state' => $state,
+                    'postal_code' => $zipcode,
+                    'country' => $country
+                ];
+            }
+
+            $tax_id_data = array(
+                'type' => $tax_id_type,
+                'value' => $tax_id
+            );
+
+            if (!empty($company_name)) {
+                $name = $first_name . ' ' . $last_name . ' - ' . $company_name;
+            } else {
+                $name = $first_name . ' ' . $last_name;
+            }
 
             $updated_client = $this->database_client->updateClient($stripe_customer_id, $company_name, $first_name, $last_name);
+
+            $updated_client = $this->stripe_customers->updateCustomer(
+                $stripe_customer_id,
+                $name,
+                $email,
+                $address,
+                $shipping,
+                $phone,
+                $payment_method_id,
+                $description,
+                $balance,
+                $cash_balance,
+                $coupon,
+                $invoice_prefix,
+                $invoice_settings,
+                $next_invoice_sequence,
+                $preferred_locales,
+                $promotion_code,
+                $source,
+                $tax,
+                $tax_exempt,
+                $tax_id_data,
+                $test_clock,
+                $metadata
+            );
 
             return rest_ensure_response($updated_client);
         } catch (Exception $e) {

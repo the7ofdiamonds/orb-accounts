@@ -67,7 +67,7 @@ class API
 
         $email = new Email($stripeClient, $mailer);
 
-        new Stripe($stripeClient);
+        $stripe = new Stripe($stripeClient);
 
         $stripe_payment_intent = new StripePaymentIntents($stripeClient);
         $stripe_charges = new StripeCharges($stripeClient);
@@ -89,171 +89,157 @@ class API
         new EmailReceipt($stripeClient, $mailer);
         new EmailOnboarding($stripeClient, $mailer);
 
-        register_rest_route('orb/users/clients/v1', '/add', array(
+        register_rest_route('orb/user/client/v1', '/add', array(
             'methods' => 'POST',
             'callback' => array($clients, 'add_client'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/users/client/v1', '/(?P<slug>[a-zA-Z0-9-_%.]+)', array(
+        register_rest_route('orb/user/client/v1', '/(?P<slug>[a-zA-Z0-9-_%.]+)', array(
             'methods' => 'GET',
             'callback' => array($clients, 'get_client'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/stripe/customers', [
+        register_rest_route('orb/v1', '/stripe/customers/add', array(
             'methods' => 'POST',
-            'callback' => [$customers, 'add_stripe_customer'],
+            'callback' => array($customers, 'add_stripe_customer'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/stripe/customers/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/v1', '/stripe/customers/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
-            'callback' => [$customers, 'get_stripe_customer'],
+            'callback' => array($customers, 'get_stripe_customer'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/stripe/customers/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/v1', '/stripe/customers/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'PATCH',
-            'callback' => [$customers, 'update_stripe_customer'],
+            'callback' => array($customers, 'update_stripe_customer'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/email/quote/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/email/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$email, 'send_quote_email'],
+            'callback' => array($email, 'send_quote_email'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/email/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/email/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$email, 'send_invoice_email'],
+            'callback' => array($email, 'send_invoice_email'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/email/receipt/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/email/v1', '/receipt/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$email, 'send_receipt_email'],
+            'callback' => array($email, 'send_receipt_email'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/email/onboarding/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/email/v1', '/onboarding/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$email, 'send_onboarding_email'],
+            'callback' => array($email, 'send_onboarding_email'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        // add_action('rest_api_init', function () {
-        //     register_rest_route('orb/v1', '/stripe/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
-        //         'methods' => 'POST',
-        //         'callback' => [$invoice, 'create_stripe_invoice'],
-        //         'permission_callback' => '__return_true',
-        //     ]);
-        // });
-
-        // add_action('rest_api_init', function () {
-        //     register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
-        //         'methods' => 'POST',
-        //         'callback' => [$invoice, 'save_invoice'],
-        //         'permission_callback' => '__return_true',
-        //     ]);
-        // });
-
-        register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/v1', '/stripe/invoices/create/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$invoice, 'get_invoice'],
+            'callback' => array($invoice, 'create_stripe_invoice'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        // add_action('rest_api_init', function () {
-        //     register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)/id', [
-        //         'methods' => 'POST',
-        //         'callback' => [$invoice, 'get_invoice_by_id'],
-        //         'permission_callback' => '__return_true',
-        //     ]);
-        // });
+        register_rest_route('orb/invoice/v1', '/save/(?P<slug>[a-zA-Z0-9-_]+)', array(
+            'methods' => 'POST',
+            'callback' => array($invoice, 'save_invoice'),
+            'permission_callback' => '__return_true',
+        ));
 
-        // add_action('rest_api_init', function () {
-        //     register_rest_route('orb/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)/quoteid', [
-        //         'methods' => 'POST',
-        //         'callback' => [$invoice, 'get_invoice_by_quote_id'],
-        //         'permission_callback' => '__return_true',
-        //     ]);
-        // });
+        register_rest_route('orb/invoice/v1', '/(?P<slug>[a-zA-Z0-9-_]+)', array(
+            'methods' => 'POST',
+            'callback' => array($invoice, 'get_invoice'),
+            'permission_callback' => '__return_true',
+        ));
 
-        register_rest_route('orb/v1', '/stripe/invoices/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/invoice/v1', '/id/(?P<slug>[a-zA-Z0-9-_]+)', array(
+            'methods' => 'POST',
+            'callback' => array($invoice, 'get_invoice_by_id'),
+            'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('orb/invoice/v1', '/quoteid/(?P<slug>[a-zA-Z0-9-_]+)', array(
+            'methods' => 'POST',
+            'callback' => array($invoice, 'get_invoice_by_quote_id'),
+            'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('orb/v1', '/stripe/invoices/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
-            'callback' => [$invoice, 'get_stripe_invoice'],
+            'callback' => array($invoice, 'get_stripe_invoice'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/stripe/invoices/(?P<slug>[a-zA-Z0-9-_]+)/finalize', [
+        register_rest_route('orb/v1', '/stripe/invoices/finalize/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$invoice, 'finalize_invoice'],
+            'callback' => array($invoice, 'finalize_invoice'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/invoice/(?P<slug>[a-z0-9-]+)', [
+        register_rest_route('orb/invoice/v1', '/update/(?P<slug>[a-z0-9-]+)', array(
             'methods' => 'PATCH',
-            'callback' => [$invoice, 'update_invoice'],
+            'callback' => array($invoice, 'update_invoice'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/invoice/status/(?P<slug>[a-z0-9-]+)', [
+        register_rest_route('orb/invoice/v1', '/update/status/(?P<slug>[a-z0-9-]+)', array(
             'methods' => 'PATCH',
-            'callback' => [$invoice, 'update_invoice_status'],
+            'callback' => array($invoice, 'update_invoice_status'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/invoices/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/invoice/v1', '/client/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
-            'callback' => [$invoice, 'get_invoices'],
+            'callback' => array($invoice, 'get_client_invoices'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/invoices/client/(?P<slug>[a-zA-Z0-9-_]+)', [
-            'methods' => 'GET',
-            'callback' => [$invoice, 'get_client_invoices'],
-            'permission_callback' => '__return_true',
-        ]);
-
-        register_rest_route('orb/v1', '/stripe/payment_intents', [
+        register_rest_route('orb/v1', '/stripe/payment_intents/create', array(
             'methods' => 'POST',
-            'callback' => [$payment, 'create_payment_intent'],
+            'callback' => array($payment, 'create_payment_intent'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/stripe/payment_intents/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/v1', '/stripe/payment_intents/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
-            'callback' => [$payment, 'get_payment_intent'],
+            'callback' => array($payment, 'get_payment_intent'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/stripe/payment_intents/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/v1', '/stripe/payment_intents/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'PATCH',
-            'callback' => [$payment, 'update_payment_intent'],
+            'callback' => array($payment, 'update_payment_intent'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/stripe/payment_methods/(?P<slug>[a-zA-Z0-9-_]+)', [
+        register_rest_route('orb/v1', '/stripe/payment_methods/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
             'callback' => [$payment, 'get_payment_method'],
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/quote', array(
+        register_rest_route('orb/quote/v1', '/create', array(
             'methods' => 'POST',
             'callback' => array($quote, 'create_stripe_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/quote/v1', '/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($quote, 'get_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)/id', array(
+        register_rest_route('orb/quote/v1', '/id/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($quote, 'get_quote_by_id'),
             'permission_callback' => '__return_true',
@@ -265,55 +251,55 @@ class API
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/quote/v1', '/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'PATCH',
             'callback' => array($quote, 'update_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/stripe/quotes/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/v1', '/stripe/quotes/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($quote, 'update_stripe_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/stripe/quotes/(?P<slug>[a-zA-Z0-9-_]+)/finalize', array(
+        register_rest_route('orb/v1', '/stripe/quotes/finalize/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => [$quote, 'finalize_quote'],
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/stripe/quotes/(?P<slug>[a-zA-Z0-9-_]+)/accept', array(
+        register_rest_route('orb/v1', '/stripe/quotes/accept/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($quote, 'accept_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/stripe/quotes/(?P<slug>[a-zA-Z0-9-_]+)/cancel', array(
+        register_rest_route('orb/v1', '/stripe/quotes/cancel/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($quote, 'cancel_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/quote/v1', '/update/status/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($quote, 'update_quote_status'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)/pdf', array(
+        register_rest_route('orb/quote/v1', '/pdf/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
             'callback' => array($quote, 'pdf_quote'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quotes', array(
+        register_rest_route('orb/quote/v1', '/all', array(
             'methods' => 'GET',
             'callback' => array($quote, 'get_quotes'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/quotes/client/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/quote/v1', '/all/client/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
             'callback' => array($quote, 'get_client_quotes'),
             'permission_callback' => '__return_true',
@@ -325,35 +311,35 @@ class API
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/stripe/quotes/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/v1', '/stripe/quotes/client/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
             'callback' => array($quote, 'get_stripe_client_quotes'),
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/v1', '/receipt', [
+        register_rest_route('orb/receipt/v1', '/save', array(
             'methods' => 'POST',
-            'callback' => [$receipt, 'save_receipt'],
+            'callback' => array($receipt, 'save_receipt'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/receipt/(?P<slug>[a-z0-9-_]+)', [
+        register_rest_route('orb/receipt/v1', '/(?P<slug>[a-z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$receipt, 'get_receipt'],
+            'callback' => array($receipt, 'get_receipt'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/receipt/(?P<slug>[a-z0-9-_]+)/id', [
+        register_rest_route('orb/receipt/v1', '/id/(?P<slug>[a-z0-9-_]+)', array(
             'methods' => 'POST',
-            'callback' => [$receipt, 'get_receipt_by_id'],
+            'callback' => array($receipt, 'get_receipt_by_id'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
 
-        register_rest_route('orb/v1', '/receipts/client/(?P<slug>[a-z0-9-_]+)', [
+        register_rest_route('orb/receipt/v1', '/client/(?P<slug>[a-z0-9-_]+)', array(
             'methods' => 'GET',
-            'callback' => [$receipt, 'get_client_receipts'],
+            'callback' => array($receipt, 'get_client_receipts'),
             'permission_callback' => '__return_true',
-        ]);
+        ));
     }
 
     public function allow_cors_headers()
