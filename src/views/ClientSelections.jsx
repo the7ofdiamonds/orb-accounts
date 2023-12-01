@@ -10,9 +10,8 @@ import {
   finalizeQuote,
   getClientQuotes,
   getQuote,
-  updateStripeQuote,
 } from '../controllers/accountsQuoteSlice.js';
-
+import { updateStripeQuote } from '../controllers/accountsStripeSlice.js';
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';
@@ -26,7 +25,9 @@ function SelectionsComponent() {
   );
   const [checkedItems, setCheckedItems] = useState([]);
 
-  const { servicesLoading, servicesError, services } = useSelector((state) => state.accountsServices);
+  const { servicesLoading, servicesError, services } = useSelector(
+    (state) => state.accountsServices
+  );
   const { user_email, stripe_customer_id } = useSelector(
     (state) => state.accountsClient
   );
@@ -136,7 +137,14 @@ function SelectionsComponent() {
     dispatch(calculateSelections(services.price));
   }, [dispatch, services.price, checkedItems]);
 
-  const handleCheckboxChange = (event, id, price_id, description, price, onboarding_link) => {
+  const handleCheckboxChange = (
+    event,
+    id,
+    price_id,
+    description,
+    price,
+    onboarding_link
+  ) => {
     const isChecked = event.target.checked;
 
     setCheckedItems((prevItems) => {
@@ -216,7 +224,13 @@ function SelectionsComponent() {
               {services && services.length ? (
                 <React.Fragment>
                   {services.map((service) => {
-                    const { id, price_id, description, price, onboarding_link } = service;
+                    const {
+                      id,
+                      price_id,
+                      description,
+                      price,
+                      onboarding_link,
+                    } = service;
 
                     return (
                       <tr key={id} id="quote_option">

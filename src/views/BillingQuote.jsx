@@ -6,13 +6,13 @@ import { getClient } from '../controllers/accountsClientSlice.js';
 import {
   cancelQuote,
   acceptQuote,
-  getStripeQuote,
   getQuoteByID,
 } from '../controllers/accountsQuoteSlice.js';
 import {
   getInvoiceByQuoteID,
   saveInvoice,
 } from '../controllers/accountsInvoiceSlice.js';
+import { getStripeQuote } from '../controllers/accountsStripeSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';

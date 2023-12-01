@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getClient, addClient } from '../controllers/accountsClientSlice';
 import {
+  getClient,
+  addClient,
+  updateClient,
   updatePhone,
   updateCompanyName,
   updateTaxID,
@@ -14,9 +16,7 @@ import {
   updateCity,
   updateState,
   updateZipcode,
-  getStripeCustomer,
-  updateStripeCustomer,
-} from '../controllers/accountsCustomerSlice.js';
+} from '../controllers/accountsClientSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -31,10 +31,11 @@ function ClientComponent() {
     'To receive a quote, please fill out the form above with the required information.'
   );
 
-  const { user_email, first_name, last_name, stripe_customer_id } = useSelector(
-    (state) => state.accountsClient
-  );
   const {
+    user_email,
+    first_name,
+    last_name,
+    stripe_customer_id,
     customerLoading,
     company_name,
     tax_id,
@@ -44,7 +45,7 @@ function ClientComponent() {
     state,
     zipcode,
     phone,
-  } = useSelector((state) => state.accountsCustomer);
+  } = useSelector((state) => state.accountsClient);
 
   const handleCompanyNameChange = (event) => {
     dispatch(updateCompanyName(event.target.value));
@@ -95,14 +96,6 @@ function ClientComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
-        } else {
-          dispatch(getStripeCustomer()).then((response) => {
-            if (response.error !== undefined) {
-              console.error(response.error.message);
-              setMessageType('error');
-              setMessage(response.error.message);
-            }
-          });
         }
       });
     }
@@ -147,7 +140,7 @@ function ClientComponent() {
         }
       });
     } else if (stripe_customer_id) {
-      dispatch(updateStripeCustomer()).then((response) => {
+      dispatch(updateClient()).then((response) => {
         if (response.error === undefined) {
           window.location.href = '/client/selections';
         } else {

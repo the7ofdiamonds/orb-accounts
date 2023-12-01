@@ -1,3 +1,17 @@
+import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
+
+const initialState = {
+  paymentLoading: false,
+  paymentError: '',
+  payment_intent_id: '',
+  amount_due: '',
+  due_date: '',
+  client_secret: '',
+  paymentStatus: '',
+  payment_method_id: '',
+  payment_method: ''
+};
+
 export const getStripeQuote = createAsyncThunk('accountsQuote/getStripeQuote', async (stripeQuoteID, { getState }) => {
     const { stripe_quote_id } = getState().accountsQuote;
 
@@ -118,6 +132,13 @@ export const pdfInvoice = createAsyncThunk('invoice/pdfInvoice', async (_, { get
     }
 });
 
+export const updateClientSecret = (clientsecret) => {
+    return {
+        type: 'stripe/updateClientSecret',
+        payload: clientsecret
+    };
+};
+
 export const getPaymentMethod = createAsyncThunk('receipt/getPaymentMethod', async (payment_method_id) => {
     try {
         const response = await fetch(`/wp-json/orb/v1/stripe/payment_methods/${payment_method_id}`, {
@@ -174,7 +195,11 @@ export const getPaymentIntent = createAsyncThunk('payment/getPaymentIntent', asy
 export const accountsStripeSlice = createSlice({
     name: 'stripe',
     initialState,
-    reducers: {},
+    reducers: {
+        updateClientSecret: (state, action) => {
+            state.client_secret = action.payload;
+        }
+    },
     extraReducers: (builder) => {
     builder
     .addCase(getStripeInvoice.fulfilled, (state, action) => {
@@ -207,14 +232,23 @@ export const accountsStripeSlice = createSlice({
         state.invoice_pdf = action.payload.invoice_pdf;
         state.items = action.payload.lines.data;
     })
+    .addCase(getPaymentIntent.fulfilled, (state, action) => {
+        state.loading = false
+        state.paymentError = ''
+        state.client_secret = action.payload.client_secret
+        state.paymentStatus = action.payload.status
+        state.payment_method_id = action.payload.payment_method
+      })
     .addMatcher(isAnyOf(
         getStripeInvoice.pending,
+        getPaymentIntent.pending
     ), (state) => {
         state.invoiceLoading = true;
         state.invoiceError = null;
     })
     .addMatcher(isAnyOf(
         getStripeInvoice.rejected,
+        getPaymentIntent.rejected
     ),
         (state, action) => {
             state.invoiceLoading = false;

@@ -126,9 +126,7 @@ function BillingInvoices() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "View"))) : invoice.status === 'void' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Void") : invoice.status === 'uncollectible' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Uncollectible") : invoice.status === 'open' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
     href: `/services/invoice/${invoice.id}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Continue")) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    onClick: async () => await dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_3__.deleteInvoice)(invoice.stripe_invoice_id)).then(() => {
-      dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_3__.getClientInvoices)());
-    })
+    onClick: console.log('invoice deleted')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "Delete")))))))))) : ''));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (BillingInvoices);

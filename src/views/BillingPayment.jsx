@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import PaymentNavigationComponent from './components/PaymentNavigation.jsx';
 
 import { getClient } from '../controllers/accountsClientSlice.js';
-import { getStripeCustomer } from '../controllers/accountsCustomerSlice.js';
-import {
-  getInvoiceByID,
-  getStripeInvoice,
-} from '../controllers/accountsInvoiceSlice.js';
-import { getPaymentIntent } from '../controllers/accountsPaymentSlice.js';
+import { getInvoiceByID } from '../controllers/accountsInvoiceSlice.js';
 import { getReceipt } from '../controllers/accountsReceiptSlice.js';
+import {
+  getStripeInvoice,
+  getPaymentIntent,
+} from '../controllers/accountsStripeSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -42,45 +41,35 @@ function PaymentComponent() {
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch(getStripeCustomer(response.payload.stripe_customer_id)).then(
-            (response) => {
-              if (response.error !== undefined) {
-                console.error(response.error.message);
-                setMessageType('error');
-                setMessage(response.error.message);
-              } else {
-                dispatch(
-                  getInvoiceByID(id, response.payload.stripe_customer_id)
-                ).then((response) => {
-                  if (response.error !== undefined) {
-                    console.error(response.error.message);
-                    setMessageType('error');
-                    setMessage(response.error.message);
-                  } else {
-                    dispatch(
-                      getStripeInvoice(response.payload.stripe_invoice_id)
-                    ).then((response) => {
-                      if (response.error !== undefined) {
-                        console.error(response.error.message);
-                        setMessageType('error');
-                        setMessage(response.error.message);
-                      } else {
-                        dispatch(
-                          getPaymentIntent(response.payload.payment_intent_id)
-                        ).then((response) => {
-                          if (response.error !== undefined) {
-                            console.error(response.error.message);
-                            setMessageType('error');
-                            setMessage(response.error.message);
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              }
+          dispatch(
+            getInvoiceByID(id, response.payload.stripe_customer_id)
+          ).then((response) => {
+            if (response.error !== undefined) {
+              console.error(response.error.message);
+              setMessageType('error');
+              setMessage(response.error.message);
+            } else {
+              dispatch(
+                getStripeInvoice(response.payload.stripe_invoice_id)
+              ).then((response) => {
+                if (response.error !== undefined) {
+                  console.error(response.error.message);
+                  setMessageType('error');
+                  setMessage(response.error.message);
+                } else {
+                  dispatch(
+                    getPaymentIntent(response.payload.payment_intent_id)
+                  ).then((response) => {
+                    if (response.error !== undefined) {
+                      console.error(response.error.message);
+                      setMessageType('error');
+                      setMessage(response.error.message);
+                    }
+                  });
+                }
+              });
             }
-          );
+          });
         }
       });
     }

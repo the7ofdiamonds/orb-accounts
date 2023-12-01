@@ -147,8 +147,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PaymentNavigation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/PaymentNavigation */ "./src/views/components/PaymentNavigation.jsx");
 /* harmony import */ var _controllers_accountsClientSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsClientSlice */ "./src/controllers/accountsClientSlice.js");
 /* harmony import */ var _controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice */ "./src/controllers/accountsInvoiceSlice.js");
-/* harmony import */ var _controllers_accountsPaymentSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice */ "./src/controllers/accountsPaymentSlice.js");
-/* harmony import */ var _controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsStripeSlice.js */ "./src/controllers/accountsStripeSlice.js");
 /* harmony import */ var _utils_PaymentMethod__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/PaymentMethod */ "./src/utils/PaymentMethod.js");
 /* harmony import */ var _utils_FormatCreditNumber__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/FormatCreditNumber */ "./src/utils/FormatCreditNumber.js");
 /* harmony import */ var _utils_FormatCurrency__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/FormatCurrency */ "./src/utils/FormatCurrency.js");
@@ -193,10 +193,10 @@ const CardPaymentComponent = () => {
     remaining_balance
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsInvoice);
   const {
-    paymentLoading,
-    paymentError,
+    stripeLoading,
+    stripeError,
     client_secret
-  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsPayment);
+  } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsStripe);
   const {
     receipt_id,
     payment_method
@@ -239,32 +239,32 @@ const CardPaymentComponent = () => {
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_invoice_id) {
-      dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(stripe_invoice_id));
+      dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.getStripeInvoice)(stripe_invoice_id));
     }
   }, [dispatch, stripe_invoice_id]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_intent_id) {
-      dispatch((0,_controllers_accountsPaymentSlice__WEBPACK_IMPORTED_MODULE_5__.getPaymentIntent)(payment_intent_id));
+      dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentIntent)(payment_intent_id));
     }
   }, [payment_intent_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_method && stripe_invoice_id) {
-      dispatch((0,_controllers_accountsInvoiceSlice__WEBPACK_IMPORTED_MODULE_4__.getStripeInvoice)(stripe_invoice_id));
+      dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.getStripeInvoice)(stripe_invoice_id));
     }
   }, [payment_method, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_method) {
-      dispatch((0,_controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_6__.getPaymentMethod)(payment_method));
+      dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentMethod)(payment_method));
     }
   }, [payment_method, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (payment_method) {
-      dispatch((0,_controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_6__.updatePaymentMethod)((0,_utils_PaymentMethod__WEBPACK_IMPORTED_MODULE_7__.PaymentMethodGenerator)(payment_method)));
+      dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.updatePaymentMethod)((0,_utils_PaymentMethod__WEBPACK_IMPORTED_MODULE_7__.PaymentMethodGenerator)(payment_method)));
     }
   }, [dispatch, payment_method]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (status === 'paid') {
-      dispatch((0,_controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_6__.postReceipt)());
+      dispatch((0,_controllers_accountsReceiptSlice__WEBPACK_IMPORTED_MODULE_5__.saveReceipt)());
     }
   }, [dispatch, status]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {

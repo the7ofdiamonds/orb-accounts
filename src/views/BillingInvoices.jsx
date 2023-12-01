@@ -2,10 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getClient } from '../controllers/accountsClientSlice';
-import {
-  getClientInvoices,
-  deleteInvoice,
-} from '../controllers/accountsInvoiceSlice';
+import { getClientInvoices } from '../controllers/accountsInvoiceSlice';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -119,14 +116,7 @@ function BillingInvoices() {
                           </a>
                         ) : (
                           <a>
-                            <button
-                              onClick={async () =>
-                                await dispatch(
-                                  deleteInvoice(invoice.stripe_invoice_id)
-                                ).then(() => {
-                                  dispatch(getClientInvoices());
-                                })
-                              }>
+                            <button onClick={console.log('invoice deleted')}>
                               <h5>Delete</h5>
                             </button>
                           </a>

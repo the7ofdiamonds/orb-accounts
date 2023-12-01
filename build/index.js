@@ -7887,27 +7887,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   addClient: () => (/* binding */ addClient),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   getClient: () => (/* binding */ getClient),
-/* harmony export */   updateClient: () => (/* binding */ updateClient)
+/* harmony export */   updateAddress: () => (/* binding */ updateAddress),
+/* harmony export */   updateAddress2: () => (/* binding */ updateAddress2),
+/* harmony export */   updateCity: () => (/* binding */ updateCity),
+/* harmony export */   updateClient: () => (/* binding */ updateClient),
+/* harmony export */   updateCompanyName: () => (/* binding */ updateCompanyName),
+/* harmony export */   updateEmail: () => (/* binding */ updateEmail),
+/* harmony export */   updateFirstName: () => (/* binding */ updateFirstName),
+/* harmony export */   updateLastName: () => (/* binding */ updateLastName),
+/* harmony export */   updatePhone: () => (/* binding */ updatePhone),
+/* harmony export */   updateState: () => (/* binding */ updateState),
+/* harmony export */   updateTaxID: () => (/* binding */ updateTaxID),
+/* harmony export */   updateZipcode: () => (/* binding */ updateZipcode)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
 const initialState = {
+  user_email: sessionStorage.getItem('email'),
   clientLoading: false,
   clientError: '',
   client_id: '',
   stripe_customer_id: '',
-  user_email: sessionStorage.getItem('email'),
+  company_name: '',
+  tax_id: '',
   first_name: '',
-  last_name: ''
+  last_name: '',
+  phone: '',
+  address_line_1: '',
+  address_line_2: '',
+  city: '',
+  state: '',
+  zipcode: '',
+  country
 };
 const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('client/addClient', async (_, {
   getState
 }) => {
   try {
     const {
-      user_email
-    } = getState().accountsClient;
-    const {
+      user_email,
       company_name,
       tax_id,
       first_name,
@@ -7919,7 +7937,7 @@ const addClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
       state,
       zipcode,
       country
-    } = getState().accountsCustomer;
+    } = getState().accountsClient;
     const response = await fetch('/wp-json/orb/user/client/v1/add', {
       method: 'POST',
       headers: {
@@ -7976,10 +7994,98 @@ const getClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncTh
     throw error.message;
   }
 });
-const updateClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('client/updateClient');
+const updateClient = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('client/updateClient', async (_, {
+  getState
+}) => {
+  try {
+    const {
+      client_id,
+      user_email,
+      stripe_customer_id
+    } = getState().accountsClient;
+    const {
+      company_name,
+      tax_id,
+      first_name,
+      last_name,
+      phone,
+      address_line_1,
+      address_line_2,
+      city,
+      state,
+      zipcode,
+      country
+    } = getState().accountsCustomer;
+    const response = await fetch(`/wp-json/orb/client/v1/update/${stripe_customer_id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        client_id: client_id,
+        company_name: company_name,
+        tax_id: tax_id,
+        first_name: first_name,
+        last_name: last_name,
+        user_email: user_email,
+        phone: phone,
+        address_line_1: address_line_1,
+        address_line_2: address_line_2,
+        city: city,
+        state: state,
+        zipcode: zipcode,
+        country: country
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
 const accountsClientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
   name: 'client',
   initialState,
+  reducers: {
+    updateCompanyName: (state, action) => {
+      state.company_name = action.payload;
+    },
+    updateTaxID: (state, action) => {
+      state.tax_id = action.payload;
+    },
+    updateFirstName: (state, action) => {
+      state.first_name = action.payload;
+    },
+    updateLastName: (state, action) => {
+      state.last_name = action.payload;
+    },
+    updateEmail: (state, action) => {
+      state.user_email = action.payload;
+    },
+    updatePhone: (state, action) => {
+      state.phone = action.payload;
+    },
+    updateAddress: (state, action) => {
+      state.address_line_1 = action.payload;
+    },
+    updateAddress2: (state, action) => {
+      state.address_line_2 = action.payload;
+    },
+    updateCity: (state, action) => {
+      state.city = action.payload;
+    },
+    updateState: (state, action) => {
+      state.state = action.payload;
+    },
+    updateZipcode: (state, action) => {
+      state.zipcode = action.payload;
+    }
+  },
   extraReducers: builder => {
     builder.addCase(addClient.fulfilled, (state, action) => {
       state.clientLoading = false;
@@ -8016,6 +8122,19 @@ const accountsClientSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cre
     });
   }
 });
+const {
+  updateEmail,
+  updatePhone,
+  updateCompanyName,
+  updateTaxID,
+  updateFirstName,
+  updateLastName,
+  updateAddress,
+  updateAddress2,
+  updateCity,
+  updateState,
+  updateZipcode
+} = accountsCustomerSlice.actions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsClientSlice);
 
 /***/ }),
@@ -8049,28 +8168,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
 const initialState = {
+  user_email: sessionStorage.getItem('email'),
   customerLoading: false,
-  customer_error: '',
+  customerError: '',
+  customer_id: '',
+  stripe_customer_id: '',
   company_name: '',
   tax_id: '',
   first_name: '',
   last_name: '',
-  user_email: sessionStorage.getItem('email'),
   phone: '',
   address_line_1: '',
   address_line_2: '',
   city: '',
   state: '',
   zipcode: '',
-  country: '',
-  stripe_customer_id: ''
+  country: ''
 };
 const addCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('customer/addCustomer', async (_, {
   getState
 }) => {
   try {
     const {
-      client_id,
+      customer_id,
       user_email
     } = getState().accountsClient;
     const {
@@ -8092,7 +8212,7 @@ const addCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        client_id: client_id,
+        customer_id: customer_id,
         company_name: company_name,
         tax_id: tax_id,
         first_name: first_name,
@@ -8164,13 +8284,13 @@ const updateCustomer = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAs
       zipcode,
       country
     } = getState().accountsCustomer;
-    const response = await fetch(`/wp-json/orb/customers/v1/update/${stripe_customer_id}`, {
+    const response = await fetch(`/wp-json/orb/customer/v1/update/${stripe_customer_id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        client_id: client_id,
+        customer_id: customer_id,
         company_name: company_name,
         tax_id: tax_id,
         first_name: first_name,
@@ -8290,6 +8410,156 @@ const {
   updateZipcode
 } = accountsCustomerSlice.actions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsCustomerSlice);
+
+/***/ }),
+
+/***/ "./src/controllers/accountsEmail.js":
+/*!******************************************!*\
+  !*** ./src/controllers/accountsEmail.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsEmailSlice: () => (/* binding */ accountsEmailSlice),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   sendInvoiceEmail: () => (/* binding */ sendInvoiceEmail),
+/* harmony export */   sendOnboardingEmail: () => (/* binding */ sendOnboardingEmail),
+/* harmony export */   sendQuoteEmail: () => (/* binding */ sendQuoteEmail),
+/* harmony export */   sendReceiptEmail: () => (/* binding */ sendReceiptEmail)
+/* harmony export */ });
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+const initialState = {
+  emailLoading: false,
+  emailError: '',
+  user_email: sessionStorage.getItem('email'),
+  first_name: '',
+  last_name: ''
+};
+const sendQuoteEmail = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsEmail/sendQuoteEmail');
+const sendInvoiceEmail = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsEmail/sendInvoiceEmail');
+const sendReceiptEmail = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsEmail/sendReceiptEmail');
+const sendOnboardingEmail = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsEmail/sendOnboardingEmail');
+const accountsEmailSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: 'email',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getStripeInvoice.fulfilled, (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = null;
+      state.stripe_invoice_id = action.payload.id;
+      state.status = action.payload.status;
+      state.company_name = action.payload.name;
+      state.account_country = action.payload.account_country;
+      state.currency = action.payload.currency;
+      state.stripe_customer_id = action.payload.customer;
+      state.customer_name = action.payload.customer_name;
+      state.customer_tax_ids = action.payload.customer_tax_ids;
+      state.address_line_1 = action.payload.customer_address.line1;
+      state.address_line_2 = action.payload.customer_address.line2;
+      state.city = action.payload.customer_address.city;
+      state.state = action.payload.customer_address.state;
+      state.postal_code = action.payload.customer_address.postal_code;
+      state.customer_phone = action.payload.customer_phone;
+      state.customer_email = action.payload.customer_email;
+      state.subtotal = action.payload.subtotal;
+      state.tax = action.payload.tax;
+      state.due_date = action.payload.due_date;
+      state.amount_due = action.payload.amount_due;
+      state.amount_paid = action.payload.amount_paid;
+      state.amount_remaining = action.payload.amount_remaining;
+      state.payment_date = action.payload.status_transitions.paid_at;
+      state.stripe_customer_id = action.payload.customer;
+      state.payment_intent_id = action.payload.payment_intent;
+      state.invoice_pdf = action.payload.invoice_pdf;
+      state.items = action.payload.lines.data;
+    }).addCase(getPaymentIntent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.paymentError = '';
+      state.client_secret = action.payload.client_secret;
+      state.paymentStatus = action.payload.status;
+      state.payment_method_id = action.payload.payment_method;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.pending, getPaymentIntent.pending), state => {
+      state.invoiceLoading = true;
+      state.invoiceError = null;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.rejected, getPaymentIntent.rejected), (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = action.error.message;
+    });
+  }
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsEmailSlice);
+
+/***/ }),
+
+/***/ "./src/controllers/accountsInvestmentsSlice.js":
+/*!*****************************************************!*\
+  !*** ./src/controllers/accountsInvestmentsSlice.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsInvestmentsSlice: () => (/* binding */ accountsInvestmentsSlice),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+const initialState = {};
+const accountsInvestmentsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: 'investments',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getStripeInvoice.fulfilled, (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = null;
+      state.stripe_invoice_id = action.payload.id;
+      state.status = action.payload.status;
+      state.company_name = action.payload.name;
+      state.account_country = action.payload.account_country;
+      state.currency = action.payload.currency;
+      state.stripe_customer_id = action.payload.customer;
+      state.customer_name = action.payload.customer_name;
+      state.customer_tax_ids = action.payload.customer_tax_ids;
+      state.address_line_1 = action.payload.customer_address.line1;
+      state.address_line_2 = action.payload.customer_address.line2;
+      state.city = action.payload.customer_address.city;
+      state.state = action.payload.customer_address.state;
+      state.postal_code = action.payload.customer_address.postal_code;
+      state.customer_phone = action.payload.customer_phone;
+      state.customer_email = action.payload.customer_email;
+      state.subtotal = action.payload.subtotal;
+      state.tax = action.payload.tax;
+      state.due_date = action.payload.due_date;
+      state.amount_due = action.payload.amount_due;
+      state.amount_paid = action.payload.amount_paid;
+      state.amount_remaining = action.payload.amount_remaining;
+      state.payment_date = action.payload.status_transitions.paid_at;
+      state.stripe_customer_id = action.payload.customer;
+      state.payment_intent_id = action.payload.payment_intent;
+      state.invoice_pdf = action.payload.invoice_pdf;
+      state.items = action.payload.lines.data;
+    }).addCase(getPaymentIntent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.paymentError = '';
+      state.client_secret = action.payload.client_secret;
+      state.paymentStatus = action.payload.status;
+      state.payment_method_id = action.payload.payment_method;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.pending, getPaymentIntent.pending), state => {
+      state.invoiceLoading = true;
+      state.invoiceError = null;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.rejected, getPaymentIntent.rejected), (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = action.error.message;
+    });
+  }
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsInvestmentsSlice);
 
 /***/ }),
 
@@ -8688,61 +8958,71 @@ const accountsInvoiceSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cr
 
 /***/ }),
 
-/***/ "./src/controllers/accountsPaymentSlice.js":
-/*!*************************************************!*\
-  !*** ./src/controllers/accountsPaymentSlice.js ***!
-  \*************************************************/
+/***/ "./src/controllers/accountsProductsSlice.js":
+/*!**************************************************!*\
+  !*** ./src/controllers/accountsProductsSlice.js ***!
+  \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   accountsPaymentSlice: () => (/* binding */ accountsPaymentSlice),
-/* harmony export */   updateClientSecret: () => (/* binding */ updateClientSecret)
+/* harmony export */   accountsProductsSlice: () => (/* binding */ accountsProductsSlice),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 
-const initialState = {
-  paymentLoading: false,
-  paymentError: '',
-  payment_intent_id: '',
-  amount_due: '',
-  due_date: '',
-  client_secret: '',
-  paymentStatus: '',
-  payment_method_id: '',
-  payment_method: ''
-};
-const updateClientSecret = clientSecret => {
-  return {
-    type: 'payment/updateClientSecret',
-    payload: clientSecret
-  };
-};
-const accountsPaymentSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-  name: 'payment',
+const initialState = {};
+const accountsProductsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: 'products',
   initialState,
-  reducers: {
-    updateClientSecret: (state, action) => {
-      state.client_secret = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers: builder => {
-    builder.addCase(getPaymentIntent.fulfilled, (state, action) => {
+    builder.addCase(getStripeInvoice.fulfilled, (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = null;
+      state.stripe_invoice_id = action.payload.id;
+      state.status = action.payload.status;
+      state.company_name = action.payload.name;
+      state.account_country = action.payload.account_country;
+      state.currency = action.payload.currency;
+      state.stripe_customer_id = action.payload.customer;
+      state.customer_name = action.payload.customer_name;
+      state.customer_tax_ids = action.payload.customer_tax_ids;
+      state.address_line_1 = action.payload.customer_address.line1;
+      state.address_line_2 = action.payload.customer_address.line2;
+      state.city = action.payload.customer_address.city;
+      state.state = action.payload.customer_address.state;
+      state.postal_code = action.payload.customer_address.postal_code;
+      state.customer_phone = action.payload.customer_phone;
+      state.customer_email = action.payload.customer_email;
+      state.subtotal = action.payload.subtotal;
+      state.tax = action.payload.tax;
+      state.due_date = action.payload.due_date;
+      state.amount_due = action.payload.amount_due;
+      state.amount_paid = action.payload.amount_paid;
+      state.amount_remaining = action.payload.amount_remaining;
+      state.payment_date = action.payload.status_transitions.paid_at;
+      state.stripe_customer_id = action.payload.customer;
+      state.payment_intent_id = action.payload.payment_intent;
+      state.invoice_pdf = action.payload.invoice_pdf;
+      state.items = action.payload.lines.data;
+    }).addCase(getPaymentIntent.fulfilled, (state, action) => {
       state.loading = false;
       state.paymentError = '';
       state.client_secret = action.payload.client_secret;
       state.paymentStatus = action.payload.status;
       state.payment_method_id = action.payload.payment_method;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getPaymentIntent.pending), state => {
-      state.paymentLoading = true;
-      state.paymentError = null;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getPaymentIntent.rejected), (state, action) => {
-      state.paymentLoading = false;
-      state.paymentError = action.error.message;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.pending, getPaymentIntent.pending), state => {
+      state.invoiceLoading = true;
+      state.invoiceError = null;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.rejected, getPaymentIntent.rejected), (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = action.error.message;
     });
   }
 });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsProductsSlice);
 
 /***/ }),
 
@@ -9477,6 +9757,269 @@ const accountsServicesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
 
 /***/ }),
 
+/***/ "./src/controllers/accountsStripeSlice.js":
+/*!************************************************!*\
+  !*** ./src/controllers/accountsStripeSlice.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsStripeSlice: () => (/* binding */ accountsStripeSlice),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getPaymentIntent: () => (/* binding */ getPaymentIntent),
+/* harmony export */   getPaymentMethod: () => (/* binding */ getPaymentMethod),
+/* harmony export */   getStripeClientQuotes: () => (/* binding */ getStripeClientQuotes),
+/* harmony export */   getStripeInvoice: () => (/* binding */ getStripeInvoice),
+/* harmony export */   getStripeQuote: () => (/* binding */ getStripeQuote),
+/* harmony export */   pdfInvoice: () => (/* binding */ pdfInvoice),
+/* harmony export */   updateClientSecret: () => (/* binding */ updateClientSecret),
+/* harmony export */   updatePaymentMethod: () => (/* binding */ updatePaymentMethod),
+/* harmony export */   updateStripeQuote: () => (/* binding */ updateStripeQuote)
+/* harmony export */ });
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+const initialState = {
+  paymentLoading: false,
+  paymentError: '',
+  payment_intent_id: '',
+  amount_due: '',
+  due_date: '',
+  client_secret: '',
+  paymentStatus: '',
+  payment_method_id: '',
+  payment_method: ''
+};
+const getStripeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getStripeQuote', async (stripeQuoteID, {
+  getState
+}) => {
+  const {
+    stripe_quote_id
+  } = getState().accountsQuote;
+  try {
+    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const updateStripeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/updateStripeQuote', async (_, {
+  getState
+}) => {
+  const {
+    stripe_quote_id,
+    selections
+  } = getState().accountsQuote;
+  try {
+    const response = await fetch(`/wp-json/orb/v1/stripe/quote/${stripe_quote_id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(selections)
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const getStripeClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('accountsQuote/getStripeClientQuotes', async (_, {
+  getState
+}) => {
+  const {
+    stripe_customer_id
+  } = getState().accountsClient;
+  try {
+    const response = await fetch(`/wp-json/orb/v1/stripe/quotes/${stripe_customer_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const getStripeInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/getStripeInvoice', async stripe_invoice_id => {
+  try {
+    const response = await fetch(`/wp-json/orb/v1/stripe/invoices/${stripe_invoice_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error;
+  }
+});
+const pdfInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/pdfInvoice', async (_, {
+  getState
+}) => {
+  try {
+    const {
+      stripe_invoice_id
+    } = getState().accountsInvoice;
+    const response = await fetch(`/wp-json/orb/v1/stripe/invoices/pdf/${stripe_invoice_id}/pdf`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error;
+  }
+});
+const updateClientSecret = clientsecret => {
+  return {
+    type: 'stripe/updateClientSecret',
+    payload: clientsecret
+  };
+};
+const getPaymentMethod = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('receipt/getPaymentMethod', async payment_method_id => {
+  try {
+    const response = await fetch(`/wp-json/orb/v1/stripe/payment_methods/${payment_method_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const updatePaymentMethod = paymentMethod => {
+  return {
+    type: 'receipt/updatePaymentMethod',
+    payload: paymentMethod
+  };
+};
+const getPaymentIntent = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('payment/getPaymentIntent', async (paymentIntentID, {
+  getState
+}) => {
+  const {
+    payment_intent_id
+  } = getState().accountsInvoice;
+  try {
+    const response = await fetch(`/wp-json/orb/v1/stripe/payment_intents/${paymentIntentID ? paymentIntentID : payment_intent_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const accountsStripeSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: 'stripe',
+  initialState,
+  reducers: {
+    updateClientSecret: (state, action) => {
+      state.client_secret = action.payload;
+    }
+  },
+  extraReducers: builder => {
+    builder.addCase(getStripeInvoice.fulfilled, (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = null;
+      state.stripe_invoice_id = action.payload.id;
+      state.status = action.payload.status;
+      state.company_name = action.payload.name;
+      state.account_country = action.payload.account_country;
+      state.currency = action.payload.currency;
+      state.stripe_customer_id = action.payload.customer;
+      state.customer_name = action.payload.customer_name;
+      state.customer_tax_ids = action.payload.customer_tax_ids;
+      state.address_line_1 = action.payload.customer_address.line1;
+      state.address_line_2 = action.payload.customer_address.line2;
+      state.city = action.payload.customer_address.city;
+      state.state = action.payload.customer_address.state;
+      state.postal_code = action.payload.customer_address.postal_code;
+      state.customer_phone = action.payload.customer_phone;
+      state.customer_email = action.payload.customer_email;
+      state.subtotal = action.payload.subtotal;
+      state.tax = action.payload.tax;
+      state.due_date = action.payload.due_date;
+      state.amount_due = action.payload.amount_due;
+      state.amount_paid = action.payload.amount_paid;
+      state.amount_remaining = action.payload.amount_remaining;
+      state.payment_date = action.payload.status_transitions.paid_at;
+      state.stripe_customer_id = action.payload.customer;
+      state.payment_intent_id = action.payload.payment_intent;
+      state.invoice_pdf = action.payload.invoice_pdf;
+      state.items = action.payload.lines.data;
+    }).addCase(getPaymentIntent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.paymentError = '';
+      state.client_secret = action.payload.client_secret;
+      state.paymentStatus = action.payload.status;
+      state.payment_method_id = action.payload.payment_method;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.pending, getPaymentIntent.pending), state => {
+      state.invoiceLoading = true;
+      state.invoiceError = null;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getStripeInvoice.rejected, getPaymentIntent.rejected), (state, action) => {
+      state.invoiceLoading = false;
+      state.invoiceError = action.error.message;
+    });
+  }
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsStripeSlice);
+
+/***/ }),
+
 /***/ "./src/model/store.js":
 /*!****************************!*\
   !*** ./src/model/store.js ***!
@@ -9488,14 +10031,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
 /* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
-/* harmony import */ var _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsServicesSlice.js */ "./src/controllers/accountsServicesSlice.js");
-/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
-/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
-/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
-/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsEmail.js */ "./src/controllers/accountsEmail.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsInvestmentsSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvestmentsSlice.js */ "./src/controllers/accountsInvestmentsSlice.js");
+/* harmony import */ var _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsProductsSlice.js */ "./src/controllers/accountsProductsSlice.js");
+/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../controllers/accountsServicesSlice.js */ "./src/controllers/accountsServicesSlice.js");
+/* harmony import */ var _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../controllers/accountsStripeSlice.js */ "./src/controllers/accountsStripeSlice.js");
 
 
 
@@ -9504,15 +10050,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_7__.configureStore)({
+
+
+
+const store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_10__.configureStore)({
   reducer: {
     accountsClient: _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_0__.accountsClientSlice.reducer,
     accountsCustomer: _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_1__.accountsCustomerSlice.reducer,
-    accountsServices: _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.accountsServicesSlice.reducer,
-    accountsQuote: _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.accountsQuoteSlice.reducer,
-    accountsInvoice: _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.accountsInvoiceSlice.reducer,
-    accountsPayment: _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_5__.accountsPaymentSlice.reducer,
-    accountsReceipt: _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_6__.accountsReceiptSlice.reducer
+    accountsEmail: _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_2__.accountsEmailSlice.reducer,
+    accountsInvoice: _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_3__.accountsInvoiceSlice.reducer,
+    accountsInvestments: _controllers_accountsInvestmentsSlice_js__WEBPACK_IMPORTED_MODULE_4__.accountsInvestmentsSlice.reducer,
+    accountsProducts: _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_5__.accountsProductsSlice.reducer,
+    accountsQuote: _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_6__.accountsQuoteSlice.reducer,
+    accountsReceipt: _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__.accountsReceiptSlice.reducer,
+    accountsServices: _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_8__.accountsServicesSlice.reducer,
+    accountsStripe: _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_9__.accountsStripeSlice.reducer
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);

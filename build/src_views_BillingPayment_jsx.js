@@ -62,18 +62,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _components_PaymentNavigation_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/PaymentNavigation.jsx */ "./src/views/components/PaymentNavigation.jsx");
 /* harmony import */ var _controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsClientSlice.js */ "./src/controllers/accountsClientSlice.js");
-/* harmony import */ var _controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsCustomerSlice.js */ "./src/controllers/accountsCustomerSlice.js");
-/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
-/* harmony import */ var _controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsPaymentSlice.js */ "./src/controllers/accountsPaymentSlice.js");
-/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
-/* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
-/* harmony import */ var _error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../error/ErrorComponent.jsx */ "./src/error/ErrorComponent.jsx");
-/* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
-
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsStripeSlice.js */ "./src/controllers/accountsStripeSlice.js");
+/* harmony import */ var _loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../loading/LoadingComponent.jsx */ "./src/loading/LoadingComponent.jsx");
+/* harmony import */ var _error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../error/ErrorComponent.jsx */ "./src/error/ErrorComponent.jsx");
+/* harmony import */ var _components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/StatusBar.jsx */ "./src/views/components/StatusBar.jsx");
 
 
 
@@ -89,7 +87,7 @@ __webpack_require__.r(__webpack_exports__);
 function PaymentComponent() {
   const {
     id
-  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useParams)();
+  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useParams)();
   const [messageType, setMessageType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const {
@@ -116,31 +114,23 @@ function PaymentComponent() {
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch((0,_controllers_accountsCustomerSlice_js__WEBPACK_IMPORTED_MODULE_4__.getStripeCustomer)(response.payload.stripe_customer_id)).then(response => {
+          dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_4__.getInvoiceByID)(id, response.payload.stripe_customer_id)).then(response => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
               setMessage(response.error.message);
             } else {
-              dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_5__.getInvoiceByID)(id, response.payload.stripe_customer_id)).then(response => {
+              dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.getStripeInvoice)(response.payload.stripe_invoice_id)).then(response => {
                 if (response.error !== undefined) {
                   console.error(response.error.message);
                   setMessageType('error');
                   setMessage(response.error.message);
                 } else {
-                  dispatch((0,_controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_5__.getStripeInvoice)(response.payload.stripe_invoice_id)).then(response => {
+                  dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentIntent)(response.payload.payment_intent_id)).then(response => {
                     if (response.error !== undefined) {
                       console.error(response.error.message);
                       setMessageType('error');
                       setMessage(response.error.message);
-                    } else {
-                      dispatch((0,_controllers_accountsPaymentSlice_js__WEBPACK_IMPORTED_MODULE_6__.getPaymentIntent)(response.payload.payment_intent_id)).then(response => {
-                        if (response.error !== undefined) {
-                          console.error(response.error.message);
-                          setMessageType('error');
-                          setMessage(response.error.message);
-                        }
-                      });
                     }
                   });
                 }
@@ -160,7 +150,7 @@ function PaymentComponent() {
   }, [status, amount_remaining]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_invoice_id) {
-      dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_7__.getReceipt)()).then(response => {
+      dispatch((0,_controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_5__.getReceipt)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -175,10 +165,10 @@ function PaymentComponent() {
     }
   };
   if (paymentLoading) {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_8__["default"], null);
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], null);
   }
   if (paymentError) {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_8__["default"], {
       error: paymentError
     });
   }
@@ -186,7 +176,7 @@ function PaymentComponent() {
     className: "payment"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
     className: "title"
-  }, "PAYMENT"), status === 'open' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_PaymentNavigation_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], null) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_10__["default"], {
+  }, "PAYMENT"), status === 'open' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_PaymentNavigation_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], null) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_9__["default"], {
     message: message,
     messageType: messageType
   }), receipt_id && status == 'paid' ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {

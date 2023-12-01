@@ -3,17 +3,19 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getClient } from '../controllers/accountsClientSlice.js';
-import { getStripeCustomer } from '../controllers/accountsCustomerSlice.js';
 import {
-  getStripeInvoice,
   getInvoiceByID,
   finalizeInvoice,
 } from '../controllers/accountsInvoiceSlice.js';
 import {
+  updateReceiptID,
+  getReceipt,
+} from '../controllers/accountsReceiptSlice.js';
+import {
+  getStripeInvoice,
   getPaymentIntent,
   updateClientSecret,
-} from '../controllers/accountsPaymentSlice.js';
-import { updateReceiptID, getReceipt } from '../controllers/accountsReceiptSlice.js';
+} from '../controllers/accountsStripeSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -70,27 +72,19 @@ function InvoiceComponent() {
           setMessageType('error');
           setMessage(response.error.message);
         } else {
-          dispatch(getStripeCustomer()).then((response) => {
+          dispatch(getInvoiceByID(id)).then((response) => {
             if (response.error !== undefined) {
               console.error(response.error.message);
               setMessageType('error');
               setMessage(response.error.message);
             } else {
-              dispatch(getInvoiceByID(id)).then((response) => {
+              dispatch(
+                getStripeInvoice(response.payload.stripe_invoice_id)
+              ).then((response) => {
                 if (response.error !== undefined) {
                   console.error(response.error.message);
                   setMessageType('error');
                   setMessage(response.error.message);
-                } else {
-                  dispatch(
-                    getStripeInvoice(response.payload.stripe_invoice_id)
-                  ).then((response) => {
-                    if (response.error !== undefined) {
-                      console.error(response.error.message);
-                      setMessageType('error');
-                      setMessage(response.error.message);
-                    }
-                  });
                 }
               });
             }

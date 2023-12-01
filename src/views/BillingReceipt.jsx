@@ -3,17 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getClient } from '../controllers/accountsClientSlice.js';
-import { getStripeCustomer } from '../controllers/accountsCustomerSlice.js';
 import { getQuoteByID } from '../controllers/accountsQuoteSlice.js';
+import { getInvoice } from '../controllers/accountsInvoiceSlice.js';
+import { getReceiptByID } from '../controllers/accountsReceiptSlice.js';
 import {
-  getInvoice,
   getStripeInvoice,
-} from '../controllers/accountsInvoiceSlice.js';
-import { getPaymentIntent } from '../controllers/accountsPaymentSlice.js';
-import {
+  getPaymentIntent,
   getPaymentMethod,
-  getReceiptByID,
-} from '../controllers/accountsReceiptSlice.js';
+} from '../controllers/accountsStripeSlice.js';
 
 import formatPhoneNumber from '../utils/PhoneNumberFormatter.js';
 
@@ -51,8 +48,14 @@ function ReceiptComponent() {
     payment_intent_id,
     quote_id,
   } = useSelector((state) => state.accountsInvoice);
-  const { receiptLoading, receiptError, stripe_invoice_id, payment_method, first_name, last_name } =
-    useSelector((state) => state.accountsReceipt);
+  const {
+    receiptLoading,
+    receiptError,
+    stripe_invoice_id,
+    payment_method,
+    first_name,
+    last_name,
+  } = useSelector((state) => state.accountsReceipt);
 
   const timestamp = payment_date * 1000;
   const paymentDate = new Date(timestamp);
@@ -70,16 +73,6 @@ function ReceiptComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
-        } else {
-          dispatch(getStripeCustomer(response.payload.stripe_customer_id)).then(
-            (response) => {
-              if (response.error !== undefined) {
-                console.error(response.error.message);
-                setMessageType('error');
-                setMessage(response.error.message);
-              }
-            }
-          );
         }
       });
     }

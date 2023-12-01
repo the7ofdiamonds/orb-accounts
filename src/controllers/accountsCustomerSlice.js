@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
+    user_email: sessionStorage.getItem('email'),
     customerLoading: false,
-    customer_error: '',
+    customerError: '',
+    customer_id: '',
+    stripe_customer_id: '',
     company_name: '',
     tax_id: '',
     first_name: '',
     last_name: '',
-    user_email: sessionStorage.getItem('email'),
     phone: '',
     address_line_1: '',
     address_line_2: '',
@@ -15,13 +17,12 @@ const initialState = {
     state: '',
     zipcode: '',
     country: '',
-    stripe_customer_id: '',
 };
 
 export const addCustomer = createAsyncThunk('customer/addCustomer', async (_, { getState }) => {
     try {
         const {
-            client_id,
+            customer_id,
             user_email
         } = getState().accountsClient;
         const {
@@ -44,7 +45,7 @@ export const addCustomer = createAsyncThunk('customer/addCustomer', async (_, { 
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                client_id: client_id,
+                customer_id: customer_id,
                 company_name: company_name,
                 tax_id: tax_id,
                 first_name: first_name,
@@ -118,13 +119,13 @@ export const updateCustomer = createAsyncThunk('customer/updateCustomer', async 
             country
         } = getState().accountsCustomer;
 
-        const response = await fetch(`/wp-json/orb/customers/v1/update/${stripe_customer_id}`, {
+        const response = await fetch(`/wp-json/orb/customer/v1/update/${stripe_customer_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                client_id: client_id,
+                customer_id: customer_id,
                 company_name: company_name,
                 tax_id: tax_id,
                 first_name: first_name,

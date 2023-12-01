@@ -7,15 +7,15 @@ import PaymentNavigationComponent from './components/PaymentNavigation';
 import { getClient } from '../controllers/accountsClientSlice';
 import {
   getInvoiceByID,
-  getStripeInvoice,
   updateInvoiceStatus,
 } from '../controllers/accountsInvoiceSlice';
-import { getPaymentIntent } from '../controllers/accountsPaymentSlice';
+import { saveReceipt } from '../controllers/accountsReceiptSlice';
 import {
-  postReceipt,
+  getStripeInvoice,
+  getPaymentIntent,
   getPaymentMethod,
   updatePaymentMethod,
-} from '../controllers/accountsReceiptSlice';
+} from '../controllers/accountsStripeSlice.js';
 
 import { PaymentMethodGenerator } from '../utils/PaymentMethod';
 import { FormatCreditNumber } from '../utils/FormatCreditNumber';
@@ -46,10 +46,12 @@ const CardPaymentComponent = () => {
     amount_paid,
     remaining_balance,
   } = useSelector((state) => state.accountsInvoice);
-  const { paymentLoading, paymentError, client_secret } = useSelector(
-    (state) => state.accountsPayment
+  const { stripeLoading, stripeError, client_secret } = useSelector(
+    (state) => state.accountsStripe
   );
-  const { receipt_id, payment_method } = useSelector((state) => state.accountsReceipt);
+  const { receipt_id, payment_method } = useSelector(
+    (state) => state.accountsReceipt
+  );
 
   const [cardNumber, setCardNumber] = useState('');
   const [expMonth, setExpMonth] = useState('');
@@ -126,7 +128,7 @@ const CardPaymentComponent = () => {
 
   useEffect(() => {
     if (status === 'paid') {
-      dispatch(postReceipt());
+      dispatch(saveReceipt());
     }
   }, [dispatch, status]);
 

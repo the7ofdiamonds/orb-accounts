@@ -1,21 +1,27 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { accountsClientSlice } from '../controllers/accountsClientSlice.js';
 import { accountsCustomerSlice } from '../controllers/accountsCustomerSlice.js';
-import { accountsServicesSlice } from '../controllers/accountsServicesSlice.js';
-import { accountsQuoteSlice } from '../controllers/accountsQuoteSlice.js';
+import { accountsEmailSlice } from '../controllers/accountsEmail.js';
 import { accountsInvoiceSlice } from '../controllers/accountsInvoiceSlice.js';
-import { accountsPaymentSlice } from '../controllers/accountsPaymentSlice.js';
+import { accountsInvestmentsSlice } from '../controllers/accountsInvestmentsSlice.js';
+import { accountsProductsSlice } from '../controllers/accountsProductsSlice.js';
+import { accountsQuoteSlice } from '../controllers/accountsQuoteSlice.js';
 import { accountsReceiptSlice } from '../controllers/accountsReceiptSlice.js';
+import { accountsServicesSlice } from '../controllers/accountsServicesSlice.js';
+import { accountsStripeSlice } from '../controllers/accountsStripeSlice.js';
 
 const store = configureStore({
   reducer: {
     accountsClient: accountsClientSlice.reducer,
     accountsCustomer: accountsCustomerSlice.reducer,
-    accountsServices: accountsServicesSlice.reducer,
-    accountsQuote: accountsQuoteSlice.reducer,
+    accountsEmail: accountsEmailSlice.reducer,
     accountsInvoice: accountsInvoiceSlice.reducer,
-    accountsPayment: accountsPaymentSlice.reducer,
+    accountsInvestments: accountsInvestmentsSlice.reducer,
+    accountsProducts: accountsProductsSlice.reducer,
+    accountsQuote: accountsQuoteSlice.reducer,
     accountsReceipt: accountsReceiptSlice.reducer,
+    accountsServices: accountsServicesSlice.reducer,
+    accountsStripe: accountsStripeSlice.reducer,
   },
 });
 

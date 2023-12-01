@@ -1,19 +1,28 @@
 import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 
 const initialState = {
+    user_email: sessionStorage.getItem('email'),
     clientLoading: false,
     clientError: '',
     client_id: '',
     stripe_customer_id: '',
-    user_email: sessionStorage.getItem('email'),
+    company_name: '',
+    tax_id: '',
     first_name: '',
     last_name: '',
+    phone: '',
+    address_line_1: '',
+    address_line_2: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    country
 };
 
 export const addClient = createAsyncThunk('client/addClient', async (_, { getState }) => {
     try {
-        const { user_email } = getState().accountsClient;
         const {
+            user_email,
             company_name,
             tax_id,
             first_name,
@@ -25,7 +34,7 @@ export const addClient = createAsyncThunk('client/addClient', async (_, { getSta
             state,
             zipcode,
             country
-        } = getState().accountsCustomer;
+        } = getState().accountsClient;
 
         const response = await fetch('/wp-json/orb/user/client/v1/add', {
             method: 'POST',
@@ -86,11 +95,100 @@ export const getClient = createAsyncThunk('client/getClient', async (_, { getSta
     }
 });
 
-export const updateClient = createAsyncThunk('client/updateClient');
+export const updateClient = createAsyncThunk('client/updateClient', async (_, { getState }) => {
+    try {
+        const {
+            client_id,
+            user_email,
+            stripe_customer_id
+        } = getState().accountsClient;
+        const {
+            company_name,
+            tax_id,
+            first_name,
+            last_name,
+            phone,
+            address_line_1,
+            address_line_2,
+            city,
+            state,
+            zipcode,
+            country
+        } = getState().accountsCustomer;
+
+        const response = await fetch(`/wp-json/orb/client/v1/update/${stripe_customer_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client_id: client_id,
+                company_name: company_name,
+                tax_id: tax_id,
+                first_name: first_name,
+                last_name: last_name,
+                user_email: user_email,
+                phone: phone,
+                address_line_1: address_line_1,
+                address_line_2: address_line_2,
+                city: city,
+                state: state,
+                zipcode: zipcode,
+                country: country
+            })
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        throw error.message;
+    }
+});
 
 export const accountsClientSlice = createSlice({
     name: 'client',
     initialState,
+    reducers: {
+        updateCompanyName: (state, action) => {
+            state.company_name = action.payload;
+        },
+        updateTaxID: (state, action) => {
+            state.tax_id = action.payload;
+        },
+        updateFirstName: (state, action) => {
+            state.first_name = action.payload;
+        },
+        updateLastName: (state, action) => {
+            state.last_name = action.payload;
+        },
+        updateEmail: (state, action) => {
+            state.user_email = action.payload;
+        },
+        updatePhone: (state, action) => {
+            state.phone = action.payload;
+        },
+        updateAddress: (state, action) => {
+            state.address_line_1 = action.payload;
+        },
+        updateAddress2: (state, action) => {
+            state.address_line_2 = action.payload;
+        },
+        updateCity: (state, action) => {
+            state.city = action.payload;
+        },
+        updateState: (state, action) => {
+            state.state = action.payload;
+        },
+        updateZipcode: (state, action) => {
+            state.zipcode = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(addClient.fulfilled, (state, action) => {
@@ -121,7 +219,7 @@ export const accountsClientSlice = createSlice({
                 state.zipcode = action.payload.address.postal_code
                 state.email = action.payload.email
                 state.phone = action.payload.phone
-             })
+            })
             .addMatcher(isAnyOf(
                 addClient.pending,
                 getClient.pending,
@@ -140,6 +238,20 @@ export const accountsClientSlice = createSlice({
                     state.clientError = action.error.message;
                 });
     }
-})
+});
+
+export const {
+    updateEmail,
+    updatePhone,
+    updateCompanyName,
+    updateTaxID,
+    updateFirstName,
+    updateLastName,
+    updateAddress,
+    updateAddress2,
+    updateCity,
+    updateState,
+    updateZipcode,
+} = accountsCustomerSlice.actions;
 
 export default accountsClientSlice;
