@@ -12,6 +12,7 @@ import {
   getQuote,
 } from '../controllers/accountsQuoteSlice.js';
 import { updateStripeQuote } from '../controllers/accountsStripeSlice.js';
+
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';
@@ -32,14 +33,14 @@ function SelectionsComponent() {
     (state) => state.accountsClient
   );
   const {
-    loading,
-    quotes,
+    quoteLoading,
     quoteError,
+    stripe_quote_id,
+    quotes,
     quote_id,
-    status,
+    quote_status,
     selections,
     total,
-    stripe_quote_id,
   } = useSelector((state) => state.accountsQuote);
 
   useEffect(() => {
@@ -161,9 +162,9 @@ function SelectionsComponent() {
     if (selections.length === 0) {
       setMessageType('error');
     } else if (
-      (stripe_quote_id && status === 'canceled' && selections.length > 0) ||
+      (stripe_quote_id && quote_status === 'canceled' && selections.length > 0) ||
       (stripe_quote_id === '' &&
-        status === '' &&
+        quote_status === '' &&
         selections.length > 0 &&
         stripe_customer_id)
     ) {
@@ -174,7 +175,7 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (stripe_quote_id && status === 'draft' && selections.length > 0) {
+    } else if (stripe_quote_id && quote_status === 'draft' && selections.length > 0) {
       dispatch(updateStripeQuote()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
@@ -182,7 +183,7 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (stripe_quote_id && status === 'draft') {
+    } else if (stripe_quote_id && quote_status === 'draft') {
       dispatch(finalizeQuote()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
@@ -190,7 +191,7 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (quote_id && (status === 'open' || status === 'accepted')) {
+    } else if (quote_id && (quote_status === 'open' || quote_status === 'accepted')) {
       window.location.href = `/billing/quote/${quote_id}`;
     }
   };

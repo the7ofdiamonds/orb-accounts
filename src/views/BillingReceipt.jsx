@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getClient } from '../controllers/accountsClientSlice.js';
-import { getQuoteByID } from '../controllers/accountsQuoteSlice.js';
-import { getInvoice } from '../controllers/accountsInvoiceSlice.js';
 import { getReceiptByID } from '../controllers/accountsReceiptSlice.js';
 import {
   getStripeInvoice,
   getPaymentIntent,
   getPaymentMethod,
 } from '../controllers/accountsStripeSlice.js';
+import { getInvoice } from '../controllers/accountsInvoiceSlice.js';
+import { getQuote } from '../controllers/accountsQuoteSlice.js';
 
 import formatPhoneNumber from '../utils/PhoneNumberFormatter.js';
 
@@ -25,19 +25,27 @@ function ReceiptComponent() {
   const [messageType, setMessageType] = useState('info');
   const [message, setMessage] = useState('');
 
-  const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.accountsClient
-  );
   const {
+    user_email,
+    stripe_customer_id,
     company_name,
     address_line_1,
     address_line_2,
     city,
     state,
     zipcode,
-    phone,
-  } = useSelector((state) => state.accountsCustomer);
-  const { selections } = useSelector((state) => state.accountsQuote);
+    phone
+  } = useSelector((state) => state.accountsClient);
+  const {
+    receiptLoading,
+    receiptError,
+    stripe_invoice_id,
+    payment_intent_id,
+    payment_method_id,
+    payment_method,
+    first_name,
+    last_name,
+  } = useSelector((state) => state.accountsReceipt);
   const {
     subtotal,
     tax,
@@ -45,18 +53,10 @@ function ReceiptComponent() {
     amount_paid,
     amount_remaining,
     payment_date,
-    payment_intent_id,
-    quote_id,
+    stripe_quote_id,
   } = useSelector((state) => state.accountsInvoice);
-  const {
-    receiptLoading,
-    receiptError,
-    stripe_invoice_id,
-    payment_method,
-    first_name,
-    last_name,
-  } = useSelector((state) => state.accountsReceipt);
-
+  const { selections } = useSelector((state) => state.accountsQuote);
+  
   const timestamp = payment_date * 1000;
   const paymentDate = new Date(timestamp);
   const formattedPhone = formatPhoneNumber(phone);
@@ -121,10 +121,10 @@ function ReceiptComponent() {
   }, [dispatch, stripe_invoice_id]);
 
   useEffect(() => {
-    if (quote_id) {
-      dispatch(getQuoteByID(quote_id));
+    if (stripe_quote_id) {
+      dispatch(getQuoteByID(stripe_quote_id));
     }
-  }, [dispatch, quote_id]);
+  }, [dispatch, stripe_quote_id]);
 
   useEffect(() => {
     if (payment_intent_id) {

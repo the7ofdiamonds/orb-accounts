@@ -26,7 +26,6 @@ export const updateReceiptID = (receiptID) => {
   };
 };
 
-
 export const saveReceipt = createAsyncThunk('receipt/saveReceipt', async (_, { getState }) => {
   try {
     const { stripe_customer_id, first_name, last_name } = getState().accountsClient;

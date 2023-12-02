@@ -9,7 +9,7 @@ const initialState = {
   stripe_quote_id: '',
   amount_subtotal: '',
   amount_total: '',
-  status: '',
+  quote_status: '',
   selections: '',
   total: '',
   pdf: ''
@@ -26,7 +26,7 @@ export const createQuote = createAsyncThunk('quote/createQuote', async (_, { get
   try {
     const { stripe_customer_id } = getState().accountsClient;
     const { selections } = getState().accountsQuote;
-  
+
     const response = await fetch('/wp-json/orb/quote/v1/create', {
       method: 'POST',
       headers: {
@@ -56,7 +56,7 @@ export const getQuote = createAsyncThunk('quote/getQuote', async (stripeQuoteID,
   try {
     const { stripe_quote_id } = getState().accountsQuote;
     const { stripe_customer_id } = getState().accountsClient;
-  
+
     const response = await fetch(`/wp-json/orb/quote/v1/${stripeQuoteID ? stripeQuoteID : stripe_quote_id}`, {
       method: 'POST',
       headers: {
@@ -84,7 +84,7 @@ export const getQuoteByID = createAsyncThunk('quote/getQuoteByID', async (quoteI
   try {
     const { quote_id } = getState().accountsQuote;
     const { stripe_customer_id } = getState().accountsClient;
-  
+
     const response = await fetch(`/wp-json/orb/quote/v1/id/${quoteID ? quoteID : quote_id}`, {
       method: 'POST',
       headers: {
@@ -134,16 +134,14 @@ export const updateQuote = createAsyncThunk('quote/updateQuote', async (_, { get
 });
 
 export const finalizeQuote = createAsyncThunk('quote/finalizeQuote', async (_, { getState }) => {
-
   try {
+    const { stripe_quote_id } = getState().accountsQuote;
+
     const response = await fetch(`/wp-json/orb/quote/v1/finalize/${stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        selections: selections
-      })
     });
 
     if (!response.ok) {
@@ -187,7 +185,7 @@ export const acceptQuote = createAsyncThunk('quote/acceptQuote', async (_, { get
   const { stripe_quote_id } = getState().accountsQuote;
 
   try {
-    const response = await fetch(`/wp-json/orb/quotes/v1/accept/${stripe_quote_id}/accept`, {
+    const response = await fetch(`/wp-json/orb/quotes/v1/accept/${stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -211,7 +209,7 @@ export const cancelQuote = createAsyncThunk('quote/cancelQuote', async (_, { get
   const { stripe_quote_id } = getState().accountsQuote;
 
   try {
-    const response = await fetch(`/wp-json/orb/quote/v1/cancel/${stripe_quote_id}/cancel`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/cancel/${stripe_quote_id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -232,9 +230,9 @@ export const cancelQuote = createAsyncThunk('quote/cancelQuote', async (_, { get
 });
 
 export const getClientQuotes = createAsyncThunk('quote/getClientQuotes', async (_, { getState }) => {
-  const { stripe_customer_id } = getState().accountsClient;
-
   try {
+    const { stripe_customer_id } = getState().accountsClient;
+
     const response = await fetch(`/wp-json/orb/quote/v1/client/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
@@ -282,87 +280,39 @@ export const accountsQuoteSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createQuote.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.stripe_quote_id = action.payload.id;
-        state.stripe_customer_id = action.payload.stripe_customer_id;
-        state.amount_subtotal = action.payload.amount_subtotal;
-        state.amount_total = action.payload.amount_total;
-        state.status = action.payload.status;
-        state.total = action.payload.total;
-      })
-      .addCase(getQuote.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.quote_id = action.payload.id;
-        state.stripe_quote_id = action.payload.stripe_quote_id;
-        state.status = action.payload.status;
-        state.selections = action.payload.selections;
-        state.amount_subtotal = action.payload.amount_subtotal
-        state.amount_total = action.payload.amount_total
-      })
-      .addCase(getQuoteByID.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.quote_id = action.payload.id;
-        state.stripe_quote_id = action.payload.stripe_quote_id;
-        state.status = action.payload.status;
-        state.selections = action.payload.selections;
-        state.amount_subtotal = action.payload.amount_subtotal
-        state.amount_total = action.payload.amount_total
-      })
-      .addCase(updateQuote.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.stripe_quote_id = action.payload.id;
-        state.status = action.payload.status;
-        state.amount_subtotal = action.payload.amount_subtotal
-        state.amount_total = action.payload.amount_total
-      })
-      .addCase(updateQuoteStatus.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.status = action.payload;
-        state.stripe_quote_id = action.payload.id;
-        state.status = action.payload.status;
-        state.amount_subtotal = action.payload.amount_subtotal
-        state.amount_total = action.payload.amount_total
-      })
       .addCase(getClientQuotes.fulfilled, (state, action) => {
         state.quoteLoading = false;
-        state.quoteError = '';
+        state.quoteError = null;
         state.quotes = action.payload;
       })
-      .addCase(finalizeQuote.fulfilled, (state, action) => {
+      .addMatcher(isAnyOf(
+        createQuote.fulfilled,
+        getQuote.fulfilled,
+        getQuoteByID.fulfilled,
+        updateQuote.fulfilled,
+        updateQuoteStatus.fulfilled,
+        finalizeQuote.fulfilled,
+        acceptQuote.fulfilled,
+        cancelQuote.fulfilled
+      ), (state, action) => {
         state.quoteLoading = false;
-        state.quoteError = '';
-        state.quote_id = action.payload.quote_id;
-        state.stripe_quote_id = action.payload.stripe_quote_id;
-        state.stripe_customer_id = action.payload.customer;
-        state.status = action.payload.status;
-        state.amount_subtotal = action.payload.amount_subtotal;
-        state.amount_discount = action.payload.amount_discount;
-        state.amount_shipping = action.payload.amount_shipping;
-        state.amount_total = action.payload.amount_total;
-      })
-      .addCase(acceptQuote.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.status = action.payload.status;
-        state.stripe_invoice_id = action.payload.invoice;
-        state.stripe_quote_id = action.payload.id;
-        state.stripe_customer_id = action.payload.customer;
-        state.status = action.payload.status;
-        state.amount_subtotal = action.payload.amount_subtotal;
-        state.amount_discount = action.payload.amount_discount;
-        state.amount_shipping = action.payload.amount_shipping;
-        state.amount_total = action.payload.amount_total;
-      })
-      .addCase(cancelQuote.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.status = action.payload;
+        state.quoteError = null;
+        state.stripe_quote_id = action.payload.id
+        state.quote_status = action.payload.status
+        state.quote_status_transitions = action.payload.status_transitions
+        state.amount_subtotal = action.payload.amount_subtotal
+        state.amount_total = action.payload.amount_total
+        state.currency = action.payload.currency
+        state.stripe_customer_id = action.payload.customer
+        state.quote_description = action.payload.description
+        state.discounts = action.payload.discounts
+        state.expires_at = action.payload.expires_at
+        state.subscription = action.payload.subscription
+        state.subscription_data = action.payload.subscription_data
+        state.subscription_schedule = action.payload.subscription_schedule
+        state.total_details = action.payload.total_details
+        state.items = action.payload.line_items
+        state.stripe_invoice_id = action.payload.invoice
       })
       .addMatcher(isAnyOf(
         createQuote.pending,
