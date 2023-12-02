@@ -186,46 +186,6 @@ class Stripe
         }
     }
 
-    public function pdf_quote(WP_REST_Request $request)
-    {
-        try {
-            // $pdf_data = '';
-
-            // $stripe_quote_id = $request->get_param('slug');
-
-            // $this->stripeClient->quotes->pdf($quote_id, function ($chunk) use (&$pdf_data) {
-            //     $pdf_data .= $chunk;
-            // });
-            // $myfile = fopen("/tmp/tmp.pdf", "w");
-
-            // $pdf = $this->stripeClient->quotes->pdf($stripe_quote_id, function ($chunk) use (&$myfile) {
-            //     fwrite($myfile, $chunk);
-            // });
-
-            // fclose($myfile);
-            // header('Content-Type: application/pdf');
-            // header('Content-Disposition: inline; filename="quote.pdf"');
-
-            // echo $pdf_data;
-
-            // return rest_ensure_response($pdf_data);
-        } catch (Exception $e) {
-
-            $error_message = $e->getMessage();
-            $status_code = $e->getCode();
-
-            $response_data = [
-                'message' => $error_message,
-                'status' => $status_code
-            ];
-
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
-        }
-    }
-
     public function get_stripe_quotes()
     {
         try {

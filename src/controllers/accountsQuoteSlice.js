@@ -312,14 +312,6 @@ export const accountsQuoteSlice = createSlice({
         state.amount_subtotal = action.payload.amount_subtotal
         state.amount_total = action.payload.amount_total
       })
-      .addCase(getStripeQuote.fulfilled, (state, action) => {
-        state.quoteLoading = false;
-        state.quoteError = '';
-        state.stripe_quote_id = action.payload.id;
-        state.status = action.payload.status;
-        state.amount_subtotal = action.payload.amount_subtotal
-        state.amount_total = action.payload.amount_total;
-      })
       .addCase(updateQuote.fulfilled, (state, action) => {
         state.quoteLoading = false;
         state.quoteError = '';
@@ -376,11 +368,9 @@ export const accountsQuoteSlice = createSlice({
         createQuote.pending,
         getQuote.pending,
         getQuoteByID.pending,
-        getStripeQuote.pending,
         updateQuote.pending,
         updateQuoteStatus.pending,
         getClientQuotes.pending,
-        getStripeClientQuotes.pending,
         finalizeQuote.pending,
         acceptQuote.pending,
         cancelQuote.pending
@@ -392,11 +382,9 @@ export const accountsQuoteSlice = createSlice({
         createQuote.rejected,
         getQuote.rejected,
         getQuoteByID.rejected,
-        getStripeQuote.rejected,
         updateQuote.rejected,
         updateQuoteStatus.rejected,
         getClientQuotes.rejected,
-        getStripeClientQuotes.rejected,
         finalizeQuote.rejected,
         acceptQuote.rejected,
         cancelQuote.rejected

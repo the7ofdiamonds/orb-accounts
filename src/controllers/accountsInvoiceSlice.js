@@ -7,20 +7,7 @@ const initialState = {
   invoices: [],
   invoice_id: '',
   status: '',
-  client_id: '',
   stripe_customer_id: '',
-  account_country: '',
-  currency: '',
-  customer_name: '',
-  customer_tax_ids: '',
-  address_line_1: '',
-  address_line_2: '',
-  city: '',
-  state: '',
-  postal_code: '',
-  customer_phone: '',
-  customer_email: '',
-  event_id: '',
   payment_intent_id: '',
   items: '',
   stripe_invoice_id: '',
@@ -317,36 +304,6 @@ export const accountsInvoiceSlice = createSlice({
       .addCase(updateInvoiceStatus.fulfilled, (state, action) => {
         state.status = action.payload;
       })
-      .addCase(getStripeInvoice.fulfilled, (state, action) => {
-        state.invoiceLoading = false;
-        state.invoiceError = null;
-        state.stripe_invoice_id = action.payload.id;
-        state.status = action.payload.status;
-        state.company_name = action.payload.name;
-        state.account_country = action.payload.account_country;
-        state.currency = action.payload.currency;
-        state.stripe_customer_id = action.payload.customer;
-        state.customer_name = action.payload.customer_name;
-        state.customer_tax_ids = action.payload.customer_tax_ids;
-        state.address_line_1 = action.payload.customer_address.line1;
-        state.address_line_2 = action.payload.customer_address.line2;
-        state.city = action.payload.customer_address.city;
-        state.state = action.payload.customer_address.state;
-        state.postal_code = action.payload.customer_address.postal_code;
-        state.customer_phone = action.payload.customer_phone;
-        state.customer_email = action.payload.customer_email;
-        state.subtotal = action.payload.subtotal;
-        state.tax = action.payload.tax;
-        state.due_date = action.payload.due_date;
-        state.amount_due = action.payload.amount_due;
-        state.amount_paid = action.payload.amount_paid;
-        state.amount_remaining = action.payload.amount_remaining;
-        state.payment_date = action.payload.status_transitions.paid_at;
-        state.stripe_customer_id = action.payload.customer;
-        state.payment_intent_id = action.payload.payment_intent;
-        state.invoice_pdf = action.payload.invoice_pdf;
-        state.items = action.payload.lines.data;
-      })
       .addCase(getClientInvoices.fulfilled, (state, action) => {
         state.invoiceLoading = false;
         state.invoiceError = '';
@@ -363,7 +320,6 @@ export const accountsInvoiceSlice = createSlice({
         saveInvoice.pending,
         getInvoice.pending,
         getInvoiceByID.pending,
-        getStripeInvoice.pending,
         updateInvoice.pending,
         updateInvoiceStatus.pending,
         getClientInvoices.pending,
@@ -376,7 +332,6 @@ export const accountsInvoiceSlice = createSlice({
         saveInvoice.rejected,
         getInvoice.rejected,
         getInvoiceByID.rejected,
-        getStripeInvoice.rejected,
         updateInvoice.rejected,
         updateInvoiceStatus.rejected,
         getClientInvoices.rejected,
