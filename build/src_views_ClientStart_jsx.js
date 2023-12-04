@@ -266,7 +266,7 @@ function StatusBarComponent(props) {
   } = props;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, message && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `status-bar card ${messageType}`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, message)));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, message))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (StatusBarComponent);
 
