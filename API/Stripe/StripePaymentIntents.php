@@ -49,7 +49,7 @@ class StripePaymentIntents
         try {
             $payment_intent = $this->stripeClient->paymentIntents->retrieve(
                 $stripe_payment_intent_id,
-                []
+                ['expand' => ['payment_method']]
             );
 
             return $payment_intent;

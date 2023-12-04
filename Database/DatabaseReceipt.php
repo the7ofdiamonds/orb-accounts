@@ -16,7 +16,7 @@ class DatabaseReceipt
         $this->table_name = 'orb_receipt';
     }
 
-    public function saveReceipt($invoice_id, $stripe_invoice, $payment_method, $onboarding_link)
+    public function saveReceipt($invoice_id, $stripe_invoice, $payment_method_id, $payment_method, $onboarding_links)
     {
         $result = $this->wpdb->insert(
             $this->table_name,
@@ -24,7 +24,7 @@ class DatabaseReceipt
                 'invoice_id' => $invoice_id,
                 'stripe_invoice_id' => $stripe_invoice->id,
                 'payment_intent_id' => $stripe_invoice->payment_intent->id,
-                'payment_method_id' => $stripe_invoice->payment_intent->payment_method->id,
+                'payment_method_id' => $payment_method_id,
                 'payment_date' => $stripe_invoice->status_transitions['paid_at'],
                 'currency' => $stripe_invoice->currency,
                 'amount_paid' => $stripe_invoice->amount_paid,
@@ -33,7 +33,7 @@ class DatabaseReceipt
                 'stripe_customer_id' => $stripe_invoice->customer->id,
                 'name' => $stripe_invoice->customer->name,
                 'receipt_pdf_url' => $stripe_invoice->hosted_invoice_url,
-                'onboarding_link' => $onboarding_link
+                'onboarding_links' => serialize($onboarding_links)
             ]
         );
 
@@ -81,7 +81,7 @@ class DatabaseReceipt
                 'stripe_customer_id' => $receipt->stripe_customer_id,
                 'name' => $receipt->name,
                 'receipt_pdf_url' => $receipt->receipt_pdf_url,
-                'onboarding_link' => $receipt->onboarding_link
+                'onboarding_links' => unserialize($receipt->onboarding_links)
             ];
 
             return $data;
@@ -116,7 +116,7 @@ class DatabaseReceipt
                 'stripe_customer_id' => $receipt->stripe_customer_id,
                 'name' => $receipt->name,
                 'receipt_pdf_url' => $receipt->receipt_pdf_url,
-                'onboarding_link' => $receipt->onboarding_link
+                'onboarding_links' => $receipt->onboarding_links
             ];
 
             return $receipt_data;

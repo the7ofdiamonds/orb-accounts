@@ -1,11 +1,14 @@
-.client-details{
-    form{
-        table{
-            tbody{
-                td{
-                    padding: 0.375em;
-                }
-            }
+.client-details {
+  form {
+    table {
+      tbody {
+        td {
+          padding: 0.375em;
+          input {
+            width: 100%;
+          }
         }
+      }
     }
+  }
 }

@@ -4,7 +4,6 @@ const initialState = {
   quoteLoading: false,
   quoteError: '',
   stripe_customer_id: '',
-  quotes: '',
   quote_id: '',
   stripe_quote_id: '',
   amount_subtotal: '',
@@ -12,7 +11,9 @@ const initialState = {
   quote_status: '',
   selections: '',
   total: '',
-  pdf: ''
+  pdf: '',
+  onboarding_links: '',
+  quotes: '',
 };
 
 export const updateQuoteID = (stripe_quote_id) => {
@@ -34,7 +35,8 @@ export const createQuote = createAsyncThunk('quote/createQuote', async (_, { get
       },
       body: JSON.stringify({
         stripe_customer_id: stripe_customer_id,
-        selections: selections
+        selections: selections,
+        onboarding_links: onboarding_links
       })
     });
 
@@ -273,6 +275,18 @@ export const accountsQuoteSlice = createSlice({
       });
 
       state.total = total;
+    },
+    addOnboardingLink: (state, action) => {
+      state.selections.forEach((item) => {
+        const onboardingLink = item.onboarding_link;
+        const onboardingLinks = [];
+
+        if (onboardingLink !== '' || onboardingLink !== null) {
+          onboardingLinks.push(onboardingLink);
+        } 
+      });
+
+      state.onboarding_links = onboardingLinks;
     },
     updateQuoteID: (state, action) => {
       state.stripe_quote_id = action.payload;

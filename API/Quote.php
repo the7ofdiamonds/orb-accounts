@@ -166,6 +166,7 @@ class Quote
             $request_body = $request->get_body();
             $body = json_decode($request_body, true);
             $selections = $body['selections'];
+            $onboarding_links = $body['onboarding_links'];
 
             if (empty($selections)) {
                 $msg = 'Selections are required';
@@ -176,14 +177,14 @@ class Quote
 
             $quote = $this->stripe_quote->finalizeQuote($stripe_quote_id);
 
-            $quote_id = $this->database_quote->saveQuote($quote, $selections);
+            $quote_id = $this->database_quote->saveQuote($quote, $selections, $onboarding_links);
 
             if ($quote_id) {
-                $amount_subtotal = intval($quote->amount_subtotal) / 100;
-                $amount_discount = intval($quote->computed->upfront->total_details->amount_discount) / 100;
-                $amount_shipping = intval($quote->computed->upfront->total_details->amount_shipping) / 100;
-                $amount_tax = intval($quote->computed->upfront->total_details->amount_tax) / 100;
-                $amount_total = intval($quote->amount_total) / 100;
+                $amount_subtotal = $quote->amount_subtotal;
+                $amount_discount = $quote->computed->upfront->total_details->amount_discount;
+                $amount_shipping = $quote->computed->upfront->total_details->amount_shipping;
+                $amount_tax = $quote->computed->upfront->total_details->amount_tax;
+                $amount_total = $quote->amount_total;
 
                 $quote_saved = [
                     'quote_id' => $quote_id,

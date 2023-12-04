@@ -28,7 +28,6 @@ function ReceiptComponent() {
   const {
     user_email,
     stripe_customer_id,
-    company_name,
     address_line_1,
     address_line_2,
     city,
@@ -43,8 +42,8 @@ function ReceiptComponent() {
     payment_intent_id,
     payment_method_id,
     payment_method,
-    first_name,
-    last_name,
+    name,
+    onboarding_links
   } = useSelector((state) => state.accountsReceipt);
   const {
     subtotal,
@@ -122,7 +121,7 @@ function ReceiptComponent() {
 
   useEffect(() => {
     if (stripe_quote_id) {
-      dispatch(getQuoteByID(stripe_quote_id));
+      dispatch(getQuote(stripe_quote_id));
     }
   }, [dispatch, stripe_quote_id]);
 
@@ -191,7 +190,7 @@ function ReceiptComponent() {
               </div>
               <div className="td">
                 <h5>
-                  {first_name} {last_name} O/B/O {company_name}
+                  {name}
                 </h5>
               </div>
               <div className="tr address-line-1">

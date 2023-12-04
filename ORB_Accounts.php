@@ -63,24 +63,24 @@ class ORB_Accounts
         $css = new CSS;
         $js = new JS;
         $this->pages = new Pages;
+        $posttypes = new Post_Types;
+        $taxonomies = new Taxonomies;
+        $templates = new Templates(
+            $css,
+            $js,
+        );
+        $this->router = new Router(
+            $this->pages,
+            $posttypes,
+            $taxonomies,
+            $templates
+        );
 
-        add_action('init', function () use ($css, $js) {
-            $posttypes = new Post_Types;
+        add_action('init', function () use ($posttypes, $taxonomies) {
             $posttypes->custom_post_types();
-            $taxonomies = new Taxonomies;
             $taxonomies->custom_taxonomy();
-            $templates = new Templates(
-                $css,
-                $js,
-            );
-            $router = new Router(
-                $this->pages,
-                $posttypes,
-                $taxonomies,
-                $templates
-            );
-            $router->load_page();
-            $router->react_rewrite_rules();
+            $this->router->load_page();
+            $this->router->react_rewrite_rules();
             new Shortcodes;
         });
 
@@ -89,10 +89,11 @@ class ORB_Accounts
 
     public function activate()
     {
-        flush_rewrite_rules();
         (new Database)->createTables();
         $this->pages->add_pages();
         // (new Roles)->add_roles();
+        $this->router->react_rewrite_rules();
+        flush_rewrite_rules();
     }
 
     public function settings_link($links)

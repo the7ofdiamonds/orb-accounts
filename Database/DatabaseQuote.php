@@ -18,15 +18,15 @@ class DatabaseQuote
         $this->table_name = 'orb_quote';
     }
 
-    public function saveQuote(Quote $quote, $selections)
+    public function saveQuote(Quote $quote, $selections, $onboarding_links)
     {
 
         if (is_object($quote)) {
-            $amount_subtotal = intval($quote->amount_subtotal) / 100;
-            $amount_discount = intval($quote->computed->upfront->total_details->amount_discount) / 100;
-            $amount_shipping = intval($quote->computed->upfront->total_details->amount_shipping) / 100;
-            $amount_tax = intval($quote->computed->upfront->total_details->amount_tax) / 100;
-            $amount_total = intval($quote->amount_total) / 100;
+            $amount_subtotal = $quote->amount_subtotal;
+            $amount_discount = $quote->computed->upfront->total_details->amount_discount;
+            $amount_shipping = $quote->computed->upfront->total_details->amount_shipping;
+            $amount_tax = $quote->computed->upfront->total_details->amount_tax;
+            $amount_total = $quote->amount_total;
         } else {
             throw new Exception('A Quote is required to save.', 400);
         }
@@ -49,7 +49,8 @@ class DatabaseQuote
                 'amount_discount' => $amount_discount,
                 'amount_shipping' => $amount_shipping,
                 'amount_tax' => $amount_tax,
-                'amount_total' => $amount_total
+                'amount_total' => $amount_total,
+                'onboarding_links' => serialize($onboarding_links)
             ]
         );
 
@@ -88,7 +89,8 @@ class DatabaseQuote
                 'amount_discount' => $quote->amount_discount,
                 'amount_shipping' => $quote->amount_shipping,
                 'amount_tax' => $quote->amount_tax,
-                'amount_total' => $quote->amount_total
+                'amount_total' => $quote->amount_total,
+                'onboarding_links' => unserialize($quote->onboarding_links)
             ];
 
             return $data;
@@ -119,7 +121,8 @@ class DatabaseQuote
                 'amount_discount' => $quote->amount_discount,
                 'amount_shipping' => $quote->amount_shipping,
                 'amount_tax' => $quote->amount_tax,
-                'amount_total' => $quote->amount_total
+                'amount_total' => $quote->amount_total,
+                'onboarding_links' => unserialize($quote->onboarding_links)
             ];
 
             return $data;
@@ -169,11 +172,11 @@ class DatabaseQuote
         $data = array();
 
         if (is_object($quote)) {
-            $amount_subtotal = !empty($quote->amount_subtotal) ? intval($quote->amount_subtotal) / 100 : null;
-            $amount_discount = !empty($quote->computed->upfront->total_details->amount_discount) ? intval($quote->computed->upfront->total_details->amount_discount) / 100 : null;
-            $amount_shipping = !empty($quote->computed->upfront->total_details->amount_shipping) ? intval($quote->computed->upfront->total_details->amount_shipping) / 100 : null;
-            $amount_tax = !empty($quote->computed->upfront->total_details->amount_tax) ? intval($quote->computed->upfront->total_details->amount_tax) / 100 : null;
-            $amount_total = !empty($quote->amount_total) ? intval($quote->amount_total) / 100 : null;
+            $amount_subtotal = !empty($quote->amount_subtotal) ? $quote->amount_subtotal : null;
+            $amount_discount = !empty($quote->computed->upfront->total_details->amount_discount) ? $quote->computed->upfront->total_details->amount_discount : null;
+            $amount_shipping = !empty($quote->computed->upfront->total_details->amount_shipping) ? $quote->computed->upfront->total_details->amount_shipping : null;
+            $amount_tax = !empty($quote->computed->upfront->total_details->amount_tax) ? $quote->computed->upfront->total_details->amount_tax : null;
+            $amount_total = !empty($quote->amount_total) ? $quote->amount_total : null;
 
             if (!empty($amount_subtotal)) {
                 $data['amount_subtotal'] = $amount_subtotal;

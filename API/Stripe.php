@@ -9,6 +9,7 @@ use WP_REST_Request;
 use PHPMailer\PHPMailer\PHPMailer;
 
 use ORB\Accounts\API\Stripe\StripeCharges;
+use ORB\Accounts\API\Stripe\StripeCustomers;
 use ORB\Accounts\API\Stripe\StripeInvoice;
 use ORB\Accounts\API\Stripe\StripePaymentIntents;
 use ORB\Accounts\API\Stripe\StripePaymentMethods;
@@ -20,6 +21,7 @@ use ORB\Accounts\Post_Types\Services\Services as PT_Services;
 
 class Stripe
 {
+    private $stripe_customer;
     private $stripe_invoice;
     private $stripe_payment_intents;
     private $stripe_payment_methods;
@@ -34,11 +36,36 @@ class Stripe
 
         // new PT_Products($stripeClient);
         // new PT_Services($stripeClient);
-
+        $this->stripe_customer = new StripeCustomers($stripeClient);
         $this->stripe_invoice = new StripeInvoice($stripeClient);
         $this->stripe_payment_intents = new StripePaymentIntents($stripeClient);
         $this->stripe_payment_methods = new StripePaymentMethods($stripeClient);
         $this->stripe_quote = new StripeQuote($stripeClient);
+    }
+
+    public function get_stripe_customer(WP_REST_Request $request)
+    {
+        try {
+            $stripe_customer_id = $request->get_param('slug');
+
+            $stripe_customer = $this->stripe_customer->getCustomer($stripe_customer_id);
+
+            return $stripe_customer;
+        } catch (Exception $e) {
+
+            $error_message = $e->getMessage();
+            $status_code = $e->getCode();
+
+            $response_data = [
+                'message' => $error_message,
+                'status' => $status_code
+            ];
+
+            $response = rest_ensure_response($response_data);
+            $response->set_status($status_code);
+
+            return $response;
+        }
     }
 
     public function create_stripe_invoice(WP_REST_Request $request)
@@ -235,5 +262,4 @@ class Stripe
             return $response;
         }
     }
-
 }

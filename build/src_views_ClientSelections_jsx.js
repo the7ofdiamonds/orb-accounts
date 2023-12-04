@@ -95,14 +95,14 @@ function SelectionsComponent() {
     stripe_customer_id
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
   const {
-    loading,
-    quotes,
+    quoteLoading,
     quoteError,
+    stripe_quote_id,
+    quotes,
     quote_id,
-    status,
+    quote_status,
     selections,
-    total,
-    stripe_quote_id
+    total
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsQuote);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
@@ -204,7 +204,7 @@ function SelectionsComponent() {
   const handleClick = () => {
     if (selections.length === 0) {
       setMessageType('error');
-    } else if (stripe_quote_id && status === 'canceled' && selections.length > 0 || stripe_quote_id === '' && status === '' && selections.length > 0 && stripe_customer_id) {
+    } else if (stripe_quote_id && quote_status === 'canceled' && selections.length > 0 || stripe_quote_id === '' && quote_status === '' && selections.length > 0 && stripe_customer_id) {
       dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.createQuote)(selections)).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
@@ -212,7 +212,7 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (stripe_quote_id && status === 'draft' && selections.length > 0) {
+    } else if (stripe_quote_id && quote_status === 'draft' && selections.length > 0) {
       dispatch((0,_controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_5__.updateStripeQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
@@ -220,7 +220,7 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (stripe_quote_id && status === 'draft') {
+    } else if (stripe_quote_id && quote_status === 'draft') {
       dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.finalizeQuote)()).then(response => {
         if (response.error !== undefined) {
           console.error(response.error.message);
@@ -228,7 +228,7 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (quote_id && (status === 'open' || status === 'accepted')) {
+    } else if (quote_id && (quote_status === 'open' || quote_status === 'accepted')) {
       window.location.href = `/billing/quote/${quote_id}`;
     }
   };

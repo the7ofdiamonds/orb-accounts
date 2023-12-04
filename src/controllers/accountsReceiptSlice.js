@@ -3,20 +3,24 @@ import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit';
 const initialState = {
   receiptLoading: false,
   receiptError: '',
-  receipts: [],
   receipt_id: '',
   invoice_id: '',
   stripe_invoice_id: '',
-  stripe_customer_id: '',
+  payment_intent_id: '',
   payment_method_id: '',
-  amount_paid: '',
   payment_date: '',
+  currency: '',
+  amount_paid: '',
   balance: '',
   type: '',
   brand: '',
   last4: '',
   payment_method: '',
-  amount_remaining: '',
+  stripe_customer_id: '',
+  name: '',
+  receipt_pdf_url: '',
+  onboarding_links: '',
+  receipts: '',
 };
 
 export const updateReceiptID = (receiptID) => {
@@ -28,9 +32,8 @@ export const updateReceiptID = (receiptID) => {
 
 export const saveReceipt = createAsyncThunk('receipt/saveReceipt', async (_, { getState }) => {
   try {
-    const { stripe_customer_id, first_name, last_name } = getState().accountsClient;
-    const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
-    const { payment_method_id, amount_paid, payment_date, balance, payment_method } = getState().accountsReceipt;
+    const { stripe_customer_id } = getState().client;
+    const { invoice_id } = getState().accountsInvoice;
   
     const response = await fetch('/wp-json/orb/receipt/v1/save', {
       method: 'POST',
@@ -38,16 +41,8 @@ export const saveReceipt = createAsyncThunk('receipt/saveReceipt', async (_, { g
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        stripe_customer_id: stripe_customer_id,
         invoice_id: invoice_id,
-        stripe_invoice_id: stripe_invoice_id,
-        payment_method_id: payment_method_id,
-        amount_paid: amount_paid,
-        payment_date: payment_date,
-        balance: balance,
-        payment_method: payment_method,
-        first_name: first_name,
-        last_name: last_name,
+        stripe_customer_id: stripe_customer_id,
       })
     });
 
@@ -119,7 +114,7 @@ export const getReceiptByID = createAsyncThunk('receipt/getReceiptByID', async (
   }
 });
 
-export const getClientReceipts = createAsyncThunk('receipt/getClientReceipts', async (_, { getState }) => {
+export const getClientReceipts = createAsyncThunk('Receipt/getClientReceipts', async (_, { getState }) => {
   try {
     const { stripe_customer_id } = getState().accountsClient;
 
@@ -135,7 +130,6 @@ export const getClientReceipts = createAsyncThunk('receipt/getClientReceipts', a
       const errorMessage = errorData.message;
       throw new Error(errorMessage);
     }
-
     const responseData = await response.json();
     return responseData;
   } catch (error) {
@@ -156,61 +150,54 @@ export const accountsReceiptSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getPaymentMethod.fulfilled, (state, action) => {
+      .addCase(saveReceipt.fulfilled, (state, action) => {
         state.receiptLoading = false;
-        state.receiptError = '';
-        state.payment_method_id = action.payload.id;
-        state.billing_details = action.payload.billing_details;
-        state.card = action.payload.card;
-        state.created = action.payload.created;
-        state.customer = action.payload.customer;
-        state.livemode = action.payload.livemode;
-        state.metadata = action.payload.metadata;
-        state.type = action.payload.type;
-      })
-      .addCase(postReceipt.fulfilled, (state, action) => {
-        state.receiptLoading = false;
-        state.receiptError = '';
-        state.receipt_id = action.payload;
+        state.receiptError = null;
+        state.receipt_id = action.payload
       })
       .addCase(getReceipt.fulfilled, (state, action) => {
         state.receiptLoading = false;
-        state.receiptError = '';
-        state.receipt_id = action.payload.id;
-        state.created_at = action.payload.created_at;
-        state.stripe_invoice_id = action.payload.stripe_invoice_id;
-        state.stripe_customer_id = action.payload.stripe_customer_id;
-        state.payment_method_id = action.payload.payment_method_id;
-        state.amount_paid = action.payload.amount_paid;
-        state.payment_date = action.payload.payment_date;
-        state.balance = action.payload.balance;
-        state.payment_method = action.payload.payment_method;
-        state.first_name = action.payload.first_name;
-        state.last_name = action.payload.last_name;
+        state.receiptError = null;
+        state.receipt_id = action.payload.id
+        state.created_at = action.payload.created_at
+        state.stripe_invoice_id = action.payload.stripe_invoice_id
+        state.payment_intent_id = action.payload.payment_intent_id
+        state.payment_method_id = action.payload.payment_method_id
+        state.payment_date = action.payload.payment_date
+        state.currency = action.payload.currency
+        state.amount_paid = action.payload.amount_paid
+        state.balance = action.payload.balance
+        state.payment_method = action.payload.payment_method
+        state.stripe_customer_id = action.payload.stripe_customer_id
+        state.name = action.payload.name
+        state.receipt_pdf_url = action.payload.receipt_pdf_url
+        state.onboarding_links = action.payload.onboarding_links
       })
       .addCase(getReceiptByID.fulfilled, (state, action) => {
         state.receiptLoading = false;
-        state.receiptError = '';
-        state.receipt_id = action.payload.id;
-        state.created_at = action.payload.created_at;
-        state.stripe_invoice_id = action.payload.stripe_invoice_id;
-        state.stripe_customer_id = action.payload.stripe_customer_id;
-        state.payment_method_id = action.payload.payment_method_id;
-        state.amount_paid = action.payload.amount_paid;
-        state.payment_date = action.payload.payment_date;
-        state.balance = action.payload.balance;
-        state.payment_method = action.payload.payment_method;
-        state.first_name = action.payload.first_name;
-        state.last_name = action.payload.last_name;
+        state.receiptError = null;
+        state.receipt_id = action.payload.id
+        state.created_at = action.payload.created_at
+        state.stripe_invoice_id = action.payload.stripe_invoice_id
+        state.payment_intent_id = action.payload.payment_intent_id
+        state.payment_method_id = action.payload.payment_method_id
+        state.payment_date = action.payload.payment_date
+        state.currency = action.payload.currency
+        state.amount_paid = action.payload.amount_paid
+        state.balance = action.payload.balance
+        state.payment_method = action.payload.payment_method
+        state.stripe_customer_id = action.payload.stripe_customer_id
+        state.name = action.payload.name
+        state.receipt_pdf_url = action.payload.receipt_pdf_url
+        state.onboarding_links = action.payload.onboarding_links
       })
       .addCase(getClientReceipts.fulfilled, (state, action) => {
         state.receiptLoading = false;
-        state.receiptError = '';
-        state.receipts = action.payload;
+        state.receiptError = null;
+        state.receipts = action.payload
       })
       .addMatcher(isAnyOf(
-        getPaymentMethod.pending,
-        postReceipt.pending,
+        saveReceipt.pending,
         getReceipt.pending,
         getReceiptByID.pending,
         getClientReceipts.pending,
@@ -219,8 +206,7 @@ export const accountsReceiptSlice = createSlice({
         state.receiptError = null;
       })
       .addMatcher(isAnyOf(
-        getPaymentMethod.rejected,
-        postReceipt.rejected,
+        saveReceipt.rejected,
         getReceipt.rejected,
         getReceiptByID.rejected,
         getClientReceipts.rejected,

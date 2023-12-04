@@ -6,17 +6,14 @@ const initialState = {
     clientError: '',
     client_id: '',
     stripe_customer_id: '',
-    company_name: '',
-    tax_id: '',
-    first_name: '',
-    last_name: '',
+    name: '',
     phone: '',
     address_line_1: '',
     address_line_2: '',
     city: '',
     state: '',
     zipcode: '',
-    country
+    country: ''
 };
 
 export const addClient = createAsyncThunk('client/addClient', async (_, { getState }) => {
@@ -155,17 +152,8 @@ export const accountsClientSlice = createSlice({
     name: 'client',
     initialState,
     reducers: {
-        updateCompanyName: (state, action) => {
-            state.company_name = action.payload;
-        },
-        updateTaxID: (state, action) => {
-            state.tax_id = action.payload;
-        },
-        updateFirstName: (state, action) => {
-            state.first_name = action.payload;
-        },
-        updateLastName: (state, action) => {
-            state.last_name = action.payload;
+        updateName: (state, action) => {
+            state.name = action.payload;
         },
         updateEmail: (state, action) => {
             state.user_email = action.payload;
@@ -200,10 +188,15 @@ export const accountsClientSlice = createSlice({
             .addCase(getClient.fulfilled, (state, action) => {
                 state.clientLoading = false;
                 state.clientError = '';
-                state.client_id = action.payload.id
-                state.first_name = action.payload.first_name
-                state.last_name = action.payload.last_name
-                state.stripe_customer_id = action.payload.stripe_customer_id
+                state.stripe_customer_id = action.payload.id
+                state.name = action.payload.name
+                state.address_line_1 = action.payload.address.line1
+                state.address_line_2 = action.payload.address.line2
+                state.city = action.payload.address.city
+                state.state = action.payload.address.state
+                state.zipcode = action.payload.address.postal_code
+                state.email = action.payload.email
+                state.phone = action.payload.phone
             })
             .addCase(updateClient.fulfilled, (state, action) => {
                 state.clientLoading = false;
@@ -241,17 +234,14 @@ export const accountsClientSlice = createSlice({
 });
 
 export const {
+    updateName,
     updateEmail,
     updatePhone,
-    updateCompanyName,
-    updateTaxID,
-    updateFirstName,
-    updateLastName,
     updateAddress,
     updateAddress2,
     updateCity,
     updateState,
     updateZipcode,
-} = accountsCustomerSlice.actions;
+} = accountsClientSlice.actions;
 
 export default accountsClientSlice;

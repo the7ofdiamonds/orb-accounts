@@ -232,7 +232,7 @@ export const accountsStripeSlice = createSlice({
         builder
             .addCase(getStripeQuote.fulfilled, (state, action) => {
                 state.stripeLoading = false;
-                state.stripeError = '';
+                state.stripeError = null;
                 state.stripe_quote_id = action.payload.id
                 state.quote_status = action.payload.status
                 state.quote_status_transitions = action.payload.status_transitions
@@ -252,9 +252,7 @@ export const accountsStripeSlice = createSlice({
             })
             .addCase(getStripeClientQuotes.fulfilled, (state, action) => {
                 state.stripeLoading = false;
-                state.stripeError = '';
-                state.stripeLoading = false;
-                state.stripeError = '';
+                state.stripeError = null;
                 state.stripe_quote_id = action.payload.id
                 state.quote_status = action.payload.status
                 state.quote_status_transitions = action.payload.status_transitions
@@ -274,9 +272,7 @@ export const accountsStripeSlice = createSlice({
             })
             .addCase(updateStripeQuote.fulfilled, (state, action) => {
                 state.stripeLoading = false;
-                state.stripeError = '';
-                state.stripeLoading = false;
-                state.stripeError = '';
+                state.stripeError = null;
                 state.stripe_quote_id = action.payload.id
                 state.quote_status = action.payload.status
                 state.quote_status_transitions = action.payload.status_transitions
@@ -325,15 +321,15 @@ export const accountsStripeSlice = createSlice({
                 state.payment_intent_id = action.payload.payment_intent
             })
             .addCase(getPaymentIntent.fulfilled, (state, action) => {
-                state.stripeLoading = false
-                state.stripeError = ''
+                state.stripeLoading = false;
+                state.stripeError = null;
                 state.client_secret = action.payload.client_secret
                 state.payment_status = action.payload.status
                 state.payment_method_id = action.payload.payment_method
             })
             .addCase(getPaymentMethod.fulfilled, (state, action) => {
-                state.stripeLoading = false
-                state.stripeError = ''
+                state.stripeLoading = false;
+                state.stripeError = null;
                 state.billing_name = action.payload.billing_details.name
                 state.billing_email = action.payload.billing_details.email
                 state.billing_phone = action.payload.billing_details.phone

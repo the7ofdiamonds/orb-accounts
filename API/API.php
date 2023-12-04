@@ -201,13 +201,7 @@ class API
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/quote/v1', '/all', array(
-            'methods' => 'GET',
-            'callback' => array($quote, 'get_quotes'),
-            'permission_callback' => '__return_true',
-        ));
-
-        register_rest_route('orb/quote/v1', '/all/client/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        register_rest_route('orb/quote/v1', '/all/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'GET',
             'callback' => array($quote, 'get_client_quotes'),
             'permission_callback' => '__return_true',
@@ -240,6 +234,12 @@ class API
         register_rest_route('orb/receipt/v1', '/client/(?P<slug>[a-z0-9-_]+)', array(
             'methods' => 'GET',
             'callback' => array($receipt, 'get_client_receipts'),
+            'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('orb/v1', '/stripe/customers/(?P<slug>[a-zA-Z0-9-_]+)', array(
+            'methods' => 'GET',
+            'callback' => array($stripe, 'get_stripe_customer'),
             'permission_callback' => '__return_true',
         ));
 

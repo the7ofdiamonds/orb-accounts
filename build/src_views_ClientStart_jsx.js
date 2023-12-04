@@ -83,12 +83,9 @@ function ClientComponent() {
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('To receive a quote, please fill out the form above with the required information.');
   const {
     user_email,
-    first_name,
-    last_name,
+    clientLoading,
     stripe_customer_id,
-    customerLoading,
-    company_name,
-    tax_id,
+    name,
     address_line_1,
     address_line_2,
     city,
@@ -96,17 +93,8 @@ function ClientComponent() {
     zipcode,
     phone
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsClient);
-  const handleCompanyNameChange = event => {
-    dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateCompanyName)(event.target.value));
-  };
-  const handleTaxIDChange = event => {
-    dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxID)(event.target.value));
-  };
-  const handleFirstNameChange = event => {
-    dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateFirstName)(event.target.value));
-  };
-  const handleLastNameChange = event => {
-    dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateLastName)(event.target.value));
+  const handleNameChange = event => {
+    dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateName)(event.target.value));
   };
   const handlePhoneChange = event => {
     dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_2__.updatePhone)(event.target.value));
@@ -142,13 +130,10 @@ function ClientComponent() {
     if (address_line_1 && city && state && zipcode) {
       setIsFormCompleted(true);
     }
-  }, [first_name, last_name, address_line_1, city, state, zipcode]);
+  }, [name, address_line_1, city, state, zipcode]);
   const handleClick = async () => {
-    if (first_name === '') {
+    if (name === '') {
       setMessage('Please provide a first name.');
-      setMessageType('error');
-    } else if (last_name === '') {
-      setMessage('Please provide last name.');
       setMessageType('error');
     } else if (address_line_1 === '') {
       setMessage('Please provide an address.');
@@ -184,7 +169,7 @@ function ClientComponent() {
       });
     }
   };
-  if (customerLoading) {
+  if (clientLoading) {
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null);
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
@@ -195,35 +180,14 @@ function ClientComponent() {
     className: "client-details card",
     id: "client-details"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: 2
+    colSpan: "2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
-    name: "company_name",
-    id: "company_name",
-    placeholder: "Company Name",
-    onChange: handleCompanyNameChange,
-    value: company_name
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    name: "tax_id",
-    id: "tax_id",
-    placeholder: "Tax ID",
-    onChange: handleTaxIDChange,
-    value: tax_id
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    name: "first_name",
-    id: "first_name",
-    placeholder: "First Name",
-    onChange: handleFirstNameChange,
-    value: first_name
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    name: "last_name",
-    id: "last_name",
-    placeholder: "Last Name",
-    onChange: handleLastNameChange,
-    value: last_name
+    name: "name",
+    id: "name",
+    placeholder: "Name",
+    onChange: handleNameChange,
+    value: name
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "phone",
@@ -232,7 +196,7 @@ function ClientComponent() {
     onChange: handlePhoneChange,
     value: phone
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: 2
+    colSpan: "2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "address_line_1",
@@ -274,7 +238,9 @@ function ClientComponent() {
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     id: "selections_button",
     onClick: handleClick
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "selections"))));
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", {
+    className: "title"
+  }, "selections"))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClientComponent);
 

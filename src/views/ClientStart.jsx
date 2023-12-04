@@ -7,10 +7,7 @@ import {
   addClient,
   updateClient,
   updatePhone,
-  updateCompanyName,
-  updateTaxID,
-  updateFirstName,
-  updateLastName,
+  updateName,
   updateAddress,
   updateAddress2,
   updateCity,
@@ -33,12 +30,9 @@ function ClientComponent() {
 
   const {
     user_email,
-    first_name,
-    last_name,
+    clientLoading,
     stripe_customer_id,
-    customerLoading,
-    company_name,
-    tax_id,
+    name,
     address_line_1,
     address_line_2,
     city,
@@ -47,20 +41,8 @@ function ClientComponent() {
     phone,
   } = useSelector((state) => state.accountsClient);
 
-  const handleCompanyNameChange = (event) => {
-    dispatch(updateCompanyName(event.target.value));
-  };
-
-  const handleTaxIDChange = (event) => {
-    dispatch(updateTaxID(event.target.value));
-  };
-
-  const handleFirstNameChange = (event) => {
-    dispatch(updateFirstName(event.target.value));
-  };
-
-  const handleLastNameChange = (event) => {
-    dispatch(updateLastName(event.target.value));
+  const handleNameChange = (event) => {
+    dispatch(updateName(event.target.value));
   };
 
   const handlePhoneChange = (event) => {
@@ -105,14 +87,11 @@ function ClientComponent() {
     if (address_line_1 && city && state && zipcode) {
       setIsFormCompleted(true);
     }
-  }, [first_name, last_name, address_line_1, city, state, zipcode]);
+  }, [name, address_line_1, city, state, zipcode]);
 
   const handleClick = async () => {
-    if (first_name === '') {
+    if (name === '') {
       setMessage('Please provide a first name.');
-      setMessageType('error');
-    } else if (last_name === '') {
-      setMessage('Please provide last name.');
       setMessageType('error');
     } else if (address_line_1 === '') {
       setMessage('Please provide an address.');
@@ -152,7 +131,7 @@ function ClientComponent() {
     }
   };
 
-  if (customerLoading) {
+  if (clientLoading) {
     return <LoadingComponent />;
   }
 
@@ -167,46 +146,14 @@ function ClientComponent() {
               <thead></thead>
               <tbody>
                 <tr>
-                  <td colSpan={2}>
+                  <td colSpan="2">
                     <input
                       className="input"
-                      name="company_name"
-                      id="company_name"
-                      placeholder="Company Name"
-                      onChange={handleCompanyNameChange}
-                      value={company_name}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="input"
-                      name="tax_id"
-                      id="tax_id"
-                      placeholder="Tax ID"
-                      onChange={handleTaxIDChange}
-                      value={tax_id}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <input
-                      className="input"
-                      name="first_name"
-                      id="first_name"
-                      placeholder="First Name"
-                      onChange={handleFirstNameChange}
-                      value={first_name}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="input"
-                      name="last_name"
-                      id="last_name"
-                      placeholder="Last Name"
-                      onChange={handleLastNameChange}
-                      value={last_name}
+                      name="name"
+                      id="name"
+                      placeholder="Name"
+                      onChange={handleNameChange}
+                      value={name}
                     />
                   </td>
                   <td>
@@ -221,7 +168,7 @@ function ClientComponent() {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={2}>
+                  <td colSpan="2">
                     <input
                       className="input"
                       name="address_line_1"
@@ -283,7 +230,7 @@ function ClientComponent() {
         <StatusBar message={message} messageType={messageType} />
 
         <button id="selections_button" onClick={handleClick}>
-          <h3>selections</h3>
+          <h3 className="title">selections</h3>
         </button>
       </section>
     </>

@@ -4,8 +4,6 @@ namespace ORB\Accounts\Database;
 
 use Exception;
 
-use Stripe\Invoice;
-
 class DatabaseInvoice
 {
     private $wpdb;
@@ -18,19 +16,19 @@ class DatabaseInvoice
         $this->table_name = 'orb_invoice';
     }
 
-    public function saveInvoice($stripe_invoice, $quote_id)
+    public function saveInvoice($quote_id, $stripe_invoice, $onboarding_links)
     {
         try {
-            if (is_object($stripe_invoice)) {
-                $subtotal = intval($stripe_invoice->subtotal) / 100;
-                $tax = intval($stripe_invoice->tax) / 100;
-                $amount_due = intval($stripe_invoice->amount_due) / 100;
-            } else {
-                throw new Exception('An Invoice is needed to save.', 400);
-            }
-
             if (empty($quote_id)) {
                 throw new Exception('A Quote ID is required.', 400);
+            }
+
+            if (is_object($stripe_invoice)) {
+                $subtotal = $stripe_invoice->subtotal;
+                $tax = $stripe_invoice->tax;
+                $amount_due = $stripe_invoice->amount_due;
+            } else {
+                throw new Exception('An Invoice is needed to save.', 400);
             }
 
             $result = $this->wpdb->insert(
@@ -43,7 +41,8 @@ class DatabaseInvoice
                     'due_date' => $stripe_invoice->due_date,
                     'subtotal' => $subtotal,
                     'tax' => $tax,
-                    'amount_due' => $amount_due
+                    'amount_due' => $amount_due,
+                    'onboarding_links' => $onboarding_links
                 ]
             );
 
@@ -104,7 +103,8 @@ class DatabaseInvoice
                 'subtotal' => $invoice->subtotal,
                 'tax' => $invoice->tax,
                 'amount_due' => $invoice->amount_due,
-                'amount_remaining' => $invoice->amount_remaining
+                'amount_remaining' => $invoice->amount_remaining,
+                'onboarding_links' => $invoice->onboarding_links
             ];
 
             return $data;
@@ -145,7 +145,8 @@ class DatabaseInvoice
                 'subtotal' => $invoice->subtotal,
                 'tax' => $invoice->tax,
                 'amount_due' => $invoice->amount_due,
-                'amount_remaining' => $invoice->amount_remaining
+                'amount_remaining' => $invoice->amount_remaining,
+                'onboarding_links' => $invoice->onboarding_links
             ];
 
             return $data;
@@ -186,7 +187,8 @@ class DatabaseInvoice
                 'subtotal' => $invoice->subtotal,
                 'tax' => $invoice->tax,
                 'amount_due' => $invoice->amount_due,
-                'amount_remaining' => $invoice->amount_remaining
+                'amount_remaining' => $invoice->amount_remaining,
+                'onboarding_links' => $invoice->onboarding_links
             ];
 
             return $data;
@@ -230,7 +232,7 @@ class DatabaseInvoice
     }
 
 
-    public function updateInvoice($stripe_invoice)
+    public function updateInvoice($stripe_invoice, $onboarding_links)
     {
         if (is_object($stripe_invoice)) {
 
@@ -255,6 +257,7 @@ class DatabaseInvoice
                 'subtotal' => $subtotal,
                 'tax' => $tax,
                 'amount_remaining' => $amount_remaining,
+                'onboarding_links' => $onboarding_links
             );
             $where = array(
                 'stripe_invoice_id' => $stripe_invoice->id,

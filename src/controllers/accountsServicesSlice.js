@@ -1,15 +1,24 @@
 import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit'
 
 const initialState = {
-  servicesLoading: false,
-  servicesError: '',
-  services: [],
-  availableServices: []
+  serviceLoading: false,
+  serviceError: '',
+  service_id: '',
+  title: '',
+  price: '',
+  description: '',
+  content: '',
+  features: '',
+  onboarding_link: '',
+  icon: '',
+  action_word: '',
+  slug: '',
+  services: ''
 }
 
-export const fetchServices = createAsyncThunk('services/fetchServices', async () => {
+export const fetchService = createAsyncThunk('service/fetchService', async () => {
   try {
-    const response = await fetch(`/wp-json/orb/v1/services`, {
+    const response = await fetch(`/wp-json/orb/service/v1/${serviceSlug}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -29,10 +38,9 @@ export const fetchServices = createAsyncThunk('services/fetchServices', async ()
   }
 });
 
-export const getAvailableServices = createAsyncThunk('services/getAvailableServices', async () => {
-
+export const fetchServices = createAsyncThunk('service/fetchServices', async () => {
   try {
-    const response = await fetch(`/wp-json/orb/v1/services/available`, {
+    const response = await fetch(`/wp-json/orb/service/v1/all`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -57,29 +65,39 @@ export const accountsServicesSlice = createSlice({
   initialState,
   extraReducers: (builder) => {
     builder
+      .addCase(fetchService.fulfilled, (state, action) => {
+        state.serviceLoading = false;
+        state.serviceError = '';
+        state.service_id = action.payload.service_id
+        state.title = action.payload.title
+        state.price = action.payload.price
+        state.description = action.payload.description
+        state.content = action.payload.content
+        state.features = action.payload.features
+        state.onboarding_link = action.payload.onboarding_link
+        state.icon = action.payload.icon
+        state.action_word = action.payload.action_word
+        state.slug = action.payload.slug
+      })
       .addCase(fetchServices.fulfilled, (state, action) => {
-        state.servicesLoading = false
-        state.servicesError = ''
+        state.serviceLoading = false;
+        state.serviceError = '';
         state.services = action.payload
       })
-      .addCase(getAvailableServices.fulfilled, (state, action) => {
-        state.servicesLoading = false
-        state.availableServices = action.payload
-      })
       .addMatcher(isAnyOf(
+        fetchService.pending,
         fetchServices.pending,
-        getAvailableServices.pending
       ), (state) => {
-        state.servicesLoading = true
-        state.servicesError = null
+        state.serviceLoading = true;
+        state.serviceError = null;
       })
       .addMatcher(isAnyOf(
+        fetchService.rejected,
         fetchServices.rejected,
-        getAvailableServices.rejected
       ),
         (state, action) => {
-          state.servicesLoading = false
-          state.servicesError = action.error.message
+          state.serviceLoading = false;
+          state.serviceError = action.error.message;
         });
 
   }

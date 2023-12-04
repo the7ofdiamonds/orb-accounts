@@ -9,13 +9,17 @@ use WP_REST_Request;
 use ORB\Accounts\API\Stripe\StripeInvoice;
 use ORB\Accounts\API\Stripe\StripeCharges;
 use ORB\Accounts\API\Stripe\StripePaymentIntents;
+use ORB\Accounts\API\Stripe\StripePaymentMethods;
+use ORB\Accounts\Database\DatabaseInvoice;
 use ORB\Accounts\Database\DatabaseReceipt;
 
 use Stripe\Exception\ApiErrorException;
 
 class Receipt
 {
+    private $database_invoice;
     private $stripe_invoice;
+    private $stripe_payment_methods;
     private $stripe_payment_intent;
     private $stripe_charges;
     private $database_receipt;
@@ -23,7 +27,9 @@ class Receipt
 
     public function __construct($stripeClient)
     {
+        $this->database_invoice = new DatabaseInvoice();
         $this->stripe_invoice = new StripeInvoice($stripeClient);
+        $this->stripe_payment_methods = new StripePaymentMethods($stripeClient);
         $this->stripe_payment_intent = new StripePaymentIntents($stripeClient);
         $this->stripe_charges = new StripeCharges($stripeClient);
         $this->database_receipt = new DatabaseReceipt($stripeClient);
@@ -32,45 +38,53 @@ class Receipt
     public function save_receipt(WP_REST_Request $request)
     {
         try {
-            $stripe_customer_id = $request['stripe_customer_id'];
             $invoice_id = $request['invoice_id'];
-            $stripe_invoice_id = $request['stripe_invoice_id'];
-            $payment_method = $request['payment_method'];
-            $first_name = $request['first_name'];
-            $last_name = $request['last_name'];
+            $stripe_customer_id = $request['stripe_customer_id'];
+
+            if (empty($invoice_id)) {
+                throw new Exception('Invoice ID is required.', 400);
+            }
+
+            $invoice = $this->database_invoice->getInvoiceByID($invoice_id, $stripe_customer_id);
+
+            $stripe_invoice_id = $invoice['stripe_invoice_id'];
+
+            if (empty($stripe_invoice_id)) {
+                throw new Exception('Stripe Invoice ID is required.', 400);
+            }
 
             $stripe_invoice = $this->stripe_invoice->getStripeInvoice(
                 $stripe_invoice_id,
-                []
             );
-
-            if ($stripe_customer_id !== $stripe_invoice->customer) {
-                $error_message = 'This is not the customer for this transaction.';
-                $status_code = 404;
-
-                $response_data = [
-                    'message' => $error_message,
-                    'status' => $status_code
-                ];
-
-                $response = rest_ensure_response($response_data);
-                $response->set_status($status_code);
-
-                return $response;
-            };
 
             $payment_intent_id = $stripe_invoice->payment_intent;
 
             $payment_intent = $this->stripe_payment_intent->getPaymentIntent($payment_intent_id);
 
             $payment_method_id = $payment_intent->payment_method;
-            $charge_id = $payment_intent->latest_charge;
 
-            $charges = $this->stripe_charges->getCharge($charge_id);
+            if (empty($payment_method_id)) {
+                throw new Exception('Payment Method ID is required.', 400);
+            }
 
-            // $receipt_id = $this->database_receipt->saveReceipt($invoice_id, $stripe_invoice, $payment_method_id, $payment_method, $first_name, $last_name, $charges);
+            $paymentMethod = $this->stripe_payment_methods->getPaymentMethod($payment_method_id);
 
-            // return rest_ensure_response($receipt_id);
+            $type = $paymentMethod->type;
+
+            if($type === 'card'){
+                $country = $paymentMethod->card->country;
+                $brand = $paymentMethod->card->brand;
+                $last4 = $paymentMethod->card->last4;
+                $payment_method = $country . '  ' . $brand . '  ' . $last4;
+            } else {
+                $payment_method = $type;
+            }
+
+            $onboarding_links = $invoice['onboarding_links'];
+
+            $receipt_id = $this->database_receipt->saveReceipt($invoice_id, $stripe_invoice, $payment_method_id, $payment_method, $onboarding_links);
+
+            return rest_ensure_response($receipt_id);
         } catch (ApiErrorException $e) {
             $error_message = $e->getMessage();
             $status_code = $e->getHttpStatus();
@@ -161,7 +175,7 @@ class Receipt
         }
     }
 
-    function get_client_receipts(WP_REST_Request $request)
+    function get_receipts(WP_REST_Request $request)
     {
         try {
             $stripe_customer_id = $request->get_param('slug');
@@ -183,4 +197,27 @@ class Receipt
             return $response;
         }
     }
+
+    public function get_client_receipts(WP_REST_Request $request)
+    {
+        try {
+            $stripe_customer_id = $request->get_param('slug');
+
+            return rest_ensure_response($this->database_receipt->getClientReceipts($stripe_customer_id));
+        } catch (Exception $e) {
+            $error_message = $e->getMessage();
+            $status_code = $e->getCode();
+
+            $response_data = [
+                'message' => $error_message,
+                'status' => $status_code
+            ];
+
+            $response = rest_ensure_response($response_data);
+            $response->set_status($status_code);
+            error_log(print_r($response, true));
+            return $response;
+        }
+    }
+
 }
