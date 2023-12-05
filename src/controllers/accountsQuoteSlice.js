@@ -235,7 +235,7 @@ export const getClientQuotes = createAsyncThunk('quote/getClientQuotes', async (
   try {
     const { stripe_customer_id } = getState().accountsClient;
 
-    const response = await fetch(`/wp-json/orb/quote/v1/client/${stripe_customer_id}`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/all/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

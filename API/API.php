@@ -69,6 +69,12 @@ class API
             'permission_callback' => '__return_true',
         ));
 
+        register_rest_route('orb/client/v1', '/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
+            'methods' => 'PATCH',
+            'callback' => array($clients, 'update_client'),
+            'permission_callback' => '__return_true',
+        ));
+
         register_rest_route('orb/customer/v1', '/add', array(
             'methods' => 'POST',
             'callback' => array($customers, 'add_customer'),

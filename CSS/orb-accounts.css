@@ -881,37 +881,37 @@ td {
 }
 
 .status-bar.card {
-  background-color: var(--orb-color-primary);
+  background-color: var(--orb-accounts-color-primary);
 }
 .status-bar.card span {
-  color: var(--orb-color-secondary);
+  color: var(--orb-accounts-color-secondary);
 }
 .status-bar.card span h4 {
   padding: 0.5em;
 }
 .status-bar.card.info {
-  background-color: var(--orb-color-info);
+  background-color: var(--orb-accounts-color-info);
 }
 .status-bar.card.info span h4 {
-  color: var(--orb-color-info-text);
+  color: var(--orb-accounts-color-info-text);
 }
 .status-bar.card.caution {
-  background-color: var(--orb-color-caution);
+  background-color: var(--orb-accounts-color-caution);
 }
 .status-bar.card.caution span h4 {
-  color: var(--orb-color-caution-text);
+  color: var(--orb-accounts-color-caution-text);
 }
 .status-bar.card.error {
-  background-color: var(--orb-color-error);
+  background-color: var(--orb-accounts-color-error);
 }
 .status-bar.card.error span h4 {
-  color: var(--orb-color-error-text);
+  color: var(--orb-accounts-color-error-text);
 }
 .status-bar.card.success {
-  background-color: var(--orb-color-success);
+  background-color: var(--orb-accounts-color-success);
 }
 .status-bar.card.success span h4 {
-  color: var(--orb-color-success-text);
+  color: var(--orb-accounts-color-success-text);
 }
 
 button.services-btn h3 {

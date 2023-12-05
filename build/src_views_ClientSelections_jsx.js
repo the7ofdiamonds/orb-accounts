@@ -117,13 +117,7 @@ function SelectionsComponent() {
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getClientQuotes)()).then(response => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getClientQuotes)());
     }
   }, [stripe_customer_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -144,13 +138,7 @@ function SelectionsComponent() {
         const earliestDate = Math.min(...filteredQuotes);
         quotes.forEach(quote => {
           if (new Date(quote.created_at).getTime() === earliestDate) {
-            dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)(quote.stripe_quote_id)).then(response => {
-              if (response.error !== undefined) {
-                console.error(response.error.message);
-                setMessageType('error');
-                setMessage(response.error.message);
-              }
-            });
+            dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)(quote.stripe_quote_id));
           }
         });
       }
@@ -169,13 +157,7 @@ function SelectionsComponent() {
   }, [stripe_quote_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_customer_id) {
-      dispatch((0,_controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.fetchServices)()).then(response => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
+      dispatch((0,_controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.fetchServices)());
     }
   }, [stripe_customer_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {

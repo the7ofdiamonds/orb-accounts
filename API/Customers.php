@@ -40,7 +40,6 @@ class Customers
             $description = $request['description'];
             $balance = $request['balance'];
             $cash_balance = $request['cash_balance'];
-            $coupon = $request['coupon'];
             $invoice_prefix = $request['invoice_prefix'];
             $invoice_settings = $request['invoice_settings'];
             $next_invoice_sequence = $request['next_invoice_sequence'];
@@ -50,7 +49,6 @@ class Customers
             $tax = $request['tax'];
             $tax_id_type = $request['tax_id_type'];
             $tax_exempt = $request['tax_exempt'];
-            $test_clock = $request['test_clock'];
 
             $address = [
                 'line1' => $address_line_1,
@@ -117,7 +115,6 @@ class Customers
                 $description,
                 $balance,
                 $cash_balance,
-                $coupon,
                 $invoice_prefix,
                 $invoice_settings,
                 $next_invoice_sequence,
@@ -127,7 +124,6 @@ class Customers
                 $tax,
                 $tax_exempt,
                 $tax_id_data,
-                $test_clock,
                 $metadata
             );
 
@@ -204,7 +200,6 @@ class Customers
             $zipcode = $request['zipcode'];
             $country = $request['country'];
             $metadata = $request['metadata'];
-            $payment_method_id = $request['payment_method_id'];
             $description = $request['description'];
             $balance = $request['balance'];
             $cash_balance = $request['cash_balance'];
@@ -215,10 +210,9 @@ class Customers
             $preferred_locales = $request['preferred_locales'];
             $promotion_code = $request['promotion_code'];
             $source = $request['source'];
-            $tax = $request['tax'];
-            $tax_id_type = $request['tax_id_type'];
-            $tax_exempt = $request['tax_exempt'];
-            $test_clock = $request['test_clock'];
+            // $tax = $request['tax'];
+            // $tax_id_type = $request['tax_id_type'];
+            // $tax_exempt = $request['tax_exempt'];
 
             $address = [
                 'line1' => $address_line_1,
@@ -240,10 +234,10 @@ class Customers
                 ];
             }
 
-            $tax_id_data = array(
-                'type' => $tax_id_type,
-                'value' => $tax_id
-            );
+            // $tax_id_data = array(
+            //     'type' => $tax_id_type,
+            //     'value' => $tax_id
+            // );
 
             if (!empty($company_name)) {
                 $name = $first_name . ' ' . $last_name . ' - ' . $company_name;
@@ -260,7 +254,6 @@ class Customers
                 $address,
                 $shipping,
                 $phone,
-                $payment_method_id,
                 $description,
                 $balance,
                 $cash_balance,
@@ -271,10 +264,9 @@ class Customers
                 $preferred_locales,
                 $promotion_code,
                 $source,
-                $tax,
-                $tax_exempt,
-                $tax_id_data,
-                $test_clock,
+                // $tax,
+                // $tax_exempt,
+                // $tax_id_data,
                 $metadata
             );
 

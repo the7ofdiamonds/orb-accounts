@@ -208,7 +208,6 @@ class Clients
             $description = $request['description'];
             $balance = $request['balance'];
             $cash_balance = $request['cash_balance'];
-            $coupon = $request['coupon'];
             $invoice_prefix = $request['invoice_prefix'];
             $invoice_settings = $request['invoice_settings'];
             $next_invoice_sequence = $request['next_invoice_sequence'];
@@ -238,6 +237,8 @@ class Clients
                     'postal_code' => $zipcode,
                     'country' => $country
                 ];
+            } else {
+                $shipping = '';
             }
 
             $tax_id_data = array(
@@ -264,7 +265,6 @@ class Clients
                 $description,
                 $balance,
                 $cash_balance,
-                $coupon,
                 $invoice_prefix,
                 $invoice_settings,
                 $next_invoice_sequence,

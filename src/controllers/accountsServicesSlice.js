@@ -40,7 +40,7 @@ export const fetchService = createAsyncThunk('service/fetchService', async () =>
 
 export const fetchServices = createAsyncThunk('service/fetchServices', async () => {
   try {
-    const response = await fetch(`/wp-json/orb/service/v1/all`, {
+    const response = await fetch(`/wp-json/orb/services/v1/all`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

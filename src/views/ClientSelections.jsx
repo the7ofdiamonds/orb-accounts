@@ -57,13 +57,7 @@ function SelectionsComponent() {
 
   useEffect(() => {
     if (stripe_customer_id) {
-      dispatch(getClientQuotes()).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
+      dispatch(getClientQuotes());
     }
   }, [stripe_customer_id, dispatch]);
 
@@ -93,13 +87,7 @@ function SelectionsComponent() {
 
         quotes.forEach((quote) => {
           if (new Date(quote.created_at).getTime() === earliestDate) {
-            dispatch(getQuote(quote.stripe_quote_id)).then((response) => {
-              if (response.error !== undefined) {
-                console.error(response.error.message);
-                setMessageType('error');
-                setMessage(response.error.message);
-              }
-            });
+            dispatch(getQuote(quote.stripe_quote_id));
           }
         });
       }
@@ -120,13 +108,7 @@ function SelectionsComponent() {
 
   useEffect(() => {
     if (stripe_customer_id) {
-      dispatch(fetchServices()).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
+      dispatch(fetchServices());
     }
   }, [stripe_customer_id, dispatch]);
 

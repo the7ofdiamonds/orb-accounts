@@ -9134,7 +9134,7 @@ const getClientQuotes = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createA
     const {
       stripe_customer_id
     } = getState().accountsClient;
-    const response = await fetch(`/wp-json/orb/quote/v1/client/${stripe_customer_id}`, {
+    const response = await fetch(`/wp-json/orb/quote/v1/all/${stripe_customer_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -9501,7 +9501,7 @@ const fetchService = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyn
 });
 const fetchServices = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('service/fetchServices', async () => {
   try {
-    const response = await fetch(`/wp-json/orb/service/v1/all`, {
+    const response = await fetch(`/wp-json/orb/services/v1/all`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
