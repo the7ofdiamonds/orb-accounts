@@ -12,6 +12,8 @@ class Customizer
 		add_action('customize_register', array($this, 'register_customizer_panel'));
 		// Add a logo to quotes, inoices and receipts
 		// Change color scheme
+		// Table header, footer and body color change
+		new Table;
 		new BorderRadius;
 		new Color;
 		new Shadow;

@@ -144,7 +144,9 @@ function SelectionsComponent() {
     if (selections.length === 0) {
       setMessageType('error');
     } else if (
-      (stripe_quote_id && quote_status === 'canceled' && selections.length > 0) ||
+      (stripe_quote_id &&
+        quote_status === 'canceled' &&
+        selections.length > 0) ||
       (stripe_quote_id === '' &&
         quote_status === '' &&
         selections.length > 0 &&
@@ -157,7 +159,11 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (stripe_quote_id && quote_status === 'draft' && selections.length > 0) {
+    } else if (
+      stripe_quote_id &&
+      quote_status === 'draft' &&
+      selections.length > 0
+    ) {
       dispatch(updateStripeQuote()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
@@ -173,7 +179,10 @@ function SelectionsComponent() {
           setMessage(response.error.message);
         }
       });
-    } else if (quote_id && (quote_status === 'open' || quote_status === 'accepted')) {
+    } else if (
+      quote_id &&
+      (quote_status === 'open' || quote_status === 'accepted')
+    ) {
       window.location.href = `/billing/quote/${quote_id}`;
     }
   };
@@ -189,17 +198,17 @@ function SelectionsComponent() {
   return (
     <>
       <section className="selections">
-        <h2>SELECTIONS</h2>
+        <h2 className="title">selections</h2>
 
         <div className="quote-card card">
           <table>
             <thead>
               <tr>
                 <th colSpan={2}>
-                  <h4 className="description-label">DESCRIPTION</h4>
+                  <h4 className="title">service</h4>
                 </th>
                 <th>
-                  <h4 className="cost-label">COST</h4>
+                  <h4 className="title">cost</h4>
                 </th>
               </tr>
             </thead>
@@ -237,14 +246,18 @@ function SelectionsComponent() {
                             }
                           />
                         </td>
-                        <td className="feature-description">{description}</td>
+                        <td className="feature-description">
+                          <h5>{description}</h5>
+                        </td>
                         <td
                           className="feature-cost table-number"
                           id="feature_cost">
-                          {new Intl.NumberFormat('us', {
-                            style: 'currency',
-                            currency: 'USD',
-                          }).format(price)}
+                          <h4>
+                            {new Intl.NumberFormat('us', {
+                              style: 'currency',
+                              currency: 'USD',
+                            }).format(price)}
+                          </h4>
                         </td>
                       </tr>
                     );
@@ -253,7 +266,7 @@ function SelectionsComponent() {
               ) : (
                 <tr>
                   <td colSpan={3}>
-                    <h3>No features to show yet</h3>
+                    <h3>No services to show yet</h3>
                   </td>
                 </tr>
               )}
@@ -261,7 +274,7 @@ function SelectionsComponent() {
             <tfoot>
               <tr>
                 <th colSpan={2}>
-                  <h4 className="subtotal-label">TOTAL</h4>
+                  <h4 className="title">TOTAL</h4>
                 </th>
                 <th>
                   <h4 className="subtotal">

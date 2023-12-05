@@ -657,18 +657,62 @@ section.invoice {
   border-radius: var(--orb-products-services-border-radius-hover);
 }
 
+table {
+  border-spacing: 0.375em;
+  border-collapse: collapse;
+}
+table thead tr th {
+  background-color: var(--orb-accounts-table-color);
+}
+table thead tr th h4 {
+  padding: 0.25em 0;
+  margin: 0;
+  color: var(--orb-accounts-table-color-text);
+}
+table th {
+  border-right: 0.375em solid var(--orb-accounts-table-border-color);
+}
+table th,
+table td {
+  padding: 0.375em;
+}
+table th:last-child {
+  border-right: none;
+}
+table td {
+  text-transform: capitalize;
+}
+table td h5 {
+  letter-spacing: unset;
+  color: var(--orb-accounts-table-body-color-text);
+}
+table td h4 {
+  color: var(--orb-accounts-table-body-color-text);
+}
+table tr {
+  border-bottom: 0.05em solid var(--orb-accounts-table-body-border-color);
+}
+table tr:last-child {
+  border-bottom: none;
+}
+table tbody {
+  background-color: var(--orb-accounts-table-body-color);
+}
+table tfoot tr th {
+  background-color: var(--orb-accounts-table-color);
+}
+table tfoot tr th h4 {
+  padding: 0.25em 0;
+  margin: 0;
+  color: var(--orb-accounts-table-color-text);
+}
+
 .receipt-card.card {
   display: grid;
   gap: 0.25em;
   min-width: 25rem;
   width: 100%;
   overflow: hidden;
-}
-.receipt-card.card .th h4,
-.receipt-card.card th h4 {
-  padding: 0.25em 0;
-  background-color: var(--orb-color-primary);
-  color: var(--orb-color-secondary);
 }
 .receipt-card.card .td h5,
 .receipt-card.card td h5 {
@@ -826,23 +870,6 @@ section.invoice {
     display: quote-table;
   }
 }
-table {
-  border-spacing: 0.375em;
-  border-collapse: collapse;
-}
-
-thead th h4,
-tfoot th h4 {
-  background-color: var(--orb-color-primary);
-  color: var(--orb-color-secondary);
-  padding: 0.375em;
-}
-
-td {
-  padding: 0.375em;
-  text-transform: capitalize;
-}
-
 .client-details form table tbody td {
   padding: 0.375em;
 }
@@ -881,13 +908,14 @@ td {
 }
 
 .status-bar.card {
-  background-color: var(--orb-accounts-color-primary);
+  background-color: var(--orb-accounts-color-secondary);
 }
 .status-bar.card span {
-  color: var(--orb-accounts-color-secondary);
+  color: var(--orb-accounts-color-primary);
 }
 .status-bar.card span h4 {
   padding: 0.5em;
+  letter-spacing: unset;
 }
 .status-bar.card.info {
   background-color: var(--orb-accounts-color-info);

@@ -1,18 +1,76 @@
+table {
+  border-spacing: 0.375em;
+  border-collapse: collapse;
+
+  thead {
+    tr {
+      th {
+        background-color: var(--orb-accounts-table-color);
+        h4 {
+          padding: 0.25em 0;
+          margin: 0;
+          color: var(--orb-accounts-table-color-text);
+        }
+      }
+    }
+  }
+
+  th {
+    border-right: 0.375em solid var(--orb-accounts-table-border-color);
+  }
+
+  th,
+  td {
+    padding: 0.375em;
+  }
+
+  th:last-child {
+    border-right: none;
+  }
+
+  td {
+    text-transform: capitalize;
+    h5 {
+      letter-spacing: unset;
+      color: var(--orb-accounts-table-body-color-text);
+    }
+    h4 {
+      color: var(--orb-accounts-table-body-color-text);
+    }
+  }
+
+  tr {
+    border-bottom: 0.05em solid var(--orb-accounts-table-body-border-color);
+  }
+
+  tr:last-child {
+    border-bottom: none;
+  }
+
+  tbody {
+    background-color: var(--orb-accounts-table-body-color);
+  }
+
+  tfoot {
+    tr {
+      th {
+        background-color: var(--orb-accounts-table-color);
+        h4 {
+          padding: 0.25em 0;
+          margin: 0;
+          color: var(--orb-accounts-table-color-text);
+        }
+      }
+    }
+  }
+}
+
 .receipt-card.card {
   display: grid;
   gap: 0.25em;
   min-width: 25rem;
   width: 100%;
   overflow: hidden;
-
-  .th,
-  th {
-    h4 {
-      padding: 0.25em 0;
-      background-color: var(--orb-color-primary);
-      color: var(--orb-color-secondary);
-    }
-  }
 
   .td,
   td {
@@ -227,25 +285,3 @@
     }
   }
 }
-
-table {
-  border-spacing: 0.375em;
-  border-collapse: collapse;
-}
-
-thead,
-tfoot {
-  th {
-    h4 {
-      background-color: var(--orb-color-primary);
-      color: var(--orb-color-secondary);
-      padding: 0.375em;
-    }
-  }
-}
-
-td {
-  padding: 0.375em;
-  text-transform: capitalize;
-}
-

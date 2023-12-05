@@ -1,10 +1,11 @@
 .status-bar.card {
-  background-color: var(--orb-accounts-color-primary);
+  background-color: var(--orb-accounts-color-secondary);
   span {
-    color: var(--orb-accounts-color-secondary);
+    color: var(--orb-accounts-color-primary);
 
     h4 {
       padding: 0.5em;
+      letter-spacing: unset;
     }
   }
 

@@ -224,15 +224,17 @@ function SelectionsComponent() {
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("section", {
     className: "selections"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", null, "SELECTIONS"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h2", {
+    className: "title"
+  }, "selections"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-card card"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    className: "description-label"
-  }, "DESCRIPTION")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    className: "cost-label"
-  }, "COST")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, services && services.length ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, services.map(service => {
+    className: "title"
+  }, "service")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    className: "title"
+  }, "cost")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, services && services.length ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, services.map(service => {
     const {
       id,
       price_id,
@@ -251,19 +253,19 @@ function SelectionsComponent() {
       onChange: event => handleCheckboxChange(event, id, price_id, description, price, onboarding_link)
     })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: "feature-description"
-    }, description), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: "feature-cost table-number",
       id: "feature_cost"
-    }, new Intl.NumberFormat('us', {
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, new Intl.NumberFormat('us', {
       style: 'currency',
       currency: 'USD'
-    }).format(price)));
+    }).format(price))));
   })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     colSpan: 3
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "No features to show yet")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "No services to show yet")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
-    className: "subtotal-label"
+    className: "title"
   }, "TOTAL")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
     className: "subtotal"
   }, new Intl.NumberFormat('us', {
