@@ -19,34 +19,86 @@ class Table
                 'capability'     => 'edit_theme_options',
                 'theme_supports' => '',
                 'title'          => __('Table', 'orb-accounts'),
-                'description'    =>  __('Table Settings', 'orb-accounts'),
+                'description'    => __('Table Settings', 'orb-accounts'),
                 'panel'  => 'orb_accounts_settings',
             )
         );
 
-        $wp_customize->add_setting('orb_accounts_card_shadow', array(
+        $wp_customize->add_setting('orb_accounts_table_color_hue', array(
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+
+        $wp_customize->add_setting('orb_accounts_table_color_saturation', array(
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+
+        $wp_customize->add_setting('orb_accounts_table_color_lightness', array(
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+
+        $wp_customize->add_setting('orb_accounts_table_body_color_hue', array(
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+
+        $wp_customize->add_setting('orb_accounts_table_body_color_saturation', array(
+            'sanitize_callback' => 'sanitize_text_field',
+        ));
+
+        $wp_customize->add_setting('orb_accounts_table_body_color_lightness', array(
             'sanitize_callback' => 'sanitize_text_field',
         ));
 
         $wp_customize->add_control(
-            'orb_accounts_card_shadow',
+            'orb_accounts_table_color_hue',
             array(
                 'type' => 'input',
-                'label' => __('Card Box Shadow', 'orb-accounts'),
-                'section' => 'orb_accounts_shadow_settings',
+                'label' => __('Header & Footer Hue', 'orb-accounts'),
+                'section' => 'orb_accounts_table_settings',
             )
         );
 
-        $wp_customize->add_setting('orb_accounts_button_shadow', array(
-            'sanitize_callback' => 'sanitize_text_field',
-        ));
-
         $wp_customize->add_control(
-            'orb_accounts_button_shadow',
+            'orb_accounts_table_color_saturation',
             array(
                 'type' => 'input',
-                'label' => __('Button Box Shadow', 'orb-accounts'),
-                'section' => 'orb_accounts_shadow_settings',
+                'label' => __('Header & Footer Saturation', 'orb-accounts'),
+                'section' => 'orb_accounts_table_settings',
+            )
+        );
+
+        $wp_customize->add_control(
+            'orb_accounts_table_color_lightness',
+            array(
+                'type' => 'input',
+                'label' => __('Header & Footer Lightness', 'orb-accounts'),
+                'section' => 'orb_accounts_table_settings',
+            )
+        );
+
+        $wp_customize->add_control(
+            'orb_accounts_table_body_color_hue',
+            array(
+                'type' => 'input',
+                'label' => __('Body Hue', 'orb-accounts'),
+                'section' => 'orb_accounts_table_settings',
+            )
+        );
+
+        $wp_customize->add_control(
+            'orb_accounts_table_body_color_saturation',
+            array(
+                'type' => 'input',
+                'label' => __('Body Saturation', 'orb-accounts'),
+                'section' => 'orb_accounts_table_settings',
+            )
+        );
+
+        $wp_customize->add_control(
+            'orb_accounts_table_body_color_lightness',
+            array(
+                'type' => 'input',
+                'label' => __('Body Lightness', 'orb-accounts'),
+                'section' => 'orb_accounts_table_settings',
             )
         );
     }
@@ -61,7 +113,7 @@ class Table
             return 0;
         }
 
-        if ($hue >= 40 || $hue <= 180) {
+        if ($hue >= 40 && $hue <= 180) {
             if (10 > ($lightness - 40)) {
                 return 10;
             }
@@ -101,19 +153,15 @@ class Table
                                                     ?>;
 
                 --orb-accounts-table-border-color: <?php
-                                                    $hue = !empty(get_theme_mod('orb_accounts_table_color_hue')) ? get_theme_mod('orb_accounts_table_color_hue') : 0;
-                                                    $lightness = !empty(get_theme_mod('orb_accounts_table_color_lightness')) ? get_theme_mod('orb_accounts_table_color_lightness') : 0;
-
-                                                    $l = $this->calculate_lightness($hue, $lightness);
+                                                    $h = !empty(get_theme_mod('orb_accounts_table_body_color_hue')) ? get_theme_mod('orb_accounts_table_body_color_hue') : 0;
+                                                    $s = !empty(get_theme_mod('orb_accounts_table_body_color_saturation')) ? get_theme_mod('orb_accounts_table_body_color_saturation') : 0;
+                                                    $l = !empty(get_theme_mod('orb_accounts_table_body_color_lightness')) ? get_theme_mod('orb_accounts_table_body_color_lightness') : 100;
 
                                                     echo "hsl({$h}, {$s}%, {$l}%)";
                                                     ?>;
 
                 --orb-accounts-table-body-color: <?php
-                                                    $h = !empty(get_theme_mod('orb_accounts_table_body_color_hue')) ? get_theme_mod('orb_accounts_table_body_color_hue') : 0;
-                                                    $s = !empty(get_theme_mod('orb_accounts_table_body_color_saturation')) ? get_theme_mod('orb_accounts_table_body_color_saturation') : 0;
-                                                    $l = !empty(get_theme_mod('orb_accounts_table_body_color_lightness')) ? get_theme_mod('orb_accounts_table_body_color_lightness') : 100;
-
+                                                    error_log($l);
                                                     echo "hsl({$h}, {$s}%, {$l}%)";
                                                     ?>;
 
@@ -122,6 +170,7 @@ class Table
                                                         $lightness = !empty(get_theme_mod('orb_accounts_table_body_color_lightness')) ? get_theme_mod('orb_accounts_table_body_color_lightness') : 100;
 
                                                         $l = $this->calculate_lightness($hue, $lightness);
+                                                        error_log($h . ' ' . $s . ' ' . $l);
 
                                                         echo "hsl({$h}, {$s}%, {$l}%)";
                                                         ?>;
