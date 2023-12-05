@@ -1,4 +1,5 @@
 <?php
+
 namespace ORB\Accounts\CSS\Customizer;
 
 class Customizer
@@ -9,12 +10,10 @@ class Customizer
 		add_theme_support("custom-background");
 
 		add_action('customize_register', array($this, 'register_customizer_panel'));
-
+		// Add a logo to quotes, inoices and receipts
+		// Change color scheme
 		new BorderRadius;
 		new Color;
-		new Hero;
-		// new Products;
-		new Services;
 		new Shadow;
 	}
 
@@ -22,9 +21,9 @@ class Customizer
 	{
 		add_theme_support('customizer');
 		$wp_customize->add_panel(
-			'orb_products_services_settings',
+			'orb_accounts_settings',
 			array(
-				'title' => __('ORB Products & Services Settings', 'the-house-forever-wins'),
+				'title' => __('ORB Accounts Settings', 'orb-accounts'),
 				'priority' => 10,
 			)
 		);
