@@ -4,9 +4,11 @@ namespace ORB\Accounts\CSS\Customizer;
 
 class StatusBar
 {
+    private $customizer;
+
     public function __construct()
     {
-        add_action('customize_register', [$this, 'orb_accounts_status_bar_section']);
+        $this->customizer = new Customizer;
     }
 
     function orb_accounts_status_bar_section($wp_customize)
@@ -90,11 +92,9 @@ class StatusBar
                                                 ?>;
 
                 --orb-accounts-color-success-text: <?php
-                                                    $h = !empty(get_theme_mod('orb_accounts_success_color_hue')) ? get_theme_mod('orb_accounts_success_color_hue') : 120;
-                                                    $s = !empty(get_theme_mod('orb_accounts_success_color_saturation')) ? get_theme_mod('orb_accounts_success_color_saturation') : 100;
-                                                    $l = 90;
+                                                    $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                    echo "hsl({$h}, {$s}%, {$l}%)";
+                                                    echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                     ?>;
 
                 --orb-accounts-color-error: <?php
@@ -106,11 +106,9 @@ class StatusBar
                                             ?>;
 
                 --orb-accounts-color-error-text: <?php
-                                                    $h = !empty(get_theme_mod('orb_accounts_error_color_hue')) ? get_theme_mod('orb_accounts_error_color_hue') : 0;
-                                                    $s = !empty(get_theme_mod('orb_accounts_error_color_saturation')) ? get_theme_mod('orb_accounts_error_color_saturation') : 100;
-                                                    $l = 90;
+                                                    $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                    echo "hsl({$h}, {$s}%, {$l}%)";
+                                                    echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                     ?>;
 
                 --orb-accounts-color-caution: <?php
@@ -122,11 +120,9 @@ class StatusBar
                                                 ?>;
 
                 --orb-accounts-color-caution-text: <?php
-                                                    $h = !empty(get_theme_mod('orb_accounts_caution_color_hue')) ? get_theme_mod('orb_accounts_caution_color_hue') : 60;
-                                                    $s = !empty(get_theme_mod('orb_accounts_caution_color_saturation')) ? get_theme_mod('orb_accounts_caution_color_saturation') : 100;
-                                                    $l = 10;
+                                                    $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                    echo "hsl({$h}, {$s}%, {$l}%)";
+                                                    echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                     ?>;
 
                 --orb-accounts-color-info: <?php
@@ -138,11 +134,9 @@ class StatusBar
                                             ?>;
 
                 --orb-accounts-color-info-text: <?php
-                                                $h = !empty(get_theme_mod('orb_accounts_info_color_hue')) ? get_theme_mod('orb_accounts_info_color_hue') : 240;
-                                                $s = !empty(get_theme_mod('orb_accounts_info_color_saturation')) ? get_theme_mod('orb_accounts_info_color_saturation') : 100;
-                                                $l = 90;
+                                                $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                echo "hsl({$h}, {$s}%, {$l}%)";
+                                                echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                 ?>;
             }
         </style>

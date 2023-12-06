@@ -24,8 +24,13 @@ define('ORB_ACCOUNTS_URL', WP_PLUGIN_URL . '/orb-accounts/');
 
 use ORB\Accounts\Admin\Admin;
 use ORB\Accounts\API\API;
-use ORB\Accounts\CSS\Customizer\Customizer;
 use ORB\Accounts\CSS\CSS;
+use ORB\Accounts\CSS\Customizer\Customizer;
+use ORB\Accounts\CSS\Customizer\BorderRadius;
+use ORB\Accounts\CSS\Customizer\Color;
+use ORB\Accounts\CSS\Customizer\Shadow;
+use ORB\Accounts\CSS\Customizer\StatusBar;
+use ORB\Accounts\CSS\Customizer\Table;
 use ORB\Accounts\JS\JS;
 use ORB\Accounts\Database\Database;
 use ORB\Accounts\Pages\Pages;
@@ -84,7 +89,16 @@ class ORB_Accounts
             new Shortcodes;
         });
 
-        add_action('customize_register', [(new Customizer), 'register_customizer_panel']);
+        // Add a logo to quotes, invoices and receipts
+        // Change color scheme
+        add_action('customize_register', function ($wp_customize) {
+            (new Customizer)->register_customizer_panel($wp_customize);
+            (new BorderRadius)->orb_accounts_border_radius_section($wp_customize);
+            (new Color)->orb_accounts_color_section($wp_customize);
+            (new Shadow)->orb_accounts_shadow_section($wp_customize);
+            (new StatusBar)->orb_accounts_status_bar_section($wp_customize);
+            (new Table)->orb_accounts_table_section($wp_customize);
+        });
     }
 
     public function activate()

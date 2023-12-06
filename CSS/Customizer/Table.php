@@ -4,9 +4,11 @@ namespace ORB\Accounts\CSS\Customizer;
 
 class Table
 {
+    private $customizer;
+
     public function __construct()
     {
-        add_action('customize_register', [$this, 'orb_accounts_table_section']);
+        $this->customizer = new Customizer;
     }
 
     function orb_accounts_table_section($wp_customize)
@@ -102,33 +104,6 @@ class Table
         );
     }
 
-    function calculate_lightness($hue, $lightness)
-    {
-        if ($hue == 0 && $lightness == 0) {
-            return 100;
-        }
-
-        if ($hue == 0 && $lightness == 100) {
-            return 0;
-        }
-
-        if ($hue >= 40 && $hue <= 180) {
-            if (10 > ($lightness - 40)) {
-                return 10;
-            }
-
-            return $lightness - 40;
-        }
-
-        if ($hue < 40 || $hue > 180) {
-            if (90 < ($lightness + 40)) {
-                return 90;
-            }
-
-            return $lightness + 40;
-        }
-    }
-
     function load_css()
     {
 ?>
@@ -143,12 +118,9 @@ class Table
                                             ?>;
 
                 --orb-accounts-table-color-text: <?php
-                                                    $hue = !empty(get_theme_mod('orb_accounts_table_color_hue')) ? get_theme_mod('orb_accounts_table_color_hue') : 0;
-                                                    $lightness = !empty(get_theme_mod('orb_accounts_table_color_lightness')) ? get_theme_mod('orb_accounts_table_color_lightness') : 0;
+                                                    $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                    $l = $this->calculate_lightness($hue, $lightness);
-
-                                                    echo "hsl({$h}, {$s}%, {$l}%)";
+                                                    echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                     ?>;
 
                 --orb-accounts-table-border-color: <?php
@@ -160,27 +132,19 @@ class Table
                                                     ?>;
 
                 --orb-accounts-table-body-color: <?php
-                                                    error_log($l);
                                                     echo "hsl({$h}, {$s}%, {$l}%)";
                                                     ?>;
 
                 --orb-accounts-table-body-color-text: <?php
-                                                        $hue = !empty(get_theme_mod('orb_accounts_table_body_color_hue')) ? get_theme_mod('orb_accounts_table_body_color_hue') : 0;
-                                                        $lightness = !empty(get_theme_mod('orb_accounts_table_body_color_lightness')) ? get_theme_mod('orb_accounts_table_body_color_lightness') : 100;
+                                                        $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                        $l = $this->calculate_lightness($hue, $lightness);
-                                                        error_log($h . ' ' . $s . ' ' . $l);
-
-                                                        echo "hsl({$h}, {$s}%, {$l}%)";
+                                                        echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                         ?>;
 
                 --orb-accounts-table-body-border-color: <?php
-                                                        $hue = !empty(get_theme_mod('orb_accounts_table_body_color_hue')) ? get_theme_mod('orb_accounts_table_body_color_hue') : 0;
-                                                        $lightness = !empty(get_theme_mod('orb_accounts_table_body_color_lightness')) ? get_theme_mod('orb_accounts_table_body_color_lightness') : 100;
+                                                        $lightness = $this->customizer->calculate_lightness($h, $l);
 
-                                                        $l = $this->calculate_lightness($hue, $lightness);
-
-                                                        echo "hsl({$h}, {$s}%, {$l}%)";
+                                                        echo "hsl({$h}, {$s}%, {$lightness}%)";
                                                         ?>;
             }
         </style>

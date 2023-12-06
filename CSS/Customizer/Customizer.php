@@ -6,17 +6,6 @@ class Customizer
 {
 	public function __construct()
 	{
-		add_theme_support('custom-logo');
-		add_theme_support("custom-background");
-
-		add_action('customize_register', array($this, 'register_customizer_panel'));
-		// Add a logo to quotes, invoices and receipts
-		// Change color scheme
-		new StatusBar;
-		new Table;
-		new BorderRadius;
-		new Color;
-		new Shadow;
 	}
 
 	function register_customizer_panel($wp_customize)
@@ -30,4 +19,31 @@ class Customizer
 			)
 		);
 	}
+
+	function calculate_lightness($hue, $lightness)
+    {
+        if ($hue == 0 && $lightness == 0) {
+            return 100;
+        }
+
+        if ($hue == 0 && $lightness == 100) {
+            return 0;
+        }
+
+        if ($hue >= 40 && $hue <= 180) {
+            if (10 > ($lightness - 40)) {
+                return 10;
+            }
+
+            return $lightness - 40;
+        }
+
+        if ($hue < 40 || $hue > 180) {
+            if (90 < ($lightness + 40)) {
+                return 90;
+            }
+
+            return $lightness + 40;
+        }
+    }
 }

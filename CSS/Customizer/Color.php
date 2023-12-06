@@ -6,7 +6,6 @@ class Color
 {
 	public function __construct()
 	{
-		add_action('customize_register', [$this, 'orb_accounts_color_section']);
 	}
 
 	function orb_accounts_color_section($wp_customize)
