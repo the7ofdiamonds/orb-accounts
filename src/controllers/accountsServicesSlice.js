@@ -13,6 +13,7 @@ const initialState = {
   icon: '',
   action_word: '',
   slug: '',
+  price_id: '',
   services: ''
 }
 
@@ -78,6 +79,7 @@ export const accountsServicesSlice = createSlice({
         state.icon = action.payload.icon
         state.action_word = action.payload.action_word
         state.slug = action.payload.slug
+        state.price_id = action.payload.price_id
       })
       .addCase(fetchServices.fulfilled, (state, action) => {
         state.serviceLoading = false;

@@ -18,65 +18,80 @@ class DatabaseQuote
         $this->table_name = 'orb_quote';
     }
 
-    public function saveQuote(Quote $quote, $selections, $onboarding_links)
+    public function saveQuote(Quote $quote, $selections, $onboarding_links = '')
     {
+        try {
+            if (empty($quote) && !is_object($quote)) {
+                throw new Exception('A Quote is required to save.', 400);
+            }
 
-        if (is_object($quote)) {
-            $amount_subtotal = $quote->amount_subtotal;
-            $amount_discount = $quote->computed->upfront->total_details->amount_discount;
-            $amount_shipping = $quote->computed->upfront->total_details->amount_shipping;
-            $amount_tax = $quote->computed->upfront->total_details->amount_tax;
-            $amount_total = $quote->amount_total;
-        } else {
-            throw new Exception('A Quote is required to save.', 400);
-        }
+            if (empty($selections)) {
+                throw new Exception('Selections are required', 400);
+            }
 
-        if (!empty($selections)) {
-            $serialized_selections = json_encode($selections);
-        } else {
-            throw new Exception('Selections are required', 400);
-        }
+            if (!preg_match('/^qt_\w+$/', $quote->id)) {
+                throw new Exception('Invalid Stripe Quote ID.');
+            }
 
-        $result = $this->wpdb->insert(
-            $this->table_name,
-            [
-                'stripe_customer_id' => $quote->customer,
-                'stripe_quote_id' => $quote->id,
-                'status' => $quote->status,
-                'expires_at' => $quote->expires_at,
-                'selections' => $serialized_selections,
-                'amount_subtotal' => $amount_subtotal,
-                'amount_discount' => $amount_discount,
-                'amount_shipping' => $amount_shipping,
-                'amount_tax' => $amount_tax,
-                'amount_total' => $amount_total,
-                'onboarding_links' => serialize($onboarding_links)
-            ]
-        );
+            $result = $this->wpdb->insert(
+                $this->table_name,
+                [
+                    'stripe_customer_id' => $quote->customer,
+                    'stripe_quote_id' => $quote->id,
+                    'status' => $quote->status,
+                    'expires_at' => $quote->expires_at,
+                    'selections' => json_encode($selections),
+                    'amount_subtotal' => $quote->amount_subtotal,
+                    'amount_discount' => $quote->computed->upfront->total_details->amount_discount,
+                    'amount_shipping' => $quote->computed->upfront->total_details->amount_shipping,
+                    'amount_tax' => $quote->computed->upfront->total_details->amount_tax,
+                    'amount_total' => $quote->amount_total,
+                    'onboarding_links' => json_encode($onboarding_links)
+                ]
+            );
 
-        if ($result) {
-            return $this->wpdb->insert_id;
-        } else {
-            $msg = $this->wpdb->last_error;
-            throw new Exception($msg, 404);
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
+            return $result;
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at saveQuote');
+
+            return $response;
         }
     }
 
     public function getQuote($stripe_quote_id)
     {
-        if (empty($stripe_quote_id)) {
-            $msg = 'A Stripe Quote ID is required.';
-            throw new Exception($msg, 400);
-        }
+        try {
+            if (empty($stripe_quote_id)) {
+                throw new Exception('A Stripe Quote ID is required.', 400);
+            }
 
-        $quote = $this->wpdb->get_row(
-            $this->wpdb->prepare(
-                "SELECT * FROM $this->table_name WHERE stripe_quote_id = %s",
-                $stripe_quote_id
-            )
-        );
+            if (!preg_match('/^qt_\w+$/', $stripe_quote_id)) {
+                throw new Exception('Invalid Stripe Quote ID.');
+            }
 
-        if ($quote) {
+            $quote = $this->wpdb->get_row(
+                $this->wpdb->prepare(
+                    "SELECT * FROM $this->table_name WHERE stripe_quote_id = %s",
+                    $stripe_quote_id
+                )
+            );
+
+            if (empty($quote)) {
+                throw new Exception('Stripe Quote ID ' . $stripe_quote_id . ' not found', 404);
+            }
+
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
             $data = [
                 'id' => $quote->id,
                 'created_at' => $quote->created_at,
@@ -84,32 +99,49 @@ class DatabaseQuote
                 'stripe_customer_id' => $quote->stripe_customer_id,
                 'stripe_quote_id' => $quote->stripe_quote_id,
                 'expires_at' => $quote->expires_at,
-                'selections' => $quote->selections,
+                'selections' => json_decode($quote->selections),
                 'amount_subtotal' => $quote->amount_subtotal,
                 'amount_discount' => $quote->amount_discount,
                 'amount_shipping' => $quote->amount_shipping,
                 'amount_tax' => $quote->amount_tax,
                 'amount_total' => $quote->amount_total,
-                'onboarding_links' => unserialize($quote->onboarding_links)
+                'onboarding_links' => json_decode($quote->onboarding_links)
             ];
 
             return $data;
-        } else {
-            $msg = 'Stripe Quote ID ' . $stripe_quote_id . ' not found';
-            throw new Exception($msg, 404);
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at getQuote');
+
+            return $response;
         }
     }
 
     public function getQuoteByID($id)
     {
-        $quote = $this->wpdb->get_row(
-            $this->wpdb->prepare(
-                "SELECT * FROM $this->table_name WHERE id = %d",
-                $id
-            )
-        );
+        try {
+            if (empty($id)) {
+                throw new Exception('A Quote ID is required.', 400);
+            }
 
-        if ($quote) {
+            $quote = $this->wpdb->get_row(
+                $this->wpdb->prepare(
+                    "SELECT * FROM $this->table_name WHERE id = %d",
+                    $id
+                )
+            );
+
+            if (empty($quote)) {
+                throw new Exception('Quote with the ID' . $id . 'not found', 404);
+            }
+
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
             $data = [
                 'id' => $quote->id,
                 'created_at' => $quote->created_at,
@@ -122,56 +154,97 @@ class DatabaseQuote
                 'amount_shipping' => $quote->amount_shipping,
                 'amount_tax' => $quote->amount_tax,
                 'amount_total' => $quote->amount_total,
-                'onboarding_links' => unserialize($quote->onboarding_links)
+                'onboarding_links' => json_decode($quote->onboarding_links)
             ];
 
             return $data;
-        } else {
-            $msg = 'Quote with the ID' . $id . 'not found';
-            throw new Exception($msg, 404);
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at getQuoteByID');
+
+            return $response;
         }
     }
 
     public function getQuotes()
     {
-        $quotes = $this->wpdb->get_results(
-            $this->wpdb->prepare(
-                "SELECT * FROM $this->table_name"
-            )
-        );
+        try {
+            $quotes = $this->wpdb->get_results(
+                $this->wpdb->prepare(
+                    "SELECT * FROM $this->table_name"
+                )
+            );
 
-        if ($quotes) {
+            if (empty($quotes)) {
+                throw new Exception('There are no quotes to display.', 400);
+            }
+
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
             return $quotes;
-        } else {
-            $msg = 'There are no quotes to display.';
-            throw new Exception($msg, 404);
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at getQuotes');
+
+            return $response;
         }
     }
 
     public function getClientQuotes($stripe_customer_id)
     {
-        $quotes = $this->wpdb->get_results(
-            $this->wpdb->prepare(
-                "SELECT * FROM $this->table_name WHERE stripe_customer_id = %s",
-                $stripe_customer_id
-            )
-        );
+        try {
+            if (empty($stripe_customer_id)) {
+                throw new Exception('A Stripe Customer ID is required.', 400);
+            }
 
-        if ($quotes) {
+            if (!preg_match('/^cus_\w+$/', $stripe_customer_id)) {
+                throw new Exception('Invalid Stripe Customer ID.');
+            }
+
+            $quotes = $this->wpdb->get_results(
+                $this->wpdb->prepare(
+                    "SELECT * FROM $this->table_name WHERE stripe_customer_id = %s",
+                    $stripe_customer_id
+                )
+            );
+
+            if (empty($quotes)) {
+                throw new Exception('There are no quotes to display.', 400);
+            }
+
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
             return $quotes;
-        } else {
-            $msg = 'There are no quotes to display.';
-            $code = 404;
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
 
-            throw new Exception($msg, $code);
+            error_log($response . ' at getClientQuotes');
+
+            return $response;
         }
     }
 
     public function updateQuote(Quote $quote, $selections = '')
     {
-        $data = array();
+        try {
+            $data = array();
 
-        if (is_object($quote)) {
+            if (empty($quote) || !is_object($quote)) {
+                throw new Exception('A Quote is required to update.');
+            }
+
             $amount_subtotal = !empty($quote->amount_subtotal) ? $quote->amount_subtotal : null;
             $amount_discount = !empty($quote->computed->upfront->total_details->amount_discount) ? $quote->computed->upfront->total_details->amount_discount : null;
             $amount_shipping = !empty($quote->computed->upfront->total_details->amount_shipping) ? $quote->computed->upfront->total_details->amount_shipping : null;
@@ -193,55 +266,73 @@ class DatabaseQuote
             if (!empty($amount_total)) {
                 $data['amount_total'] = $amount_total;
             }
+            if (!empty($selections)) {
+                $data['selections'] = $selections;
+            }
+            if (!preg_match('/^qt_\w+$/', $quote->id)) {
+                throw new Exception('Invalid Stripe quote ID.');
+            }
 
             $where = array(
                 'stripe_quote_id' => $quote->id,
             );
-        } else {
-            throw new Exception('A Quote is required to update.');
-        }
 
-        if (!empty($selections)) {
-            $data['selections'] = $selections;
-        }
-
-        if (!empty($quote->id)) {
             $updated = $this->wpdb->update($this->table_name, $data, $where);
-        }
 
-        if ($updated) {
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
             return $updated;
-        } else {
-            $error_message = $this->wpdb->last_error ?: 'Quote not found';
-            throw new Exception($error_message);
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at updateQuote');
+
+            return $response;
         }
     }
 
     public function updateQuoteStatus($stripe_quote_id, $status)
     {
-        if (!empty($stripe_quote_id)) {
-            $where = array(
-                'stripe_quote_id' => $stripe_quote_id,
-            );
-        } else {
-            throw new Exception('A Stripe Quote ID is required.', 400);
-        }
+        try {
+            if (empty($stripe_quote_id)) {
+                throw new Exception('A Stripe Quote ID is required.', 400);
+            }
 
-        if (!empty($status)) {
+            if (!preg_match('/^qt_\w+$/', $stripe_quote_id)) {
+                throw new Exception('Invalid Stripe quote ID.');
+            }
+
+            if (empty($status)) {
+                throw new Exception('A status is required.', 400);
+            }
+
             $data = array(
                 'status' => $status,
             );
-        } else {
-            throw new Exception('A status is required.', 400);
-        }
 
-        $updated = $this->wpdb->update($this->table_name, $data, $where);
+            $where = array(
+                'stripe_quote_id' => $stripe_quote_id,
+            );
 
-        if ($updated) {
+            $updated = $this->wpdb->update($this->table_name, $data, $where);
+
+            if ($this->wpdb->last_error) {
+                throw new Exception($this->wpdb->last_error, 400);
+            }
+
             return $updated;
-        } else {
-            $error_message = $this->wpdb->last_error;
-            throw new Exception($error_message, 404);
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at updateQuoteStatus');
+
+            return $response;
         }
     }
 }

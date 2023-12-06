@@ -104,6 +104,7 @@ function SelectionsComponent() {
     selections,
     total
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsQuote);
+  console.log(services);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
       dispatch((0,_controllers_accountsClientSlice_js__WEBPACK_IMPORTED_MODULE_3__.getClient)()).then(response => {
@@ -145,6 +146,20 @@ function SelectionsComponent() {
     }
   }, [quotes, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (stripe_customer_id) {
+      dispatch((0,_controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.fetchServices)());
+    }
+  }, [stripe_customer_id, dispatch]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.addSelections)(checkedItems));
+  }, [dispatch, checkedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.calculateSelections)(services.price));
+  }, [dispatch, services.price, checkedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.addOnboardingLink)());
+  }, [dispatch, checkedItems]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (stripe_quote_id) {
       dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuote)()).then(response => {
         if (response.error !== undefined) {
@@ -156,16 +171,16 @@ function SelectionsComponent() {
     }
   }, [stripe_quote_id, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (stripe_customer_id) {
-      dispatch((0,_controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_2__.fetchServices)());
+    if (quote_id) {
+      dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.getQuoteByID)()).then(response => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        }
+      });
     }
-  }, [stripe_customer_id, dispatch]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.addSelections)(checkedItems));
-  }, [dispatch, checkedItems]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    dispatch((0,_controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.calculateSelections)(services.price));
-  }, [dispatch, services.price, checkedItems]);
+  }, [quote_id, dispatch]);
   const handleCheckboxChange = (event, id, price_id, description, price, onboarding_link) => {
     const isChecked = event.target.checked;
     setCheckedItems(prevItems => {

@@ -6,10 +6,12 @@ import { getClient } from '../controllers/accountsClientSlice.js';
 import {
   addSelections,
   calculateSelections,
+  addOnboardingLink,
   createQuote,
   finalizeQuote,
   getClientQuotes,
   getQuote,
+  getQuoteByID
 } from '../controllers/accountsQuoteSlice.js';
 import { updateStripeQuote } from '../controllers/accountsStripeSlice.js';
 
@@ -42,7 +44,7 @@ function SelectionsComponent() {
     selections,
     total,
   } = useSelector((state) => state.accountsQuote);
-
+console.log(services);
   useEffect(() => {
     if (user_email) {
       dispatch(getClient()).then((response) => {
@@ -95,18 +97,6 @@ function SelectionsComponent() {
   }, [quotes, dispatch]);
 
   useEffect(() => {
-    if (stripe_quote_id) {
-      dispatch(getQuote()).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
-    }
-  }, [stripe_quote_id, dispatch]);
-
-  useEffect(() => {
     if (stripe_customer_id) {
       dispatch(fetchServices());
     }
@@ -119,6 +109,34 @@ function SelectionsComponent() {
   useEffect(() => {
     dispatch(calculateSelections(services.price));
   }, [dispatch, services.price, checkedItems]);
+
+  useEffect(() => {
+    dispatch(addOnboardingLink());
+  }, [dispatch, checkedItems]);
+
+  useEffect(() => {
+    if (stripe_quote_id) {
+      dispatch(getQuote()).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        }
+      });
+    }
+  }, [stripe_quote_id, dispatch]);
+
+  useEffect(() => {
+    if (quote_id) {
+      dispatch(getQuoteByID()).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        }
+      });
+    }
+  }, [quote_id, dispatch]);
 
   const handleCheckboxChange = (
     event,
@@ -157,7 +175,7 @@ function SelectionsComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
-        }
+        } 
       });
     } else if (
       stripe_quote_id &&

@@ -26,7 +26,7 @@ export const updateQuoteID = (stripe_quote_id) => {
 export const createQuote = createAsyncThunk('quote/createQuote', async (_, { getState }) => {
   try {
     const { stripe_customer_id } = getState().accountsClient;
-    const { selections } = getState().accountsQuote;
+    const { selections, onboarding_links } = getState().accountsQuote;
 
     const response = await fetch('/wp-json/orb/quote/v1/create', {
       method: 'POST',
@@ -276,14 +276,15 @@ export const accountsQuoteSlice = createSlice({
 
       state.total = total;
     },
-    addOnboardingLink: (state, action) => {
+    addOnboardingLink: (state) => {
+      const onboardingLinks = [];
+
       state.selections.forEach((item) => {
         const onboardingLink = item.onboarding_link;
-        const onboardingLinks = [];
 
-        if (onboardingLink !== '' || onboardingLink !== null) {
+        if (onboardingLink !== '' && onboardingLink !== null) {
           onboardingLinks.push(onboardingLink);
-        } 
+        }
       });
 
       state.onboarding_links = onboardingLinks;
@@ -294,13 +295,17 @@ export const accountsQuoteSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(createQuote.fulfilled, (state, action) => {
+        state.quoteLoading = false;
+        state.quoteError = null;
+        state.quote_id = action.payload;
+      })
       .addCase(getClientQuotes.fulfilled, (state, action) => {
         state.quoteLoading = false;
         state.quoteError = null;
         state.quotes = action.payload;
       })
       .addMatcher(isAnyOf(
-        createQuote.fulfilled,
         getQuote.fulfilled,
         getQuoteByID.fulfilled,
         updateQuote.fulfilled,
@@ -311,7 +316,8 @@ export const accountsQuoteSlice = createSlice({
       ), (state, action) => {
         state.quoteLoading = false;
         state.quoteError = null;
-        state.stripe_quote_id = action.payload.id
+        state.quote_id = action.payload.id
+        state.stripe_quote_id = action.payload.stripe_quote_id
         state.quote_status = action.payload.status
         state.quote_status_transitions = action.payload.status_transitions
         state.amount_subtotal = action.payload.amount_subtotal
@@ -327,6 +333,7 @@ export const accountsQuoteSlice = createSlice({
         state.total_details = action.payload.total_details
         state.items = action.payload.line_items
         state.stripe_invoice_id = action.payload.invoice
+        state.selections = action.payload.selections
       })
       .addMatcher(isAnyOf(
         createQuote.pending,
@@ -360,5 +367,9 @@ export const accountsQuoteSlice = createSlice({
   }
 });
 
-export const { addSelections, calculateSelections } = accountsQuoteSlice.actions;
+export const {
+  addSelections,
+  calculateSelections,
+  addOnboardingLink } = accountsQuoteSlice.actions;
+
 export default accountsQuoteSlice;

@@ -48,16 +48,16 @@ class StripeQuote
 
             $line_items = [];
 
-            if (isset($selection['price_id'])) {
-                foreach ($selections as $selection) {
+            foreach ($selections as $selection) {
+                if (isset($selection['price_id'])) {
                     $price_id = $selection['price_id'];
 
                     $line_items[] = [
                         'price' => $price_id
                     ];
+                } else {
+                    throw new Exception('Price ID is required.', 404);
                 }
-            } else {
-                throw new Exception('Price ID is required.', 404);
             }
 
             $stripe_quote = $this->stripeClient->quotes->create([

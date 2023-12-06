@@ -28,6 +28,7 @@ class Quote
             $body = json_decode($request_body, true);
             $stripe_customer_id = $body['stripe_customer_id'];
             $selections = $body['selections'];
+            $onboarding_links = $body['onboarding_links'];
 
             if (empty($stripe_customer_id)) {
                 $msg = 'Stripe Customer ID is required';
@@ -43,7 +44,10 @@ class Quote
                 throw new Exception($msg, $code);
             }
 
-            return rest_ensure_response($this->stripe_quote->createStripeQuote($stripe_customer_id, $selections));
+            $stripeQuote = $this->stripe_quote->createStripeQuote($stripe_customer_id, $selections);
+            $quote_id = $this->database_quote->saveQuote($stripeQuote, $selections, $onboarding_links);
+            
+            return rest_ensure_response($quote_id);
         } catch (Exception $e) {
 
             $error_message = $e->getMessage();

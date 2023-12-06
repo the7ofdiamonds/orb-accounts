@@ -108,7 +108,7 @@ class Database
             amount_shipping VARCHAR(255) DEFAULT NULL,
             amount_tax VARCHAR(255) DEFAULT NULL,
             amount_total VARCHAR(255) DEFAULT NULL,
-            onboarding_link TEXT DEFAULT NULL,
+            onboarding_links TEXT DEFAULT NULL,
             PRIMARY KEY (id)
         ) $charset_collate;";
 

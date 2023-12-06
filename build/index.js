@@ -8877,6 +8877,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   acceptQuote: () => (/* binding */ acceptQuote),
 /* harmony export */   accountsQuoteSlice: () => (/* binding */ accountsQuoteSlice),
+/* harmony export */   addOnboardingLink: () => (/* binding */ addOnboardingLink),
 /* harmony export */   addSelections: () => (/* binding */ addSelections),
 /* harmony export */   calculateSelections: () => (/* binding */ calculateSelections),
 /* harmony export */   cancelQuote: () => (/* binding */ cancelQuote),
@@ -8921,7 +8922,8 @@ const createQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
       stripe_customer_id
     } = getState().accountsClient;
     const {
-      selections
+      selections,
+      onboarding_links
     } = getState().accountsQuote;
     const response = await fetch('/wp-json/orb/quote/v1/create', {
       method: 'POST',
@@ -9170,11 +9172,11 @@ const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.crea
       });
       state.total = total;
     },
-    addOnboardingLink: (state, action) => {
+    addOnboardingLink: state => {
+      const onboardingLinks = [];
       state.selections.forEach(item => {
         const onboardingLink = item.onboarding_link;
-        const onboardingLinks = [];
-        if (onboardingLink !== '' || onboardingLink !== null) {
+        if (onboardingLink !== '' && onboardingLink !== null) {
           onboardingLinks.push(onboardingLink);
         }
       });
@@ -9185,14 +9187,19 @@ const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.crea
     }
   },
   extraReducers: builder => {
-    builder.addCase(getClientQuotes.fulfilled, (state, action) => {
+    builder.addCase(createQuote.fulfilled, (state, action) => {
+      state.quoteLoading = false;
+      state.quoteError = null;
+      state.quote_id = action.payload;
+    }).addCase(getClientQuotes.fulfilled, (state, action) => {
       state.quoteLoading = false;
       state.quoteError = null;
       state.quotes = action.payload;
-    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(createQuote.fulfilled, getQuote.fulfilled, getQuoteByID.fulfilled, updateQuote.fulfilled, updateQuoteStatus.fulfilled, finalizeQuote.fulfilled, acceptQuote.fulfilled, cancelQuote.fulfilled), (state, action) => {
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getQuote.fulfilled, getQuoteByID.fulfilled, updateQuote.fulfilled, updateQuoteStatus.fulfilled, finalizeQuote.fulfilled, acceptQuote.fulfilled, cancelQuote.fulfilled), (state, action) => {
       state.quoteLoading = false;
       state.quoteError = null;
-      state.stripe_quote_id = action.payload.id;
+      state.quote_id = action.payload.id;
+      state.stripe_quote_id = action.payload.stripe_quote_id;
       state.quote_status = action.payload.status;
       state.quote_status_transitions = action.payload.status_transitions;
       state.amount_subtotal = action.payload.amount_subtotal;
@@ -9208,6 +9215,7 @@ const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.crea
       state.total_details = action.payload.total_details;
       state.items = action.payload.line_items;
       state.stripe_invoice_id = action.payload.invoice;
+      state.selections = action.payload.selections;
     }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(createQuote.pending, getQuote.pending, getQuoteByID.pending, updateQuote.pending, updateQuoteStatus.pending, getClientQuotes.pending, finalizeQuote.pending, acceptQuote.pending, cancelQuote.pending), state => {
       state.quoteLoading = true;
       state.quoteError = null;
@@ -9219,7 +9227,8 @@ const accountsQuoteSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.crea
 });
 const {
   addSelections,
-  calculateSelections
+  calculateSelections,
+  addOnboardingLink
 } = accountsQuoteSlice.actions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsQuoteSlice);
 
@@ -9478,6 +9487,7 @@ const initialState = {
   icon: '',
   action_word: '',
   slug: '',
+  price_id: '',
   services: ''
 };
 const fetchService = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('service/fetchService', async () => {
@@ -9535,6 +9545,7 @@ const accountsServicesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.c
       state.icon = action.payload.icon;
       state.action_word = action.payload.action_word;
       state.slug = action.payload.slug;
+      state.price_id = action.payload.price_id;
     }).addCase(fetchServices.fulfilled, (state, action) => {
       state.serviceLoading = false;
       state.serviceError = '';
