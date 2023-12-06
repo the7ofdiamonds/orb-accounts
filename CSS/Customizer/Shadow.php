@@ -7,7 +7,6 @@ class Shadow
     public function __construct()
     {
         add_action('customize_register', [$this, 'orb_accounts_shadow_section']);
-        add_action('wp_head', [$this, 'load_css']);
     }
 
     function orb_accounts_shadow_section($wp_customize)
