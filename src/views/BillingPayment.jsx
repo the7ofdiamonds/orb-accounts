@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PaymentNavigationComponent from './components/PaymentNavigation.jsx';
 
-import { getClient } from '../controllers/accountsClientSlice.js';
+import { getUser } from '../controllers/accountsUserSlice.js';
 import { getInvoiceByID } from '../controllers/accountsInvoiceSlice.js';
 import { getReceipt } from '../controllers/accountsReceiptSlice.js';
 import {
@@ -22,7 +22,7 @@ function PaymentComponent() {
   const [messageType, setMessageType] = useState('');
   const [message, setMessage] = useState('');
 
-  const { user_email } = useSelector((state) => state.accountsClient);
+  const { user_email } = useSelector((state) => state.accountsUser);
   const { stripe_invoice_id, status, amount_remaining } = useSelector(
     (state) => state.accountsInvoice
   );
@@ -35,7 +35,7 @@ function PaymentComponent() {
 
   useEffect(() => {
     if (user_email) {
-      dispatch(getClient()).then((response) => {
+      dispatch(getUser()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');

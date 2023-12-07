@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getClient } from '../controllers/accountsClientSlice.js';
+import { getUser } from '../controllers/accountsUserSlice.js';
 import {
   cancelQuote,
   acceptQuote,
@@ -26,7 +26,7 @@ function QuoteComponent() {
     'To receive an invoice for the selected services, you must accept the quote above.'
   );
 
-  const { user_email } = useSelector((state) => state.accountsClient);
+  const { user_email } = useSelector((state) => state.accountsUser);
   const {
     quoteLoading,
     quoteError,
@@ -43,7 +43,7 @@ function QuoteComponent() {
 
   useEffect(() => {
     if (user_email) {
-      dispatch(getClient()).then((response) => {
+      dispatch(getUser()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');

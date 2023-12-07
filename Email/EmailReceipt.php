@@ -4,15 +4,17 @@ namespace ORB\Accounts\Email;
 
 use Exception;
 
-use ORB\Accounts\Database\DatabaseReceipt;
 use ORB\Accounts\API\Stripe\StripeInvoice;
+use ORB\Accounts\API\Stripe\StripeCustomers;
+use ORB\Accounts\Database\DatabaseReceipt;
 
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 
 class EmailReceipt
 {
     private $database_receipt;
-    private $stripe_receipt;
+    private $stripe_invoice;
+    private $stripe_customer;
     private $email;
     private $billing;
     private $pdf;
@@ -29,7 +31,8 @@ class EmailReceipt
     public function __construct($stripeClient, $mailer)
     {
         $this->database_receipt = new DatabaseReceipt();
-        $this->stripe_receipt = new StripeInvoice($stripeClient);
+        $this->stripe_invoice = new StripeInvoice($stripeClient);
+        $this->stripe_customer = new StripeCustomers($stripeClient);
         $this->email = new Email();
         $this->billing = new EmailBilling($stripeClient);
         $this->mailer = $mailer;
@@ -98,12 +101,13 @@ class EmailReceipt
 
     public function sendReceiptEmail($stripe_invoice_id)
     {
-        $databaseReceipt = $this->database_receipt->getReceipt($stripe_invoice_id);
-        $stripeInvoice = $this->stripe_receipt->getStripeInvoice($databaseReceipt['stripe_invoice_id']);
+        $stripeInvoice = $this->stripe_invoice->getStripeInvoice($stripe_invoice_id);
+        $stripeCustomer = $this->stripe_customer->getCustomer($stripeInvoice->customer);
+        $databaseReceipt = $this->database_receipt->getReceipt($stripeInvoice->id,  $stripeCustomer->id);
 
-        $to_email = $stripeInvoice->customer_email;
+        $to_email = $stripeCustomer->email;
         $receipt_number = 'Receipt #' . $databaseReceipt['id'];
-        $name = $stripeInvoice->customer_name;
+        $name =  $stripeCustomer->name;
         $to_name = $name;
 
         $subject = $receipt_number . ' for ' . $name;

@@ -3,6 +3,7 @@
 namespace ORB\Accounts\API\Stripe;
 
 use Exception;
+
 use Stripe\Exception\ApiErrorException;
 
 class StripeCustomers
@@ -18,45 +19,27 @@ class StripeCustomers
     public function createCustomer(
         $name,
         $email,
+        $phone = '',
         $address = '',
         $shipping = '',
-        $phone = '',
-        $payment_method_id = '',
-        $description = '',
-        $balance = '',
-        $cash_balance = '',
-        $coupon = '',
-        $invoice_prefix = '',
-        $invoice_settings = '',
-        $next_invoice_sequence = '',
-        $preferred_locales = '',
-        $promotion_code = '',
-        $source = '',
-        $tax = '',
-        $tax_exempt = '',
+        $metadata = '',
         $tax_id_data = '',
-        $test_clock = '',
-        $metadata = ''
+        $tax_exempt = '',
+        $invoice_settings = '',
+        $preferred_locales = ''
     ) {
         try {
             $customer = $this->stripeClient->customers->create([
                 'name' => $name,
                 'email' => $email,
+                'phone' => $phone,
                 'address' => $address,
                 'shipping' => $shipping,
-                'phone' => $phone,
-                // 'payment_method' => $payment_method_id,
-                'description' => $description,
-                // 'invoice_prefix' => $invoice_prefix,
-                // 'invoice_settings' => $invoice_settings,
-                // 'next_invoice_sequence' => $next_invoice_sequence,
-                // 'preferred_locales' => $preferred_locales,
-                // 'promotion_code' => $promotion_code,
-                // 'source' => $source,
-                // 'tax' => $tax,
-                // 'tax_exempt' => $tax_exempt,
-                // 'tax_id_data' => $tax_id_data,
-                ['metadata' => $metadata]
+                ['metadata' => $metadata],
+                'tax_id_data' => $tax_id_data,
+                'tax_exempt' => $tax_exempt,
+                'invoice_settings' => $invoice_settings,
+                'preferred_locales' => $preferred_locales
             ]);
 
             return $customer;
@@ -68,49 +51,46 @@ class StripeCustomers
                 'status' => $status_code
             ];
 
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
+            return $response_data;
         }
     }
 
     public function getCustomer($stripe_customer_id)
     {
         try {
-            if (!empty($stripe_customer_id)) {
-                $customer = $this->stripeClient->customers->retrieve(
-                    $stripe_customer_id,
-                    ['expand' => ['tax_ids']]
-                );
-                return $customer;
-            } else {
+            if (empty($stripe_customer_id)) {
                 throw new Exception('A Stripe Customer ID is required.');
             }
+
+            $customer = $this->stripeClient->customers->retrieve(
+                $stripe_customer_id,
+                ['expand' => ['tax_ids']]
+            );
+
+            return $customer;
         } catch (ApiErrorException $e) {
             $error_message = $e->getMessage();
+            $status_code = $e->getHttpStatus();
+            $response_data = [
+                'message' => $error_message,
+                'status' => $status_code
+            ];
 
-            return $error_message;
+            return $response_data;
         }
     }
 
     public function updateCustomer(
         $stripe_customer_id,
-        $name = '',
-        $email = '',
+        $name,
+        $email,
         $address = '',
         $shipping = '',
         $phone = '',
-        $description = '',
-        // $invoice_prefix = '',
-        // $invoice_settings = '',
-        // $next_invoice_sequence = '',
-        // $preferred_locales = '',
-        // $promotion_code = '',
-        // $source = '',
-        // $tax = '',
-        // $tax_exempt = '',
-        // $tax_id_data = '',
+        $invoice_settings = '',
+        $preferred_locales = '',
+        $tax_exempt = '',
+        $tax_id_data = '',
         $metadata = ''
     ) {
         try {
@@ -119,19 +99,13 @@ class StripeCustomers
                 [
                     'name' => $name,
                     'email' => $email,
+                    'phone' => $phone,
                     'address' => $address,
                     'shipping' => $shipping,
-                    'phone' => $phone,
-                    'description' => $description,
-                    // 'invoice_prefix' => $invoice_prefix,
-                    // 'invoice_settings' => $invoice_settings,
-                    // 'next_invoice_sequence' => $next_invoice_sequence,
-                    // 'preferred_locales' => $preferred_locales,
-                    // 'promotion_code' => $promotion_code,
-                    // 'source' => $source,
-                    // 'tax' => $tax,
-                    // 'tax_exempt' => $tax_exempt,
-                    // 'tax_id_data' => $tax_id_data,
+                    'invoice_settings' => $invoice_settings,
+                    'preferred_locales' => $preferred_locales,
+                    'tax_exempt' => $tax_exempt,
+                    'tax_id_data' => $tax_id_data,
                     ['metadata' => $metadata]
                 ]
             );
@@ -145,10 +119,7 @@ class StripeCustomers
                 'status' => $status_code
             ];
 
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
+            return $response_data;
         }
     }
 
@@ -156,6 +127,7 @@ class StripeCustomers
     {
         try {
             $customers = $this->stripeClient->customers->all(['limit' => $list_limit]);
+            
             return $customers;
         } catch (ApiErrorException $e) {
             $error_message = $e->getMessage();
@@ -165,10 +137,7 @@ class StripeCustomers
                 'status' => $status_code
             ];
 
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
+            return $response_data;
         }
     }
 
@@ -188,10 +157,7 @@ class StripeCustomers
                 'status' => $status_code
             ];
 
-            $response = rest_ensure_response($response_data);
-            $response->set_status($status_code);
-
-            return $response;
+            return $response_data;
         }
     }
 }

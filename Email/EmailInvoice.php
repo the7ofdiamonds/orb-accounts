@@ -4,8 +4,9 @@ namespace ORB\Accounts\Email;
 
 use Exception;
 
-use ORB\Accounts\Database\DatabaseInvoice;
 use ORB\Accounts\API\Stripe\StripeInvoice;
+use ORB\Accounts\API\Stripe\StripeCustomers;
+use ORB\Accounts\Database\DatabaseInvoice;
 
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 
@@ -13,6 +14,7 @@ class EmailInvoice
 {
     private $database_invoice;
     private $stripe_invoice;
+    private $stripe_customer;
     private $email;
     private $billing;
     private $pdf;
@@ -30,6 +32,7 @@ class EmailInvoice
     {
         $this->database_invoice = new DatabaseInvoice();
         $this->stripe_invoice = new StripeInvoice($stripeClient);
+        $this->stripe_customer = new StripeCustomers($stripeClient);
         $this->email = new Email();
         $this->billing = new EmailBilling($stripeClient);
         $this->mailer = $mailer;
@@ -43,7 +46,6 @@ class EmailInvoice
         $this->smtp_password = get_option('invoice_smtp_password');
         $this->from_email = get_option('invoice_email');
         $this->from_name = get_option('invoice_name');
-
     }
 
     function invoiceEmailBodyHeader($databaseInvoice, $stripeInvoice)
@@ -100,12 +102,13 @@ class EmailInvoice
     function sendInvoiceEmail($stripe_invoice_id)
     {
         try {
-            $databaseInvoice = $this->database_invoice->getInvoice($stripe_invoice_id);
-            $stripeInvoice = $this->stripe_invoice->getStripeInvoice($databaseInvoice['stripe_invoice_id']);
+            $stripeInvoice = $this->stripe_invoice->getStripeInvoice($stripe_invoice_id);
+            $stripeCustomer = $this->stripe_customer->getCustomer($stripeInvoice->customer);
+            $databaseInvoice = $this->database_invoice->getInvoice($stripeInvoice->id,  $stripeCustomer->id);
 
-            $to_email = $stripeInvoice->customer_email;
+            $to_email = $stripeCustomer->email;
             $invoice_number = 'Invoice #' . $databaseInvoice['id'];
-            $name = $stripeInvoice->customer_name;
+            $name =  $stripeCustomer->name;
             $to_name = $name;
 
             $subject = $invoice_number . ' for ' . $name;

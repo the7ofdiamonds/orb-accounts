@@ -7,20 +7,20 @@ use Exception;
 use WP_REST_Request;
 
 use ORB\Accounts\API\Stripe\StripeCustomers;
-use ORB\Accounts\Database\DatabaseCustomer;
+use ORB\Accounts\Database\DatabaseUsers;
 
-class Customers
+class Users
 {
     private $stripe_customers;
-    private $database_customer;
+    private $database_users;
 
     public function __construct($stripeClient)
     {
         $this->stripe_customers = new StripeCustomers($stripeClient);
-        $this->database_customer = new DatabaseCustomer();
+        $this->database_users = new DatabaseUsers();
     }
 
-    public function add_customer(WP_REST_Request $request)
+    public function add_user(WP_REST_Request $request)
     {
         try {
             $company_name = $request['company_name'];
@@ -105,7 +105,7 @@ class Customers
                 'client_name' => $first_name . ' ' . $last_name
             );
 
-            $customer = $this->stripe_customers->createCustomer(
+            $user = $this->stripe_customers->createCustomer(
                 $name,
                 $email,
                 $address,
@@ -127,13 +127,13 @@ class Customers
                 $metadata
             );
 
-            $stripe_customer_id = $customer->id;
+            $stripe_user_id = $user->id;
 
-            $customer_id = $this->database_customer->saveCustomer($user_id, $stripe_customer_id, $first_name, $last_name);
+            $user_id = $this->database_users->saveUser($user_id, $stripe_user_id, $email, $phone, $first_name, $last_name);
 
             $data = [
-                'customer_id' => $customer_id,
-                'stripe_customer_id' => $stripe_customer_id
+                'user_id' => $user_id,
+                'stripe_user_id' => $stripe_user_id
             ];
 
             return rest_ensure_response($data);
@@ -153,19 +153,19 @@ class Customers
         }
     }
 
-    public function get_customer(WP_REST_Request $request)
+    public function get_user(WP_REST_Request $request)
     {
         try {
             $user_email_encoded = $request->get_param('slug');
             $user_email = urldecode($user_email_encoded);
             $user = get_user_by('email', $user_email);
-            $customer_id = $user->id;
+            $user_id = $user->id;
 
-            $customer = $this->database_customer->getCustomer($customer_id);
+            $user = $this->database_users->getUser($user_id);
 
-            $customer = $this->stripe_customers->getCustomer($customer['stripe_customer_id']);
+            $user = $this->stripe_customers->getCustomer($user['stripe_user_id']);
 
-            return rest_ensure_response($customer);
+            return rest_ensure_response($user);
         } catch (Exception $e) {
             $error_message = $e->getMessage();
             $status_code = $e->getCode();
@@ -182,12 +182,12 @@ class Customers
         }
     }
 
-    public function update_customer(WP_REST_Request $request)
+    public function update_user(WP_REST_Request $request)
     {
         try {
             $stripe_customer_id = $request->get_param('slug');
             $tax_id = $request['tax_id'];
-            $customer_id = $request['customer_id'];
+            $user_id = $request['user_id'];
             $company_name = $request['company_name'];
             $first_name = $request['first_name'];
             $last_name = $request['last_name'];
@@ -245,9 +245,9 @@ class Customers
                 $name = $first_name . ' ' . $last_name;
             }
 
-            $updated_customer = $this->database_customer->updateCustomer($stripe_customer_id, $company_name, $first_name, $last_name);
+            $updated_user = $this->database_users->updateUser($stripe_customer_id, $email, $phone, $first_name, $last_name);
 
-            $updated_customer = $this->stripe_customers->updateCustomer(
+            $updated_user = $this->stripe_customers->updateCustomer(
                 $stripe_customer_id,
                 $name,
                 $email,
@@ -270,7 +270,7 @@ class Customers
                 $metadata
             );
 
-            return rest_ensure_response($updated_customer);
+            return rest_ensure_response($updated_user);
         } catch (Exception $e) {
             $error_message = $e->getMessage();
             $status_code = $e->getCode();

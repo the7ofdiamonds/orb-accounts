@@ -7,24 +7,22 @@ use Exception;
 use WP_REST_Request;
 
 use ORB\Accounts\API\Stripe\StripeCustomers;
-use ORB\Accounts\Database\DatabaseClient;
+use ORB\Accounts\Database\DatabaseUsers;
 
 class Clients
 {
     private $stripe_customers;
-    private $database_client;
+    private $database_users;
 
     public function __construct($stripeClient)
     {
         $this->stripe_customers = new StripeCustomers($stripeClient);
-        $this->database_client = new DatabaseClient();
+        $this->database_users = new DatabaseUsers();
     }
 
     function add_client(WP_REST_Request $request)
     {
         try {
-            $company_name = $request['company_name'];
-            $tax_id = $request['tax_id'];
             $first_name = $request['first_name'];
             $last_name = $request['last_name'];
             $email = $request['user_email'];
@@ -35,22 +33,18 @@ class Clients
             $state = $request['state'];
             $zipcode = $request['zipcode'];
             $country = $request['country'];
-            $metadata = $request['metadata'];
-            $payment_method_id = $request['payment_method_id'];
-            $description = $request['description'];
-            $balance = $request['balance'];
-            $cash_balance = $request['cash_balance'];
-            $coupon = $request['coupon'];
-            $invoice_prefix = $request['invoice_prefix'];
-            $invoice_settings = $request['invoice_settings'];
-            $next_invoice_sequence = $request['next_invoice_sequence'];
-            $preferred_locales = $request['preferred_locales'];
-            $promotion_code = $request['promotion_code'];
-            $source = $request['source'];
-            $tax = $request['tax'];
+            $shipping_address_line_1 = $request['shipping_address_line_1'];
+            $shipping_address_line_2 = $request['shipping_address_line_2'];
+            $shipping_city = $request['shipping_city'];
+            $shipping_state = $request['shipping_state'];
+            $shipping_zipcode = $request['shipping_zipcode'];
+            $shipping_country = $request['shipping_country'];
+            $company_name = $request['company_name'];
             $tax_id_type = $request['tax_id_type'];
+            $tax_id = $request['tax_id'];
             $tax_exempt = $request['tax_exempt'];
-            $test_clock = $request['test_clock'];
+            $invoice_settings = $request['invoice_settings'];
+            $preferred_locales = $request['preferred_locales'];
 
             $address = [
                 'line1' => $address_line_1,
@@ -61,16 +55,14 @@ class Clients
                 'country' => $country
             ];
 
-            if (!empty($shipping)) {
-                $shipping = [
-                    'line1' => $address_line_1,
-                    'line2' => $address_line_2,
-                    'city' => $city,
-                    'state' => $state,
-                    'postal_code' => $zipcode,
-                    'country' => $country
-                ];
-            }
+            $shipping = [
+                'line1' => $shipping_address_line_1,
+                'line2' => $shipping_address_line_2,
+                'city' => $shipping_city,
+                'state' => $shipping_state,
+                'postal_code' => $shipping_zipcode,
+                'country' => $shipping_country
+            ];
 
             $tax_id_data = array(
                 'type' => $tax_id_type,
@@ -98,42 +90,27 @@ class Clients
                 $name = $first_name . ' ' . $last_name;
             }
 
-            if (isset($company_name)) {
-                $name = $company_name;
-            }
-
             $metadata = array(
                 'user_id' => $user_id,
-                'client_name' => $first_name . ' ' . $last_name
+                'company_name' => $company_name
             );
 
             $customer = $this->stripe_customers->createCustomer(
                 $name,
                 $email,
+                $phone,
                 $address,
                 $shipping,
-                $phone,
-                $payment_method_id,
-                $description,
-                $balance,
-                $cash_balance,
-                $coupon,
-                $invoice_prefix,
-                $invoice_settings,
-                $next_invoice_sequence,
-                $preferred_locales,
-                $promotion_code,
-                $source,
-                $tax,
-                $tax_exempt,
+                $metadata,
                 $tax_id_data,
-                $test_clock,
-                $metadata
+                $tax_exempt,
+                $invoice_settings,
+                $preferred_locales
             );
 
             $stripe_customer_id = $customer->id;
 
-            $client_id = $this->database_client->saveClient($user_id, $stripe_customer_id, $first_name, $last_name);
+            $client_id = $this->database_users->saveUser($user_id, $stripe_customer_id, $email, $phone, $first_name, $last_name, $company_name);
 
             $data = [
                 'client_id' => $client_id,
@@ -165,11 +142,10 @@ class Clients
             $user = get_user_by('email', $user_email);
             $client_id = $user->id;
 
-            $client = $this->database_client->getClient($client_id);
+            $databaseClient = $this->database_users->getUser($client_id);
+            $stripeCustomer = $this->stripe_customers->getCustomer($databaseClient['stripe_customer_id']);
 
-            $client = $this->stripe_customers->getCustomer($client['stripe_customer_id']);
-            
-            return rest_ensure_response($client);
+            return rest_ensure_response($stripeCustomer);
         } catch (Exception $e) {
             $error_message = $e->getMessage();
             $status_code = $e->getCode();
@@ -252,7 +228,7 @@ class Clients
                 $name = $first_name . ' ' . $last_name;
             }
 
-            $updated_client = $this->database_client->updateClient($stripe_customer_id, $company_name, $first_name, $last_name);
+            $updated_client = $this->database_users->updateUser($stripe_customer_id, $email, $phone, $first_name, $last_name,  $company_name,);
 
             $updated_client = $this->stripe_customers->updateCustomer(
                 $stripe_customer_id,

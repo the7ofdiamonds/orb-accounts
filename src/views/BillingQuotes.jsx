@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getClient } from '../controllers/accountsClientSlice';
+import { getUser } from '../controllers/accountsUserSlice';
 import { getClientQuotes } from '../controllers/accountsQuoteSlice';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
@@ -11,7 +11,7 @@ function BillingQuotes() {
   const dispatch = useDispatch();
 
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.accountsClient
+    (state) => state.accountsUser
   );
   const { quoteLoading, quoteError, quotes, pdf } = useSelector(
     (state) => state.accountsQuote
@@ -19,7 +19,7 @@ function BillingQuotes() {
 
   useEffect(() => {
     if (user_email) {
-      dispatch(getClient());
+      dispatch(getUser());
     }
   }, [user_email, dispatch]);
 

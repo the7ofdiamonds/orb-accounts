@@ -3,7 +3,7 @@
 namespace ORB\Accounts\Database;
 
 use Exception;
-
+use Google\Service\Books\Resource\Onboarding;
 use Stripe\Quote;
 
 class DatabaseQuote
@@ -135,7 +135,7 @@ class DatabaseQuote
             );
 
             if (empty($quote)) {
-                throw new Exception('Quote with the ID' . $id . 'not found', 404);
+                throw new Exception('Quote with the ID ' . $id . 'not found', 404);
             }
 
             if ($this->wpdb->last_error) {
@@ -236,13 +236,17 @@ class DatabaseQuote
         }
     }
 
-    public function updateQuote(Quote $quote, $selections = '')
+    public function updateQuote(Quote $quote, $selections = '', $onboarding_links = '')
     {
         try {
             $data = array();
 
             if (empty($quote) || !is_object($quote)) {
                 throw new Exception('A Quote is required to update.');
+            }
+
+            if (empty($selections)) {
+                throw new Exception('Selections are required to update.');
             }
 
             $amount_subtotal = !empty($quote->amount_subtotal) ? $quote->amount_subtotal : null;
@@ -266,11 +270,12 @@ class DatabaseQuote
             if (!empty($amount_total)) {
                 $data['amount_total'] = $amount_total;
             }
-            if (!empty($selections)) {
-                $data['selections'] = $selections;
+            if (!empty($onboarding_links)) {
+                $data['onboarding_links'] = $onboarding_links;
             }
+
             if (!preg_match('/^qt_\w+$/', $quote->id)) {
-                throw new Exception('Invalid Stripe quote ID.');
+                throw new Exception('Invalid Stripe quote ID.', 400);
             }
 
             $where = array(

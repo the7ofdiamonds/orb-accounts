@@ -1,14 +1,54 @@
-.client-details {
+.start {
   form {
-    table {
-      tbody {
-        td {
-          padding: 0.375em;
-          input {
-            width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+
+    table.card {
+      padding: 0;
+      thead {
+        tr {
+          th {
+            h5 {
+              padding: 0.25em 0;
+              margin: 0;
+            }
           }
         }
       }
+
+      tbody {
+        tr {
+          border-bottom: none;
+          td {
+            padding: 0.375em;
+            input {
+              width: 100%;
+            }
+            p.email {
+              text-transform: lowercase;
+            }
+          }
+        }
+      }
+    }
+
+    .email {
+      text-transform: lowercase;
+      span {
+        text-transform: capitalize;
+        padding-right: .25rem;
+      }
+    }
+
+    .address {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

@@ -661,10 +661,11 @@ table {
   border-spacing: 0.375em;
   border-collapse: collapse;
 }
-table thead tr th {
+table thead {
   background-color: var(--orb-accounts-table-color);
+  width: 100%;
 }
-table thead tr th h4 {
+table thead tr th h5 {
   padding: 0.25em 0;
   margin: 0;
   color: var(--orb-accounts-table-color-text);
@@ -870,11 +871,45 @@ table tfoot tr:last-child {
     display: quote-table;
   }
 }
-.client-details form table tbody td {
+.start form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+.start form table.card {
+  padding: 0;
+}
+.start form table.card thead tr th h5 {
+  padding: 0.25em 0;
+  margin: 0;
+}
+.start form table.card tbody tr {
+  border-bottom: none;
+}
+.start form table.card tbody tr td {
   padding: 0.375em;
 }
-.client-details form table tbody td input {
+.start form table.card tbody tr td input {
   width: 100%;
+}
+.start form table.card tbody tr td p.email {
+  text-transform: lowercase;
+}
+.start form .email {
+  text-transform: lowercase;
+}
+.start form .email span {
+  text-transform: capitalize;
+  padding-right: 0.25rem;
+}
+.start form .address {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
 .dashboard .orb-services {

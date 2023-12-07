@@ -45,7 +45,6 @@ class EmailOnboarding
         $this->smtp_password = get_option('support_smtp_password');
         $this->from_email = get_option('support_email');
         $this->from_name = get_option('support_name');
-
     }
 
     function onboardingEmailMessage($databaseReceipt, $stripeInvoice, $subject)

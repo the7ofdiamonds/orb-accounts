@@ -15,8 +15,7 @@ class Database
 
         $this->createTables();
 
-        new DatabaseClient();
-        new DatabaseCustomer();
+        new DatabaseUsers();
         new DatabaseInvoice();
         new DatabaseQuote();
         new DatabaseReceipt();
@@ -24,8 +23,7 @@ class Database
 
     function createTables()
     {
-        $this->create_client_table();
-        $this->create_customer_table();
+        $this->create_users_table();
         $this->create_quote_table();
         $this->create_invoice_table();
         $this->create_receipt_table();
@@ -34,54 +32,19 @@ class Database
         $this->create_communication_types_table();
     }
 
-    function create_services_table()
+    function create_users_table()
     {
-        $table_name = 'orb_services';
+        $table_name = 'orb_users';
         $charset_collate = $this->wpdb->get_charset_collate();
 
         $sql = "CREATE TABLE {$table_name} (
             id INT NOT NULL AUTO_INCREMENT,
             created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            post_id VARCHAR(255) DEFAULT NULL,
-            features VARCHAR(255) DEFAULT NULL,
-            unit_amount VARCHAR(255) DEFAULT NULL,
-            description VARCHAR(255) DEFAULT NULL,
-            PRIMARY KEY (id)
-        ) $charset_collate;";
-
-        dbDelta($sql);
-    }
-
-    function create_client_table()
-    {
-        $table_name = 'orb_client';
-        $charset_collate = $this->wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$table_name} (
-            id INT NOT NULL AUTO_INCREMENT,
-            created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             user_id VARCHAR(255) DEFAULT NULL,
             stripe_customer_id VARCHAR(255) DEFAULT NULL,
-            company_name VARCHAR(255) DEFAULT NULL,
-            first_name VARCHAR(255) DEFAULT NULL,
-            last_name VARCHAR(255) DEFAULT NULL,
-            PRIMARY KEY (id)
-        ) $charset_collate;";
-
-        dbDelta($sql);
-    }
-
-    function create_customer_table()
-    {
-        $table_name = 'orb_customer';
-        $charset_collate = $this->wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$table_name} (
-            id INT NOT NULL AUTO_INCREMENT,
-            created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            user_id VARCHAR(255) DEFAULT NULL,
-            stripe_customer_id VARCHAR(255) DEFAULT NULL,
-            company_name VARCHAR(255) DEFAULT NULL,
+            email VARCHAR(255) DEFAULT NULL,
+            phone VARCHAR(255) DEFAULT NULL,
             first_name VARCHAR(255) DEFAULT NULL,
             last_name VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (id)
@@ -98,6 +61,7 @@ class Database
         $sql = "CREATE TABLE {$table_name} (
             id INT NOT NULL AUTO_INCREMENT,
             created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             stripe_customer_id VARCHAR(255) DEFAULT NULL,
             stripe_quote_id VARCHAR(255) DEFAULT NULL,
             status VARCHAR(255) DEFAULT NULL,
@@ -123,6 +87,7 @@ class Database
         $sql = "CREATE TABLE {$table_name} (
             id INT NOT NULL AUTO_INCREMENT,
             created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             stripe_customer_id VARCHAR(255) DEFAULT NULL,
             quote_id VARCHAR(255) DEFAULT NULL,
             stripe_invoice_id VARCHAR(255) DEFAULT NULL,
@@ -150,6 +115,7 @@ class Database
         $sql = "CREATE TABLE {$table_name} (
         id INT NOT NULL AUTO_INCREMENT,
         created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         invoice_id VARCHAR(255) DEFAULT NULL,
         stripe_invoice_id VARCHAR(255) DEFAULT NULL,
         payment_intent_id VARCHAR(255) DEFAULT NULL,
@@ -197,6 +163,7 @@ class Database
         $sql = "CREATE TABLE {$table_name} (
         id INT NOT NULL AUTO_INCREMENT,
         created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         client_id VARCHAR(255) DEFAULT NULL,
         summary VARCHAR(255) DEFAULT NULL,
         description VARCHAR(255) DEFAULT NULL,
@@ -218,6 +185,7 @@ class Database
         $sql = "CREATE TABLE {$table_name} (
         id INT NOT NULL AUTO_INCREMENT,
         created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         type VARCHAR(255) DEFAULT NULL,
         contact_info VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id)

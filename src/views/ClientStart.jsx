@@ -3,17 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
-  getClient,
-  addClient,
-  updateClient,
+  getUser,
+  addUser,
+  updateUser,
+  updateFirstName,
+  updateLastName,
   updatePhone,
-  updateName,
   updateAddress,
   updateAddress2,
   updateCity,
   updateState,
   updateZipcode,
-} from '../controllers/accountsClientSlice.js';
+  updateCountry,
+  updateShippingAddress,
+  updateShippingAddress2,
+  updateShippingCity,
+  updateShippingState,
+  updateShippingZipcode,
+  updateShippingCountry,
+  updateCompanyName,
+  updateTaxExempt,
+  updateTaxIDType,
+  updateTaxID,
+} from '../controllers/accountsUserSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -29,20 +41,36 @@ function ClientComponent() {
   );
 
   const {
-    user_email,
     clientLoading,
     stripe_customer_id,
-    name,
+    first_name,
+    last_name,
+    user_email,
+    phone,
     address_line_1,
     address_line_2,
     city,
     state,
     zipcode,
-    phone,
-  } = useSelector((state) => state.accountsClient);
+    country,
+    shipping_address_line_1,
+    shipping_address_line_2,
+    shipping_city,
+    shipping_state,
+    shipping_zipcode,
+    shipping_country,
+    company_name,
+    tax_exempt,
+    tax_id_type,
+    tax_id,
+  } = useSelector((state) => state.accountsUser);
 
-  const handleNameChange = (event) => {
-    dispatch(updateName(event.target.value));
+  const handleFirstNameChange = (event) => {
+    dispatch(updateFirstName(event.target.value));
+  };
+
+  const handleLastNameChange = (event) => {
+    dispatch(updateLastName(event.target.value));
   };
 
   const handlePhoneChange = (event) => {
@@ -69,29 +97,79 @@ function ClientComponent() {
     dispatch(updateZipcode(event.target.value));
   };
 
+  const handleCountryChange = (event) => {
+    dispatch(updateCountry(event.target.value));
+  };
+
+  const handleShippingAddressChange = (event) => {
+    dispatch(updateShippingAddress(event.target.value));
+  };
+
+  const handleShippingAddressChange2 = (event) => {
+    dispatch(updateShippingAddress2(event.target.value));
+  };
+
+  const handleShippingCityChange = (event) => {
+    dispatch(updateShippingCity(event.target.value));
+  };
+
+  const handleShippingStateChange = (event) => {
+    dispatch(updateShippingState(event.target.value));
+  };
+
+  const handleShippingZipcodeChange = (event) => {
+    dispatch(updateShippingZipcode(event.target.value));
+  };
+
+  const handleShippingCountryChange = (event) => {
+    dispatch(updateShippingCountry(event.target.value));
+  };
+
+  const handleCompanyNameChange = (event) => {
+    dispatch(updateCompanyName(event.target.value));
+  };
+
+  const handleTaxExemptChange = (event) => {
+    dispatch(updateTaxExempt(event.target.value));
+  };
+
+  const handleTaxIDTypeChange = (event) => {
+    dispatch(updateTaxIDType(event.target.value));
+  };
+
+  const handleTaxIDChange = (event) => {
+    dispatch(updateTaxID(event.target.value));
+  };
+
   const [isFomCompleted, setIsFormCompleted] = useState(false);
 
   useEffect(() => {
     if (user_email) {
-      dispatch(getClient(user_email)).then((response) => {
-        if (response.error !== undefined) {
+      dispatch(getUser(user_email));
+    }
+  }, [user_email, dispatch]);
+
+  useEffect(() => {
+    if (first_name && last_name && address_line_1 && city && state && zipcode) {
+      setIsFormCompleted(true);
+    }
+  }, [first_name, last_name, address_line_1, city, state, zipcode]);
+
+  const handleClick = async () => {
+    if (stripe_customer_id) {
+      dispatch(updateUser()).then((response) => {
+        if (response.error === undefined) {
+          window.location.href = '/client/selections';
+        } else {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         }
       });
     }
-  }, [user_email, dispatch]);
 
-  useEffect(() => {
-    if (address_line_1 && city && state && zipcode) {
-      setIsFormCompleted(true);
-    }
-  }, [name, address_line_1, city, state, zipcode]);
-
-  const handleClick = async () => {
     if (name === '') {
-      setMessage('Please provide a first name.');
+      setMessage('Please provide a name.');
       setMessageType('error');
     } else if (address_line_1 === '') {
       setMessage('Please provide an address.');
@@ -109,17 +187,7 @@ function ClientComponent() {
       (isFomCompleted && stripe_customer_id === '') ||
       stripe_customer_id === undefined
     ) {
-      dispatch(addClient()).then((response) => {
-        if (response.error === undefined) {
-          window.location.href = '/client/selections';
-        } else {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
-    } else if (stripe_customer_id) {
-      dispatch(updateClient()).then((response) => {
+      dispatch(addUser()).then((response) => {
         if (response.error === undefined) {
           window.location.href = '/client/selections';
         } else {
@@ -138,35 +206,62 @@ function ClientComponent() {
   return (
     <>
       <section className="start">
-        <h2 className="title">CLIENT DETAILS</h2>
+        <h2 className="title">user details</h2>
+        <form>
+          <table className="card">
+            <thead>
+              <tr>
+                <th>
+                  <h5 className="title">contact</h5>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <input
+                    className="input"
+                    name="first_name"
+                    id="first_name"
+                    placeholder="First Name"
+                    onChange={handleFirstNameChange}
+                    value={first_name}
+                  />
+                </td>
+                <td>
+                  <input
+                    className="input"
+                    name="last_name"
+                    id="last_name"
+                    placeholder="Last Name"
+                    onChange={handleLastNameChange}
+                    value={last_name}
+                  />
+                </td>
+                <td>
+                  <input
+                    className="input"
+                    name="phone"
+                    type="tel"
+                    placeholder="Phone"
+                    onChange={handlePhoneChange}
+                    value={phone}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-        <div className="client-details card" id="client-details">
-          <form>
-            <table>
-              <thead></thead>
-              <tbody>
+          <div className="address">
+            <table className="card">
+              <thead>
                 <tr>
-                  <td colSpan="2">
-                    <input
-                      className="input"
-                      name="name"
-                      id="name"
-                      placeholder="Name"
-                      onChange={handleNameChange}
-                      value={name}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      className="input"
-                      name="phone"
-                      type="tel"
-                      placeholder="Phone"
-                      onChange={handlePhoneChange}
-                      value={phone}
-                    />
-                  </td>
+                  <th colSpan="3">
+                    <h5 className="title">address</h5>
+                  </th>
                 </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td colSpan="2">
                     <input
@@ -221,11 +316,156 @@ function ClientComponent() {
                     />
                   </td>
                 </tr>
+                <tr>
+                  <td colSpan="2">
+                    <input
+                      className="input"
+                      name="country"
+                      id="country"
+                      placeholder="Country"
+                      onChange={handleCountryChange}
+                      value={country}
+                    />
+                  </td>
+                </tr>
               </tbody>
-              <tfoot></tfoot>
             </table>
-          </form>
-        </div>
+
+            <table className="card">
+              <thead>
+                <tr>
+                  <th colSpan="3">
+                    <h5 className="title">shipping address</h5>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colSpan="2">
+                    <input
+                      className="input"
+                      name="shipping_address_line_1"
+                      id="shipping_street"
+                      placeholder="Shipping Street Address"
+                      onChange={handleShippingAddressChange}
+                      value={shipping_address_line_1}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_address_line_2"
+                      id="shipping_street2"
+                      placeholder="Suite #"
+                      onChange={handleShippingAddressChange2}
+                      value={shipping_address_line_2}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_city"
+                      id="shipping_city"
+                      placeholder="Shipping City"
+                      onChange={handleShippingCityChange}
+                      value={shipping_city}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_state"
+                      id="shipping_state"
+                      placeholder="Shipping State"
+                      onChange={handleShippingStateChange}
+                      value={shipping_state}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_zipcode"
+                      id="shipping_zipcode"
+                      placeholder="Shipping Zipcode"
+                      onChange={handleShippingZipcodeChange}
+                      value={shipping_zipcode}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan="2">
+                    <input
+                      className="input"
+                      name="shipping_country"
+                      id="shipping_country"
+                      placeholder="Shipping Country"
+                      onChange={handleShippingCountryChange}
+                      value={shipping_country}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <table className="card">
+            <thead>
+              <tr>
+                <th colSpan="3">
+                  <h5 className="title">company details</h5>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan="2">
+                  <input
+                    className="input"
+                    name="company_name"
+                    id="company_name"
+                    placeholder="Company Name"
+                    onChange={handleCompanyNameChange}
+                    value={company_name}
+                  />
+                </td>
+                <td>
+                  <input
+                    className="input"
+                    name="tax_exempt"
+                    id="tax_exempt"
+                    placeholder="Tax Exempt"
+                    onChange={handleTaxExemptChange}
+                    value={tax_exempt}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    className="input"
+                    name="tax_id_type"
+                    id="tax_id_type"
+                    placeholder="Tax ID Type"
+                    onChange={handleTaxIDTypeChange}
+                    value={tax_id_type}
+                  />
+                </td>
+                <td>
+                  <input
+                    className="input"
+                    name="tax_id"
+                    id="tax_id"
+                    placeholder="Tax ID"
+                    onChange={handleTaxIDChange}
+                    value={tax_id}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
 
         <StatusBar message={message} messageType={messageType} />
 

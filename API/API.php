@@ -45,8 +45,7 @@ class API
         // PDF being used ???
         $pdf = new PDF;
 
-        $clients = new Clients($stripeClient);
-        $customers = new Customers($stripeClient);
+        $user = new Users($stripeClient);
         $email = new Email($stripeClient, $mailer);
         new EmailQuote($stripeClient, $mailer);
         new EmailInvoice($stripeClient, $mailer);
@@ -57,42 +56,24 @@ class API
         $receipt = new Receipt($stripeClient);
         $stripe = new Stripe($stripeClient);
 
-        register_rest_route('orb/user/client/v1', '/add', array(
+        register_rest_route('orb/user/v1', '/add', array(
             'methods' => 'POST',
-            'callback' => array($clients, 'add_client'),
+            'callback' => array($user, 'add_user'),
             'permission_callback' => '__return_true',
         ));
-
-        register_rest_route('orb/user/client/v1', '/(?P<slug>[a-zA-Z0-9-_%.]+)', array(
+        
+        register_rest_route('orb/user/v1', '/(?P<slug>[a-zA-Z0-9-_%]+)', array(
             'methods' => 'GET',
-            'callback' => array($clients, 'get_client'),
+            'callback' => array($user, 'get_user'),
             'permission_callback' => '__return_true',
         ));
-
-        register_rest_route('orb/client/v1', '/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        
+        register_rest_route('orb/user/v1', '/update/(?P<slug>[a-zA-Z0-9-_%]+)', array(
             'methods' => 'PATCH',
-            'callback' => array($clients, 'update_client'),
+            'callback' => array($user, 'update_user'),
             'permission_callback' => '__return_true',
         ));
-
-        register_rest_route('orb/customer/v1', '/add', array(
-            'methods' => 'POST',
-            'callback' => array($customers, 'add_customer'),
-            'permission_callback' => '__return_true',
-        ));
-
-        register_rest_route('orb/customer/v1', '/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'GET',
-            'callback' => array($customers, 'get_customer'),
-            'permission_callback' => '__return_true',
-        ));
-
-        register_rest_route('orb/customer/v1', '/update/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'PATCH',
-            'callback' => array($customers, 'update_customer'),
-            'permission_callback' => '__return_true',
-        ));
-
+        
         register_rest_route('orb/email/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($email, 'send_quote_email'),

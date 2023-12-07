@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { accountsClientSlice } from '../controllers/accountsClientSlice.js';
+import { accountsUserSlice } from '../controllers/accountsUserSlice.js';
 import { accountsCustomerSlice } from '../controllers/accountsCustomerSlice.js';
 import { accountsEmailSlice } from '../controllers/accountsEmail.js';
 import { accountsInvoiceSlice } from '../controllers/accountsInvoiceSlice.js';
@@ -12,7 +12,7 @@ import { accountsStripeSlice } from '../controllers/accountsStripeSlice.js';
 
 const store = configureStore({
   reducer: {
-    accountsClient: accountsClientSlice.reducer,
+    accountsUser: accountsUserSlice.reducer,
     accountsCustomer: accountsCustomerSlice.reducer,
     accountsEmail: accountsEmailSlice.reducer,
     accountsInvoice: accountsInvoiceSlice.reducer,

@@ -46,7 +46,7 @@ class Quote
 
             $stripeQuote = $this->stripe_quote->createStripeQuote($stripe_customer_id, $selections);
             $quote_id = $this->database_quote->saveQuote($stripeQuote, $selections, $onboarding_links);
-            
+
             return rest_ensure_response($quote_id);
         } catch (Exception $e) {
 
@@ -115,11 +115,14 @@ class Quote
     {
         try {
             $stripe_quote_id = $request->get_param('slug');
-            $selections = $request['selections'];
+            $request_body = $request->get_body();
+            $body = json_decode($request_body, true);
 
-            $stripe_quote = $this->stripe_quote->updateStripeQuote($stripe_quote_id, $selections);
 
-            return rest_ensure_response($this->database_quote->updateQuote($stripe_quote, $selections));
+            $stripeQuote = $this->stripe_quote->updateStripeQuote($stripe_quote_id, $body['selections']);
+            $this->database_quote->updateQuote($stripeQuote, $body['selections']);
+
+            return rest_ensure_response($stripeQuote);
         } catch (Exception $e) {
 
             $error_message = $e->getMessage();
@@ -172,30 +175,35 @@ class Quote
             $selections = $body['selections'];
             $onboarding_links = $body['onboarding_links'];
 
-            if (empty($selections)) {
-                $msg = 'Selections are required';
-                $code = 404;
-
-                throw new Exception($msg, $code);
+            if (!preg_match('/^qt_\w+$/', $stripe_quote_id)) {
+                throw new Exception('Invalid Stripe Quote ID.');
             }
 
-            $quote = $this->stripe_quote->finalizeQuote($stripe_quote_id);
+            $stripeQuote = $this->stripe_quote->finalizeQuote($stripe_quote_id);
 
-            $quote_id = $this->database_quote->saveQuote($quote, $selections, $onboarding_links);
+            if (empty($stripeQuote) && !is_object($stripeQuote)) {
+                throw new Exception('A Quote is required to save.', 400);
+            }
 
-            if ($quote_id) {
-                $amount_subtotal = $quote->amount_subtotal;
-                $amount_discount = $quote->computed->upfront->total_details->amount_discount;
-                $amount_shipping = $quote->computed->upfront->total_details->amount_shipping;
-                $amount_tax = $quote->computed->upfront->total_details->amount_tax;
-                $amount_total = $quote->amount_total;
+            if (empty($selections)) {
+                throw new Exception('Selections are required', 400);
+            }
+
+            $databaseQuote = $this->database_quote->updateQuote($stripeQuote, $selections, $onboarding_links);
+
+            if ($databaseQuote) {
+                $amount_subtotal = $stripeQuote->amount_subtotal;
+                $amount_discount = $stripeQuote->computed->upfront->total_details->amount_discount;
+                $amount_shipping = $stripeQuote->computed->upfront->total_details->amount_shipping;
+                $amount_tax = $stripeQuote->computed->upfront->total_details->amount_tax;
+                $amount_total = $stripeQuote->amount_total;
 
                 $quote_saved = [
-                    'quote_id' => $quote_id,
-                    'stripe_customer_id' => $quote->customer,
-                    'stripe_quote_id' => $quote->id,
-                    'status' => $quote->status,
-                    'expires_at' => $quote->expires_at,
+                    'quote_id' => $databaseQuote['id'],
+                    'stripe_customer_id' => $stripeQuote->customer,
+                    'stripe_quote_id' => $stripeQuote->id,
+                    'status' => $stripeQuote->status,
+                    'expires_at' => $stripeQuote->expires_at,
                     'selections' => $selections,
                     'amount_subtotal' => $amount_subtotal,
                     'amount_discount' => $amount_discount,
@@ -205,9 +213,6 @@ class Quote
                 ];
 
                 return rest_ensure_response($quote_saved);
-            } else {
-
-                return rest_ensure_response($quote_id);
             }
         } catch (Exception $e) {
 

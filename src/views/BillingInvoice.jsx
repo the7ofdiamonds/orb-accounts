@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getClient } from '../controllers/accountsClientSlice.js';
+import { getUser } from '../controllers/accountsUserSlice.js';
 import {
   getInvoiceByID,
   finalizeInvoice,
@@ -66,7 +66,7 @@ function InvoiceComponent() {
 
   useEffect(() => {
     if (user_email) {
-      dispatch(getClient()).then((response) => {
+      dispatch(getUser()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');

@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchServices } from '../controllers/accountsServicesSlice.js';
-import { getClient } from '../controllers/accountsClientSlice.js';
+import { getUser } from '../controllers/accountsUserSlice.js';
 import {
   addSelections,
   calculateSelections,
   addOnboardingLink,
   createQuote,
+  updateQuote,
   finalizeQuote,
   getClientQuotes,
   getQuote,
-  getQuoteByID
 } from '../controllers/accountsQuoteSlice.js';
-import { updateStripeQuote } from '../controllers/accountsStripeSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -32,7 +31,7 @@ function SelectionsComponent() {
     (state) => state.accountsServices
   );
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.accountsClient
+    (state) => state.accountsUser
   );
   const {
     quoteLoading,
@@ -44,10 +43,10 @@ function SelectionsComponent() {
     selections,
     total,
   } = useSelector((state) => state.accountsQuote);
-console.log(services);
+
   useEffect(() => {
     if (user_email) {
-      dispatch(getClient()).then((response) => {
+      dispatch(getUser()).then((response) => {
         if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
@@ -126,18 +125,6 @@ console.log(services);
     }
   }, [stripe_quote_id, dispatch]);
 
-  useEffect(() => {
-    if (quote_id) {
-      dispatch(getQuoteByID()).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
-    }
-  }, [quote_id, dispatch]);
-
   const handleCheckboxChange = (
     event,
     id,
@@ -159,49 +146,40 @@ console.log(services);
   };
 
   const handleClick = () => {
-    if (selections.length === 0) {
-      setMessageType('error');
-    } else if (
-      (stripe_quote_id &&
-        quote_status === 'canceled' &&
-        selections.length > 0) ||
-      (stripe_quote_id === '' &&
-        quote_status === '' &&
-        selections.length > 0 &&
-        stripe_customer_id)
-    ) {
-      dispatch(createQuote(selections)).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        } 
-      });
-    } else if (
-      stripe_quote_id &&
-      quote_status === 'draft' &&
-      selections.length > 0
-    ) {
-      dispatch(updateStripeQuote()).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
-    } else if (stripe_quote_id && quote_status === 'draft') {
-      dispatch(finalizeQuote()).then((response) => {
-        if (response.error !== undefined) {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
-    } else if (
-      quote_id &&
-      (quote_status === 'open' || quote_status === 'accepted')
-    ) {
+    if (quote_id && (quote_status === 'open' || quote_status === 'accepted')) {
       window.location.href = `/billing/quote/${quote_id}`;
+    }
+
+    if (quote_status === 'draft') {
+      dispatch(updateQuote()).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        } else {
+          dispatch(finalizeQuote()).then((response) => {
+            if (response.error !== undefined) {
+              console.error(response.error.message);
+              setMessageType('error');
+              setMessage(response.error.message);
+            } else {
+              window.location.href = `/billing/quote/${response.payload.quote_id}`;
+            }
+          });
+        }
+      });
+    }
+
+    if (stripe_quote_id === '' || quote_status === 'canceled') {
+      dispatch(createQuote()).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        } else {
+          window.location.href = `/billing/quote/${response.payload}`;
+        }
+      });
     }
   };
 

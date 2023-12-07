@@ -130,26 +130,12 @@ class StripeQuote
     public function updateStripeQuote($stripe_quote_id, $selections)
     {
         try {
-            if (empty($stripe_customer_id)) {
-                $msg = 'Stripe Customer ID is required';
-                $message = array(
-                    'message' => $msg,
-                );
-                $response = rest_ensure_response($message);
-                $response->set_status(404);
-
-                return $response;
+            if (empty($stripe_quote_id)) {
+                throw new Exception('Stripe Customer ID is required', 400);
             }
 
             if (empty($selections)) {
-                $msg = 'Selections are required';
-                $message = array(
-                    'message' => $msg,
-                );
-                $response = rest_ensure_response($message);
-                $response->set_status(404);
-
-                return $response;
+                throw new Exception('Selections are required', 400);
             }
 
             $line_items = [];
