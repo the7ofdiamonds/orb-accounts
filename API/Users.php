@@ -127,13 +127,11 @@ class Users
                 $metadata
             );
 
-            $stripe_user_id = $user->id;
-
             $user_id = $this->database_users->saveUser($user_id, $stripe_user_id, $email, $phone, $first_name, $last_name);
 
             $data = [
                 'user_id' => $user_id,
-                'stripe_user_id' => $stripe_user_id
+                'stripe_user_id' => $user->id
             ];
 
             return rest_ensure_response($data);
@@ -156,16 +154,13 @@ class Users
     public function get_user(WP_REST_Request $request)
     {
         try {
-            $user_email_encoded = $request->get_param('slug');
-            $user_email = urldecode($user_email_encoded);
+            $slug = $request->get_param('slug');
+            $user_email = urldecode($slug);
             $user = get_user_by('email', $user_email);
-            $user_id = $user->id;
 
-            $user = $this->database_users->getUser($user_id);
+            $user = $this->database_users->getUser($user->id);
 
-            $user = $this->stripe_customers->getCustomer($user['stripe_user_id']);
-
-            return rest_ensure_response($user);
+            return rest_ensure_response($this->stripe_customers->getCustomer($user['stripe_customer_id']));
         } catch (Exception $e) {
             $error_message = $e->getMessage();
             $status_code = $e->getCode();
@@ -186,9 +181,6 @@ class Users
     {
         try {
             $stripe_customer_id = $request->get_param('slug');
-            $tax_id = $request['tax_id'];
-            $user_id = $request['user_id'];
-            $company_name = $request['company_name'];
             $first_name = $request['first_name'];
             $last_name = $request['last_name'];
             $email = $request['user_email'];
@@ -201,18 +193,15 @@ class Users
             $country = $request['country'];
             $metadata = $request['metadata'];
             $description = $request['description'];
-            $balance = $request['balance'];
-            $cash_balance = $request['cash_balance'];
-            $coupon = $request['coupon'];
             $invoice_prefix = $request['invoice_prefix'];
             $invoice_settings = $request['invoice_settings'];
-            $next_invoice_sequence = $request['next_invoice_sequence'];
-            $preferred_locales = $request['preferred_locales'];
-            $promotion_code = $request['promotion_code'];
-            $source = $request['source'];
-            // $tax = $request['tax'];
-            // $tax_id_type = $request['tax_id_type'];
-            // $tax_exempt = $request['tax_exempt'];
+            $user_id = $request['user_id'];
+            $company_name = $request['company_name'];
+            $tax_exempt = $request['tax_exempt'];
+            $tax_id_type = $request['tax_id_type'];
+            $tax_id = $request['tax_id'];
+
+            $name = $first_name . ' ' . $last_name;
 
             $address = [
                 'line1' => $address_line_1,
@@ -223,53 +212,36 @@ class Users
                 'country' => $country
             ];
 
-            if (!empty($shipping)) {
-                $shipping = [
-                    'line1' => $address_line_1,
-                    'line2' => $address_line_2,
-                    'city' => $city,
-                    'state' => $state,
-                    'postal_code' => $zipcode,
-                    'country' => $country
-                ];
-            }
+            // $shipping = [
+            //     'line1' => $address_line_1,
+            //     'line2' => $address_line_2,
+            //     'city' => $city,
+            //     'state' => $state,
+            //     'postal_code' => $zipcode,
+            //     'country' => $country
+            // ];
 
             // $tax_id_data = array(
             //     'type' => $tax_id_type,
             //     'value' => $tax_id
             // );
 
-            if (!empty($company_name)) {
-                $name = $first_name . ' ' . $last_name . ' - ' . $company_name;
-            } else {
-                $name = $first_name . ' ' . $last_name;
-            }
-
             $updated_user = $this->database_users->updateUser($stripe_customer_id, $email, $phone, $first_name, $last_name);
-
+            
             $updated_user = $this->stripe_customers->updateCustomer(
                 $stripe_customer_id,
-                $name,
                 $email,
-                $address,
-                $shipping,
                 $phone,
-                $description,
-                $balance,
-                $cash_balance,
-                $coupon,
-                $invoice_prefix,
-                $invoice_settings,
-                $next_invoice_sequence,
-                $preferred_locales,
-                $promotion_code,
-                $source,
-                // $tax,
-                // $tax_exempt,
+                $name,
+                $address,
+                // $shipping,
+                $tax_exempt,
                 // $tax_id_data,
-                $metadata
+                $metadata,
+                $invoice_settings,
+                $preferred_locales,
             );
-
+            error_log(print_r($updated_user, true));
             return rest_ensure_response($updated_user);
         } catch (Exception $e) {
             $error_message = $e->getMessage();

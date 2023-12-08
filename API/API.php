@@ -62,13 +62,13 @@ class API
             'permission_callback' => '__return_true',
         ));
         
-        register_rest_route('orb/user/v1', '/(?P<slug>[a-zA-Z0-9-_%]+)', array(
+        register_rest_route('orb/users/v1', '/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
             'methods' => 'GET',
             'callback' => array($user, 'get_user'),
             'permission_callback' => '__return_true',
         ));
         
-        register_rest_route('orb/user/v1', '/update/(?P<slug>[a-zA-Z0-9-_%]+)', array(
+        register_rest_route('orb/user/v1', '/update/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
             'methods' => 'PATCH',
             'callback' => array($user, 'update_user'),
             'permission_callback' => '__return_true',

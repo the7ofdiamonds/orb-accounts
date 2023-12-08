@@ -25,6 +25,7 @@ import {
   updateTaxExempt,
   updateTaxIDType,
   updateTaxID,
+  splitName
 } from '../controllers/accountsUserSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
@@ -43,6 +44,7 @@ function ClientComponent() {
   const {
     clientLoading,
     stripe_customer_id,
+    name,
     first_name,
     last_name,
     user_email,
@@ -145,7 +147,7 @@ function ClientComponent() {
 
   useEffect(() => {
     if (user_email) {
-      dispatch(getUser(user_email));
+      dispatch(getUser());
     }
   }, [user_email, dispatch]);
 
@@ -154,6 +156,12 @@ function ClientComponent() {
       setIsFormCompleted(true);
     }
   }, [first_name, last_name, address_line_1, city, state, zipcode]);
+
+  useEffect(()=>{
+    if(name){
+      dispatch(splitName(name));
+    }
+  },[name, dispatch]);
 
   const handleClick = async () => {
     if (stripe_customer_id) {

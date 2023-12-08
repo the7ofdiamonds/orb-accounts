@@ -84,6 +84,7 @@ function ClientComponent() {
   const {
     clientLoading,
     stripe_customer_id,
+    name,
     first_name,
     last_name,
     user_email,
@@ -165,7 +166,7 @@ function ClientComponent() {
   const [isFomCompleted, setIsFormCompleted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
-      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.getUser)(user_email));
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.getUser)());
     }
   }, [user_email, dispatch]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
@@ -173,6 +174,11 @@ function ClientComponent() {
       setIsFormCompleted(true);
     }
   }, [first_name, last_name, address_line_1, city, state, zipcode]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (name) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitName)(name));
+    }
+  }, [name, dispatch]);
   const handleClick = async () => {
     if (stripe_customer_id) {
       dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateUser)()).then(response => {

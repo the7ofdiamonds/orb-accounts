@@ -200,11 +200,11 @@ function SelectionsComponent() {
           <table>
             <thead>
               <tr>
-                <th colSpan={2}>
-                  <h4 className="title">service</h4>
+                <th colSpan="2">
+                  <h5 className="title">service</h5>
                 </th>
                 <th>
-                  <h4 className="title">cost</h4>
+                  <h5 className="title">cost</h5>
                 </th>
               </tr>
             </thead>
@@ -248,12 +248,12 @@ function SelectionsComponent() {
                         <td
                           className="feature-cost table-number"
                           id="feature_cost">
-                          <h4>
+                          <h5>
                             {new Intl.NumberFormat('us', {
                               style: 'currency',
                               currency: 'USD',
                             }).format(price)}
-                          </h4>
+                          </h5>
                         </td>
                       </tr>
                     );
@@ -261,24 +261,24 @@ function SelectionsComponent() {
                 </React.Fragment>
               ) : (
                 <tr>
-                  <td colSpan={3}>
-                    <h3>No services to show yet</h3>
+                  <td colSpan="3">
+                    <h5>No services to show yet</h5>
                   </td>
                 </tr>
               )}
             </tbody>
             <tfoot>
               <tr>
-                <th colSpan={2}>
-                  <h4 className="title">TOTAL</h4>
+                <th colSpan="2">
+                  <h5 className="title">TOTAL</h5>
                 </th>
                 <th>
-                  <h4 className="subtotal">
+                  <h5 className="subtotal">
                     {new Intl.NumberFormat('us', {
                       style: 'currency',
                       currency: 'USD',
                     }).format(total)}
-                  </h4>
+                  </h5>
                 </th>
               </tr>
             </tfoot>

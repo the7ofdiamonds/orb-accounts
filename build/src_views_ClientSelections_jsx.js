@@ -234,10 +234,10 @@ function SelectionsComponent() {
   }, "selections"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "quote-card card"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    colSpan: 2
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    colSpan: "2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
-  }, "service")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+  }, "service")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
   }, "cost")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, services && services.length ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, services.map(service => {
     const {
@@ -261,17 +261,17 @@ function SelectionsComponent() {
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
       className: "feature-cost table-number",
       id: "feature_cost"
-    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, new Intl.NumberFormat('us', {
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, new Intl.NumberFormat('us', {
       style: 'currency',
       currency: 'USD'
     }).format(price))));
   })) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: 3
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "No services to show yet")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    colSpan: 2
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+    colSpan: "3"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "No services to show yet")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    colSpan: "2"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
-  }, "TOTAL")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", {
+  }, "TOTAL")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "subtotal"
   }, new Intl.NumberFormat('us', {
     style: 'currency',

@@ -27,9 +27,6 @@ class Database
         $this->create_quote_table();
         $this->create_invoice_table();
         $this->create_receipt_table();
-        $this->create_accounts_receivable();
-        $this->create_schedule_table();
-        $this->create_communication_types_table();
     }
 
     function create_users_table()
@@ -129,65 +126,6 @@ class Database
         name VARCHAR(255) DEFAULT NULL,
         receipt_pdf_url VARCHAR(255) DEFAULT NULL,
         onboarding_link TEXT DEFAULT NULL,
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-
-        dbDelta($sql);
-    }
-
-    function create_accounts_receivable()
-    {
-        $table_name = 'orb_accounts_receivable';
-        $charset_collate = $this->wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$table_name} (
-        id INT NOT NULL AUTO_INCREMENT,
-        created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        invoice_id VARCHAR(255) DEFAULT NULL,
-        description VARCHAR(255) DEFAULT NULL,
-        ref VARCHAR(255) DEFAULT NULL,
-        debit VARCHAR(255) DEFAULT NULL,
-        credit VARCHAR(255) DEFAULT NULL,
-        balance VARCHAR(255) DEFAULT NULL,        
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-
-        dbDelta($sql);
-    }
-
-    function create_schedule_table()
-    {
-        $table_name = 'orb_schedule';
-        $charset_collate = $this->wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$table_name} (
-        id INT NOT NULL AUTO_INCREMENT,
-        created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        client_id VARCHAR(255) DEFAULT NULL,
-        summary VARCHAR(255) DEFAULT NULL,
-        description VARCHAR(255) DEFAULT NULL,
-        google_event_id VARCHAR(255) DEFAULT NULL,
-        start_date VARCHAR(255) DEFAULT NULL,
-        start_time VARCHAR(255) DEFAULT NULL,
-        calendar_link VARCHAR(255) DEFAULT NULL,
-        PRIMARY KEY (id)
-    ) $charset_collate;";
-
-        dbDelta($sql);
-    }
-
-    function create_communication_types_table()
-    {
-        $table_name = 'orb_communication_types';
-        $charset_collate = $this->wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$table_name} (
-        id INT NOT NULL AUTO_INCREMENT,
-        created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        type VARCHAR(255) DEFAULT NULL,
-        contact_info VARCHAR(255) DEFAULT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 

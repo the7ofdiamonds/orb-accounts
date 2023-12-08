@@ -99,7 +99,7 @@ export const getUser = createAsyncThunk('user/getUser', async (_, { getState }) 
         const { user_email } = getState().accountsUser;
         const encodedEmail = encodeURIComponent(user_email);
 
-        const response = await fetch(`/wp-json/orb/user/v1/${encodedEmail}`, {
+        const response = await fetch(`/wp-json/orb/users/v1/${encodedEmail}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,6 +122,7 @@ export const getUser = createAsyncThunk('user/getUser', async (_, { getState }) 
 export const updateUser = createAsyncThunk('user/updateUser', async (_, { getState }) => {
     try {
         const {
+            stripe_customer_id,
             first_name,
             last_name,
             user_email,
@@ -247,6 +248,13 @@ export const accountsUserSlice = createSlice({
         updateTaxID: (state, action) => {
             state.tax_id = action.payload;
         },
+        splitName: (state, action) => {
+            const fullName = action.payload;
+            const [firstName, lastName] = fullName.split(' ');
+
+            state.first_name = firstName;
+            state.last_name = lastName;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -261,11 +269,14 @@ export const accountsUserSlice = createSlice({
                 state.userError = '';
                 state.stripe_customer_id = action.payload.id
                 state.name = action.payload.name
-                state.address_line_1 = action.payload.address.line1
-                state.address_line_2 = action.payload.address.line2
-                state.city = action.payload.address.city
-                state.state = action.payload.address.state
-                state.zipcode = action.payload.address.postal_code
+                if (action.payload && action.payload.address) {
+                    state.address_line_1 = action.payload.address.line1
+                    state.address_line_2 = action.payload.address.line2
+                    state.city = action.payload.address.city
+                    state.state = action.payload.address.state
+                    state.zipcode = action.payload.address.postal_code
+                    state.country = action.payload.address.country
+                }
                 state.email = action.payload.email
                 state.phone = action.payload.phone
             })
@@ -276,11 +287,14 @@ export const accountsUserSlice = createSlice({
                 state.company_name = action.payload.name;
                 state.first_name = action.payload.first_name;
                 state.last_name = action.payload.last_name;
-                state.address_line_1 = action.payload.address.line1
-                state.address_line_2 = action.payload.address.line2
-                state.city = action.payload.address.city
-                state.state = action.payload.address.state
-                state.zipcode = action.payload.address.postal_code
+                if (action.payload && action.payload.address) {
+                    state.address_line_1 = action.payload.address.line1
+                    state.address_line_2 = action.payload.address.line2
+                    state.city = action.payload.address.city
+                    state.state = action.payload.address.state
+                    state.zipcode = action.payload.address.postal_code
+                    state.country = action.payload.address.country
+                }
                 state.email = action.payload.email
                 state.phone = action.payload.phone
             })
@@ -304,7 +318,7 @@ export const accountsUserSlice = createSlice({
     }
 });
 
-export const {    
+export const {
     updateFirstName,
     updateLastName,
     updatePhone,
@@ -324,6 +338,7 @@ export const {
     updateTaxExempt,
     updateTaxIDType,
     updateTaxID,
+    splitName
 } = accountsUserSlice.actions;
 
 export default accountsUserSlice;
