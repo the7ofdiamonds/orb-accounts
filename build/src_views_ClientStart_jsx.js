@@ -95,6 +95,10 @@ function ClientComponent() {
     state,
     zipcode,
     country,
+    shipping_name,
+    shipping_first_name,
+    shipping_last_name,
+    shipping_phone,
     shipping_address_line_1,
     shipping_address_line_2,
     shipping_city,
@@ -132,6 +136,15 @@ function ClientComponent() {
   };
   const handleCountryChange = event => {
     dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateCountry)(event.target.value));
+  };
+  const handleShippingFirstNameChange = event => {
+    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateShippingFirstName)(event.target.value));
+  };
+  const handleShippingLastNameChange = event => {
+    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateShippingLastName)(event.target.value));
+  };
+  const handleShippingPhoneChange = event => {
+    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateShippingPhone)(event.target.value));
   };
   const handleShippingAddressChange = event => {
     dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateShippingAddress)(event.target.value));
@@ -179,6 +192,11 @@ function ClientComponent() {
       dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitName)(name));
     }
   }, [name, dispatch]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (shipping_name) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitShippingName)(shipping_name));
+    }
+  }, [shipping_name, dispatch]);
   const handleClick = async () => {
     if (stripe_customer_id) {
       dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateUser)()).then(response => {
@@ -310,7 +328,28 @@ function ClientComponent() {
     colSpan: "3"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
-  }, "shipping address")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+  }, "shipping")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "input",
+    name: "shipping_first_name",
+    id: "shipping_first_name",
+    placeholder: "First Name",
+    onChange: handleShippingFirstNameChange,
+    value: shipping_first_name
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "input",
+    name: "shipping_last_name",
+    id: "shipping_last_name",
+    placeholder: "Last Name",
+    onChange: handleShippingLastNameChange,
+    value: shipping_last_name
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "input",
+    name: "shipping_phone",
+    type: "tel",
+    placeholder: "Phone",
+    onChange: handleShippingPhoneChange,
+    value: shipping_phone
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     colSpan: "2"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
@@ -371,14 +410,21 @@ function ClientComponent() {
     placeholder: "Company Name",
     onChange: handleCompanyNameChange,
     value: company_name
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "tax-exempt"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Tax Exempt: "), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    className: "select",
     name: "tax_exempt",
     id: "tax_exempt",
-    placeholder: "Tax Exempt",
     onChange: handleTaxExemptChange,
     value: tax_exempt
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "none"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "None")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "exempt"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Exempt")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "reverse"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Reverse"))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "tax_id_type",
     id: "tax_id_type",

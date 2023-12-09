@@ -911,6 +911,10 @@ table tfoot tr:last-child {
   align-items: center;
   justify-content: center;
 }
+.start form .tax-exempt {
+  display: flex;
+  flex-direction: row;
+}
 
 .dashboard .orb-services {
   display: flex;

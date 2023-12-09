@@ -21,10 +21,10 @@ class StripeCustomers
         $phone = '',
         $name,
         $address = '',
-        // $shipping = '',
-        // $metadata = '',
-        // $tax_id_data = '',
-        // $tax_exempt = '',
+        $shipping = '',
+        $metadata = '',
+        $tax_exempt = '',
+        $tax_id_data = '',
         // $invoice_settings = '',
         // $preferred_locales = ''
     ) {
@@ -34,10 +34,10 @@ class StripeCustomers
                 'phone' => $phone,
                 'name' => $name,
                 'address' => $address,
-                // 'shipping' => $shipping,
-                // ['metadata' => $metadata],
-                // 'tax_id_data' => $tax_id_data,
-                // 'tax_exempt' => $tax_exempt,
+                'shipping' => $shipping,
+                ['metadata' => $metadata],
+                'tax_exempt' => $tax_exempt,
+                'tax_id_data' => $tax_id_data,
                 // 'invoice_settings' => $invoice_settings,
                 // 'preferred_locales' => $preferred_locales
             ]);
@@ -86,10 +86,10 @@ class StripeCustomers
         $phone = '',
         $name,
         $address = '',
-        // $shipping = '',
-        // $tax_exempt = '',
-        // $tax_id_data = '',
-        // $metadata = '',
+        $shipping = '',
+        $metadata = '',
+        $tax_exempt = '',
+        $tax_id_data = '',
         // $invoice_settings = '',
         // $preferred_locales = '',
     ) {
@@ -101,10 +101,10 @@ class StripeCustomers
                     'phone' => $phone,
                     'name' => $name,
                     'address' => $address,
-                    // 'shipping' => $shipping,
-                    // 'tax_exempt' => $tax_exempt,
+                    'shipping' => $shipping,
+                    ['metadata' => $metadata],
+                    'tax_exempt' => $tax_exempt,
                     // 'tax_id_data' => $tax_id_data,
-                    // ['metadata' => $metadata],
                     // 'invoice_settings' => $invoice_settings,
                     // 'preferred_locales' => $preferred_locales,
                 ]
@@ -127,7 +127,7 @@ class StripeCustomers
     {
         try {
             $customers = $this->stripeClient->customers->all(['limit' => $list_limit]);
-            
+
             return $customers;
         } catch (ApiErrorException $e) {
             $error_message = $e->getMessage();

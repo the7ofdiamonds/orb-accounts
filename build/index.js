@@ -9414,6 +9414,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   getUser: () => (/* binding */ getUser),
 /* harmony export */   splitName: () => (/* binding */ splitName),
+/* harmony export */   splitShippingName: () => (/* binding */ splitShippingName),
 /* harmony export */   updateAddress: () => (/* binding */ updateAddress),
 /* harmony export */   updateAddress2: () => (/* binding */ updateAddress2),
 /* harmony export */   updateCity: () => (/* binding */ updateCity),
@@ -9426,6 +9427,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   updateShippingAddress2: () => (/* binding */ updateShippingAddress2),
 /* harmony export */   updateShippingCity: () => (/* binding */ updateShippingCity),
 /* harmony export */   updateShippingCountry: () => (/* binding */ updateShippingCountry),
+/* harmony export */   updateShippingFirstName: () => (/* binding */ updateShippingFirstName),
+/* harmony export */   updateShippingLastName: () => (/* binding */ updateShippingLastName),
+/* harmony export */   updateShippingPhone: () => (/* binding */ updateShippingPhone),
 /* harmony export */   updateShippingState: () => (/* binding */ updateShippingState),
 /* harmony export */   updateShippingZipcode: () => (/* binding */ updateShippingZipcode),
 /* harmony export */   updateState: () => (/* binding */ updateState),
@@ -9443,6 +9447,7 @@ const initialState = {
   userError: '',
   user_id: '',
   stripe_customer_id: '',
+  name: '',
   first_name: '',
   last_name: '',
   phone: '',
@@ -9452,6 +9457,10 @@ const initialState = {
   state: '',
   zipcode: '',
   country: '',
+  shipping_name: '',
+  shipping_first_name: '',
+  shipping_last_name: '',
+  shipping_phone: '',
   shipping_address_line_1: '',
   shipping_address_line_2: '',
   shipping_city: '',
@@ -9461,7 +9470,8 @@ const initialState = {
   company_name: '',
   tax_exempt: '',
   tax_id_type: '',
-  tax_id: ''
+  tax_id: '',
+  tax_ids: ''
 };
 const addUser = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('user/addUser', async (_, {
   getState
@@ -9478,6 +9488,9 @@ const addUser = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThun
       state,
       zipcode,
       country,
+      shipping_first_name,
+      shipping_last_name,
+      shipping_phone,
       shipping_address_line_1,
       shipping_address_line_2,
       shipping_city,
@@ -9505,6 +9518,9 @@ const addUser = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThun
         state: state,
         zipcode: zipcode,
         country: country,
+        shipping_first_name: shipping_first_name,
+        shipping_last_name: shipping_last_name,
+        shipping_phone: shipping_phone,
         shipping_address_line_1: shipping_address_line_1,
         shipping_address_line_2: shipping_address_line_2,
         shipping_city: shipping_city,
@@ -9569,6 +9585,9 @@ const updateUser = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
       state,
       zipcode,
       country,
+      shipping_first_name,
+      shipping_last_name,
+      shipping_phone,
       shipping_address_line_1,
       shipping_address_line_2,
       shipping_city,
@@ -9596,6 +9615,9 @@ const updateUser = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
         state: state,
         zipcode: zipcode,
         country: country,
+        shipping_first_name: shipping_first_name,
+        shipping_last_name: shipping_last_name,
+        shipping_phone: shipping_phone,
         shipping_address_line_1: shipping_address_line_1,
         shipping_address_line_2: shipping_address_line_2,
         shipping_city: shipping_city,
@@ -9650,6 +9672,15 @@ const accountsUserSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
     updateCountry: (state, action) => {
       state.country = action.payload;
     },
+    updateShippingFirstName: (state, action) => {
+      state.shipping_first_name = action.payload;
+    },
+    updateShippingLastName: (state, action) => {
+      state.shipping_last_name = action.payload;
+    },
+    updateShippingPhone: (state, action) => {
+      state.shipping_phone = action.payload;
+    },
     updateShippingAddress: (state, action) => {
       state.shipping_address_line_1 = action.payload;
     },
@@ -9685,6 +9716,12 @@ const accountsUserSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
       const [firstName, lastName] = fullName.split(' ');
       state.first_name = firstName;
       state.last_name = lastName;
+    },
+    splitShippingName: (state, action) => {
+      const fullName = action.payload;
+      const [firstName, lastName] = fullName.split(' ');
+      state.shipping_first_name = firstName;
+      state.shipping_last_name = lastName;
     }
   },
   extraReducers: builder => {
@@ -9706,8 +9743,22 @@ const accountsUserSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
         state.zipcode = action.payload.address.postal_code;
         state.country = action.payload.address.country;
       }
+      if (action.payload && action.payload.shipping) {
+        state.shipping_name = action.payload.shipping.name;
+        state.shipping_phone = action.payload.shipping.phone;
+        state.shipping_address_line_1 = action.payload.shipping.address.line1;
+        state.shipping_address_line_2 = action.payload.shipping.address.line2;
+        state.shipping_city = action.payload.shipping.address.city;
+        state.shipping_state = action.payload.shipping.address.state;
+        state.shipping_zipcode = action.payload.shipping.address.postal_code;
+        state.shipping_country = action.payload.shipping.address.country;
+      }
       state.email = action.payload.email;
       state.phone = action.payload.phone;
+      state.company_name = action.payload.metadata.company_name;
+      if (action.payload.tax_ids) {
+        state.tax_ids = action.payload.tax_ids.data;
+      }
     }).addCase(updateUser.fulfilled, (state, action) => {
       state.userLoading = false;
       state.userError = '';
@@ -9722,6 +9773,14 @@ const accountsUserSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
         state.state = action.payload.address.state;
         state.zipcode = action.payload.address.postal_code;
         state.country = action.payload.address.country;
+      }
+      if (action.payload && action.payload.shipping) {
+        state.shipping_address_line_1 = action.payload.shipping.address.line1;
+        state.shipping_address_line_2 = action.payload.shipping.address.line2;
+        state.shipping_city = action.payload.shipping.address.city;
+        state.shipping_state = action.payload.shipping.address.state;
+        state.shipping_zipcode = action.payload.shipping.address.postal_code;
+        state.shipping_country = action.payload.shipping.address.country;
       }
       state.email = action.payload.email;
       state.phone = action.payload.phone;
@@ -9744,6 +9803,9 @@ const {
   updateState,
   updateZipcode,
   updateCountry,
+  updateShippingFirstName,
+  updateShippingLastName,
+  updateShippingPhone,
   updateShippingAddress,
   updateShippingAddress2,
   updateShippingCity,
@@ -9754,7 +9816,8 @@ const {
   updateTaxExempt,
   updateTaxIDType,
   updateTaxID,
-  splitName
+  splitName,
+  splitShippingName
 } = accountsUserSlice.actions;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsUserSlice);
 

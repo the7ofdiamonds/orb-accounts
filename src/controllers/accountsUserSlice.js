@@ -6,6 +6,7 @@ const initialState = {
     userError: '',
     user_id: '',
     stripe_customer_id: '',
+    name: '',
     first_name: '',
     last_name: '',
     phone: '',
@@ -15,6 +16,10 @@ const initialState = {
     state: '',
     zipcode: '',
     country: '',
+    shipping_name: '',
+    shipping_first_name: '',
+    shipping_last_name: '',
+    shipping_phone: '',
     shipping_address_line_1: '',
     shipping_address_line_2: '',
     shipping_city: '',
@@ -24,7 +29,8 @@ const initialState = {
     company_name: '',
     tax_exempt: '',
     tax_id_type: '',
-    tax_id: ''
+    tax_id: '',
+    tax_ids: ''
 };
 
 export const addUser = createAsyncThunk('user/addUser', async (_, { getState }) => {
@@ -40,6 +46,9 @@ export const addUser = createAsyncThunk('user/addUser', async (_, { getState }) 
             state,
             zipcode,
             country,
+            shipping_first_name,
+            shipping_last_name,
+            shipping_phone,
             shipping_address_line_1,
             shipping_address_line_2,
             shipping_city,
@@ -68,6 +77,9 @@ export const addUser = createAsyncThunk('user/addUser', async (_, { getState }) 
                 state: state,
                 zipcode: zipcode,
                 country: country,
+                shipping_first_name: shipping_first_name,
+                shipping_last_name: shipping_last_name,
+                shipping_phone: shipping_phone,
                 shipping_address_line_1: shipping_address_line_1,
                 shipping_address_line_2: shipping_address_line_2,
                 shipping_city: shipping_city,
@@ -133,6 +145,9 @@ export const updateUser = createAsyncThunk('user/updateUser', async (_, { getSta
             state,
             zipcode,
             country,
+            shipping_first_name,
+            shipping_last_name,
+            shipping_phone,
             shipping_address_line_1,
             shipping_address_line_2,
             shipping_city,
@@ -161,6 +176,9 @@ export const updateUser = createAsyncThunk('user/updateUser', async (_, { getSta
                 state: state,
                 zipcode: zipcode,
                 country: country,
+                shipping_first_name: shipping_first_name,
+                shipping_last_name: shipping_last_name,
+                shipping_phone: shipping_phone,
                 shipping_address_line_1: shipping_address_line_1,
                 shipping_address_line_2: shipping_address_line_2,
                 shipping_city: shipping_city,
@@ -218,6 +236,15 @@ export const accountsUserSlice = createSlice({
         updateCountry: (state, action) => {
             state.country = action.payload;
         },
+        updateShippingFirstName: (state, action) => {
+            state.shipping_first_name = action.payload;
+        },
+        updateShippingLastName: (state, action) => {
+            state.shipping_last_name = action.payload;
+        },
+        updateShippingPhone: (state, action) => {
+            state.shipping_phone = action.payload;
+        },
         updateShippingAddress: (state, action) => {
             state.shipping_address_line_1 = action.payload;
         },
@@ -254,6 +281,13 @@ export const accountsUserSlice = createSlice({
 
             state.first_name = firstName;
             state.last_name = lastName;
+        },
+        splitShippingName: (state, action) => {
+            const fullName = action.payload;
+            const [firstName, lastName] = fullName.split(' ');
+
+            state.shipping_first_name = firstName;
+            state.shipping_last_name = lastName;
         }
     },
     extraReducers: (builder) => {
@@ -277,8 +311,23 @@ export const accountsUserSlice = createSlice({
                     state.zipcode = action.payload.address.postal_code
                     state.country = action.payload.address.country
                 }
+                if (action.payload && action.payload.shipping) {
+                    state.shipping_name = action.payload.shipping.name
+                    state.shipping_phone = action.payload.shipping.phone
+                    state.shipping_address_line_1 = action.payload.shipping.address.line1
+                    state.shipping_address_line_2 = action.payload.shipping.address.line2
+                    state.shipping_city = action.payload.shipping.address.city
+                    state.shipping_state = action.payload.shipping.address.state
+                    state.shipping_zipcode = action.payload.shipping.address.postal_code
+                    state.shipping_country = action.payload.shipping.address.country
+                }
                 state.email = action.payload.email
                 state.phone = action.payload.phone
+                state.company_name = action.payload.metadata.company_name
+
+                if (action.payload.tax_ids) {
+                    state.tax_ids = action.payload.tax_ids.data
+                }
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.userLoading = false;
@@ -294,6 +343,14 @@ export const accountsUserSlice = createSlice({
                     state.state = action.payload.address.state
                     state.zipcode = action.payload.address.postal_code
                     state.country = action.payload.address.country
+                }
+                if (action.payload && action.payload.shipping) {
+                    state.shipping_address_line_1 = action.payload.shipping.address.line1
+                    state.shipping_address_line_2 = action.payload.shipping.address.line2
+                    state.shipping_city = action.payload.shipping.address.city
+                    state.shipping_state = action.payload.shipping.address.state
+                    state.shipping_zipcode = action.payload.shipping.address.postal_code
+                    state.shipping_country = action.payload.shipping.address.country
                 }
                 state.email = action.payload.email
                 state.phone = action.payload.phone
@@ -328,6 +385,9 @@ export const {
     updateState,
     updateZipcode,
     updateCountry,
+    updateShippingFirstName,
+    updateShippingLastName,
+    updateShippingPhone,
     updateShippingAddress,
     updateShippingAddress2,
     updateShippingCity,
@@ -338,7 +398,8 @@ export const {
     updateTaxExempt,
     updateTaxIDType,
     updateTaxID,
-    splitName
+    splitName,
+    splitShippingName
 } = accountsUserSlice.actions;
 
 export default accountsUserSlice;

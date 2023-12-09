@@ -38,7 +38,7 @@
       text-transform: lowercase;
       span {
         text-transform: capitalize;
-        padding-right: .25rem;
+        padding-right: 0.25rem;
       }
     }
 
@@ -49,6 +49,11 @@
       gap: 1.5rem;
       align-items: center;
       justify-content: center;
+    }
+
+    .tax-exempt {
+      display: flex;
+      flex-direction: row;
     }
   }
 }

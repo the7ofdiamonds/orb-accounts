@@ -15,6 +15,9 @@ import {
   updateState,
   updateZipcode,
   updateCountry,
+  updateShippingFirstName,
+  updateShippingLastName,
+  updateShippingPhone,
   updateShippingAddress,
   updateShippingAddress2,
   updateShippingCity,
@@ -25,7 +28,8 @@ import {
   updateTaxExempt,
   updateTaxIDType,
   updateTaxID,
-  splitName
+  splitName,
+  splitShippingName,
 } from '../controllers/accountsUserSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
@@ -55,6 +59,10 @@ function ClientComponent() {
     state,
     zipcode,
     country,
+    shipping_name,
+    shipping_first_name,
+    shipping_last_name,
+    shipping_phone,
     shipping_address_line_1,
     shipping_address_line_2,
     shipping_city,
@@ -101,6 +109,18 @@ function ClientComponent() {
 
   const handleCountryChange = (event) => {
     dispatch(updateCountry(event.target.value));
+  };
+
+  const handleShippingFirstNameChange = (event) => {
+    dispatch(updateShippingFirstName(event.target.value));
+  };
+
+  const handleShippingLastNameChange = (event) => {
+    dispatch(updateShippingLastName(event.target.value));
+  };
+
+  const handleShippingPhoneChange = (event) => {
+    dispatch(updateShippingPhone(event.target.value));
   };
 
   const handleShippingAddressChange = (event) => {
@@ -157,11 +177,17 @@ function ClientComponent() {
     }
   }, [first_name, last_name, address_line_1, city, state, zipcode]);
 
-  useEffect(()=>{
-    if(name){
+  useEffect(() => {
+    if (name) {
       dispatch(splitName(name));
     }
-  },[name, dispatch]);
+  }, [name, dispatch]);
+
+  useEffect(() => {
+    if (shipping_name) {
+      dispatch(splitShippingName(shipping_name));
+    }
+  }, [shipping_name, dispatch]);
 
   const handleClick = async () => {
     if (stripe_customer_id) {
@@ -343,11 +369,43 @@ function ClientComponent() {
               <thead>
                 <tr>
                   <th colSpan="3">
-                    <h5 className="title">shipping address</h5>
+                    <h5 className="title">shipping</h5>
                   </th>
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_first_name"
+                      id="shipping_first_name"
+                      placeholder="First Name"
+                      onChange={handleShippingFirstNameChange}
+                      value={shipping_first_name}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_last_name"
+                      id="shipping_last_name"
+                      placeholder="Last Name"
+                      onChange={handleShippingLastNameChange}
+                      value={shipping_last_name}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="input"
+                      name="shipping_phone"
+                      type="tel"
+                      placeholder="Phone"
+                      onChange={handleShippingPhoneChange}
+                      value={shipping_phone}
+                    />
+                  </td>
+                </tr>
                 <tr>
                   <td colSpan="2">
                     <input
@@ -438,15 +496,18 @@ function ClientComponent() {
                     value={company_name}
                   />
                 </td>
-                <td>
-                  <input
-                    className="input"
+                <td className='tax-exempt'>
+                  <label>Tax Exempt: </label>
+                  <select
+                    className="select"
                     name="tax_exempt"
                     id="tax_exempt"
-                    placeholder="Tax Exempt"
                     onChange={handleTaxExemptChange}
-                    value={tax_exempt}
-                  />
+                    value={tax_exempt}>
+                    <option value="none"><label>None</label></option>
+                    <option value="exempt"><label>Exempt</label></option>
+                    <option value="reverse"><label>Reverse</label></option>
+                  </select>
                 </td>
               </tr>
               <tr>
