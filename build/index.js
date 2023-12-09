@@ -9756,6 +9756,7 @@ const accountsUserSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
       state.email = action.payload.email;
       state.phone = action.payload.phone;
       state.company_name = action.payload.metadata.company_name;
+      state.tax_exempt = action.payload.tax_exempt;
       if (action.payload.tax_ids) {
         state.tax_ids = action.payload.tax_ids.data;
       }

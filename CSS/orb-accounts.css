@@ -833,6 +833,9 @@ table thead tr th h5 {
   margin: 0;
   color: var(--orb-accounts-table-color-text);
 }
+table thead tr th h5 span {
+  text-transform: lowercase;
+}
 table th {
   border-right: 0.375em solid var(--orb-accounts-table-border-color);
 }

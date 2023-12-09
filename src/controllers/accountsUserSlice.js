@@ -324,6 +324,7 @@ export const accountsUserSlice = createSlice({
                 state.email = action.payload.email
                 state.phone = action.payload.phone
                 state.company_name = action.payload.metadata.company_name
+                state.tax_exempt = action.payload.tax_exempt
 
                 if (action.payload.tax_ids) {
                     state.tax_ids = action.payload.tax_ids.data

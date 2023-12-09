@@ -65,7 +65,6 @@ class Router
             if (!empty($this->protected_pages_list)) {
                 foreach ($this->protected_pages_list as $protected_page) {
                     if (preg_match($protected_page['regex'], $path)) {
-                        error_log('protected page');
                         add_filter('template_include',  function ($template_include) use ($protected_page) {
                             return $this->templates->get_protected_page_template($template_include, $protected_page);
                         });

@@ -480,7 +480,7 @@ function ClientComponent() {
             <thead>
               <tr>
                 <th colSpan="3">
-                  <h5 className="title">company details</h5>
+                  <h5 className="title">company</h5>
                 </th>
               </tr>
             </thead>
@@ -496,7 +496,7 @@ function ClientComponent() {
                     value={company_name}
                   />
                 </td>
-                <td className='tax-exempt'>
+                <td className="tax-exempt">
                   <label>Tax Exempt: </label>
                   <select
                     className="select"
@@ -504,12 +504,30 @@ function ClientComponent() {
                     id="tax_exempt"
                     onChange={handleTaxExemptChange}
                     value={tax_exempt}>
-                    <option value="none"><label>None</label></option>
-                    <option value="exempt"><label>Exempt</label></option>
-                    <option value="reverse"><label>Reverse</label></option>
+                    <option value="none">
+                      <label>None</label>
+                    </option>
+                    <option value="exempt">
+                      <label>Exempt</label>
+                    </option>
+                    <option value="reverse">
+                      <label>Reverse</label>
+                    </option>
                   </select>
                 </td>
               </tr>
+            </tbody>
+          </table>
+
+          <table className="card">
+            <thead>
+              <tr>
+                <th colSpan="3">
+                  <h5 className="title">company tax id<span>s</span></h5>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
               <tr>
                 <td>
                   <input
