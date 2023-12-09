@@ -26,8 +26,8 @@ import {
   updateShippingCountry,
   updateCompanyName,
   updateTaxExempt,
-  updateTaxIDType,
-  updateTaxID,
+  addTaxID,
+  deleteTaxID,
   splitName,
   splitShippingName,
 } from '../controllers/accountsUserSlice.js';
@@ -71,8 +71,7 @@ function ClientComponent() {
     shipping_country,
     company_name,
     tax_exempt,
-    tax_id_type,
-    tax_id,
+    tax_ids,
   } = useSelector((state) => state.accountsUser);
 
   const handleFirstNameChange = (event) => {
@@ -155,14 +154,6 @@ function ClientComponent() {
     dispatch(updateTaxExempt(event.target.value));
   };
 
-  const handleTaxIDTypeChange = (event) => {
-    dispatch(updateTaxIDType(event.target.value));
-  };
-
-  const handleTaxIDChange = (event) => {
-    dispatch(updateTaxID(event.target.value));
-  };
-
   const [isFomCompleted, setIsFormCompleted] = useState(false);
 
   useEffect(() => {
@@ -188,6 +179,27 @@ function ClientComponent() {
       dispatch(splitShippingName(shipping_name));
     }
   }, [shipping_name, dispatch]);
+
+  const handleAddTaxID = (e) => {
+    e.preventDefault();
+    const newTaxIDType = prompt('Enter Tax ID Type:');
+    const newTaxIDValue = prompt('Enter Tax ID Value:');
+
+    if (newTaxIDType && newTaxIDValue) {
+      dispatch(addTaxID({ tax_id_type: newTaxIDType, tax_id: newTaxIDValue }));
+    }
+  };
+
+  const handleDeleteTaxID = (e, taxID) => {
+    e.preventDefault();
+    const confirmDeletion = window.confirm(
+      'Are you sure you want to delete this tax ID?'
+    );
+
+    if (confirmDeletion) {
+      dispatch(deleteTaxID(taxID));
+    }
+  };
 
   const handleClick = async () => {
     if (stripe_customer_id) {
@@ -245,7 +257,7 @@ function ClientComponent() {
           <table className="card">
             <thead>
               <tr>
-                <th>
+                <th colSpan={3}>
                   <h5 className="title">contact</h5>
                 </th>
               </tr>
@@ -290,14 +302,14 @@ function ClientComponent() {
             <table className="card">
               <thead>
                 <tr>
-                  <th colSpan="3">
+                  <th colSpan={3}>
                     <h5 className="title">address</h5>
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td colSpan="2">
+                  <td colSpan={2}>
                     <input
                       className="input"
                       name="address_line_1"
@@ -351,7 +363,7 @@ function ClientComponent() {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan="2">
+                  <td colSpan={2}>
                     <input
                       className="input"
                       name="country"
@@ -368,7 +380,7 @@ function ClientComponent() {
             <table className="card">
               <thead>
                 <tr>
-                  <th colSpan="3">
+                  <th colSpan={3}>
                     <h5 className="title">shipping</h5>
                   </th>
                 </tr>
@@ -407,7 +419,7 @@ function ClientComponent() {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan="2">
+                  <td colSpan={2}>
                     <input
                       className="input"
                       name="shipping_address_line_1"
@@ -461,7 +473,7 @@ function ClientComponent() {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan="2">
+                  <td colSpan={2}>
                     <input
                       className="input"
                       name="shipping_country"
@@ -479,14 +491,14 @@ function ClientComponent() {
           <table className="card">
             <thead>
               <tr>
-                <th colSpan="3">
+                <th colSpan={3}>
                   <h5 className="title">company</h5>
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td colSpan="2">
+                <td colSpan={2}>
                   <input
                     className="input"
                     name="company_name"
@@ -522,35 +534,45 @@ function ClientComponent() {
           <table className="card">
             <thead>
               <tr>
-                <th colSpan="3">
-                  <h5 className="title">company tax id<span>s</span></h5>
+                <th colSpan={5}>
+                  <h5 className="title">
+                    company tax id<span>s</span>
+                  </h5>
                 </th>
+              </tr>
+              <tr>
+                <th>Type</th>
+                <th>ID</th>
+                <th>Verified</th>
+                <th colSpan={2}></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <input
-                    className="input"
-                    name="tax_id_type"
-                    id="tax_id_type"
-                    placeholder="Tax ID Type"
-                    onChange={handleTaxIDTypeChange}
-                    value={tax_id_type}
-                  />
-                </td>
-                <td>
-                  <input
-                    className="input"
-                    name="tax_id"
-                    id="tax_id"
-                    placeholder="Tax ID"
-                    onChange={handleTaxIDChange}
-                    value={tax_id}
-                  />
-                </td>
-              </tr>
+              {tax_ids &&
+                tax_ids.length > 0 &&
+                tax_ids.map((tax_id) => (
+                  <tr key={tax_id.id}>
+                    <td>{tax_id.type.replace(/_/g, ' ').toUpperCase()}</td>
+                    <td>{tax_id.value}</td>
+                    <td className="status">{tax_id.verification.status}</td>
+                    <td>
+                      <button
+                        className="add-button"
+                        onClick={(e) => handleAddTaxID(e)}>
+                        <h4>add</h4>
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="delete-button"
+                        onClick={(e) => handleDeleteTaxID(e, tax_id.id)}>
+                        <h4>delete</h4>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
+            <tfoot></tfoot>
           </table>
         </form>
 

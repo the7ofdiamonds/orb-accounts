@@ -265,20 +265,37 @@ class Users
         }
     }
 
-    public function add_user_tax_id(WP_REST_Request $request){
-        $stripe_customer_id = $request->get_param('slug');
-        $tax_id_type = $request['tax_id_type'];
-        $tax_id = $request['tax_id'];
+    public function add_user_tax_id(WP_REST_Request $request)
+    {
+        try {
+            $stripe_customer_id = $request->get_param('slug');
+            $tax_id_type = $request['tax_id_type'];
+            $tax_id = $request['tax_id'];
 
-        $tax_id_data = [
-            'type' => $tax_id_type,
-            'value' => $tax_id
-        ];
+            $tax_id_data = [
+                'type' => $tax_id_type,
+                'value' => $tax_id
+            ];
 
-        return $this->stripe_taxids->createTaxID($stripe_customer_id, $tax_id_data);
+            return $this->stripe_taxids->createTaxID($stripe_customer_id, $tax_id_data);
+        } catch (Exception $e) {
+            $error_message = $e->getMessage();
+            $status_code = $e->getCode();
+
+            $response_data = [
+                'message' => $error_message,
+                'status' => $status_code
+            ];
+
+            $response = rest_ensure_response($response_data);
+            $response->set_status($status_code);
+
+            return $response;
+        }
     }
 
-    public function delete_user_tax_id(WP_REST_Request $request){
+    public function delete_user_tax_id(WP_REST_Request $request)
+    {
         $stripe_customer_id = $request->get_param('slug');
         $stripe_tax_id = $request['stripe_tax_id'];
 

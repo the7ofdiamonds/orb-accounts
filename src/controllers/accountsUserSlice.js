@@ -205,6 +205,65 @@ export const updateUser = createAsyncThunk('user/updateUser', async (_, { getSta
     }
 });
 
+export const addTaxID = createAsyncThunk('user/addTaxID', async (tax_id_data, { getState }) => {
+    try {
+        const {
+            stripe_customer_id,
+        } = getState().accountsUser;
+
+        const response = await fetch(`/wp-json/orb/user/v1/add/tax-id/${stripe_customer_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                tax_id_type: tax_id_data.tax_id_type,
+                tax_id: tax_id_data.tax_id,
+            })
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        throw error.message;
+    }
+});
+
+export const deleteTaxID = createAsyncThunk('user/deleteTaxID', async (stripe_tax_id, { getState }) => {
+    try {
+        const {
+            stripe_customer_id,
+        } = getState().accountsUser;
+
+        const response = await fetch(`/wp-json/orb/user/v1/delete/tax-id/${stripe_customer_id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                stripe_tax_id: stripe_tax_id,
+            })
+        })
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            const errorMessage = errorData.message;
+            throw new Error(errorMessage);
+        }
+
+        const responseData = await response.json();
+        return responseData;
+    } catch (error) {
+        throw error.message;
+    }
+});
+
 export const accountsUserSlice = createSlice({
     name: 'user',
     initialState,

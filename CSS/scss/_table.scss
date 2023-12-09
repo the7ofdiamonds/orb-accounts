@@ -4,13 +4,14 @@ table {
 
   thead {
     background-color: var(--orb-accounts-table-color);
-    width: 100%;
     tr {
       th {
+        color: var(--orb-accounts-table-color-text);
+        text-transform: uppercase;
+        text-align: left;
         h5 {
           padding: 0.25em 0;
           margin: 0;
-          color: var(--orb-accounts-table-color-text);
           span {
             text-transform: lowercase;
           }
@@ -19,16 +20,14 @@ table {
     }
   }
 
-  th {
-    border-right: 0.375em solid var(--orb-accounts-table-border-color);
-  }
-
   th,
   td {
+    border-right: 0.375em solid var(--orb-accounts-table-border-color);
     padding: 0.375em;
   }
 
-  th:last-child {
+  th:last-child,
+  td:last-child {
     border-right: none;
   }
 

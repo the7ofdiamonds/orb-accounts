@@ -107,8 +107,7 @@ function ClientComponent() {
     shipping_country,
     company_name,
     tax_exempt,
-    tax_id_type,
-    tax_id
+    tax_ids
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsUser);
   const handleFirstNameChange = event => {
     dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateFirstName)(event.target.value));
@@ -170,12 +169,6 @@ function ClientComponent() {
   const handleTaxExemptChange = event => {
     dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxExempt)(event.target.value));
   };
-  const handleTaxIDTypeChange = event => {
-    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxIDType)(event.target.value));
-  };
-  const handleTaxIDChange = event => {
-    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxID)(event.target.value));
-  };
   const [isFomCompleted, setIsFormCompleted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (user_email) {
@@ -197,6 +190,24 @@ function ClientComponent() {
       dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitShippingName)(shipping_name));
     }
   }, [shipping_name, dispatch]);
+  const handleAddTaxID = e => {
+    e.preventDefault();
+    const newTaxIDType = prompt('Enter Tax ID Type:');
+    const newTaxIDValue = prompt('Enter Tax ID Value:');
+    if (newTaxIDType && newTaxIDValue) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.addTaxID)({
+        tax_id_type: newTaxIDType,
+        tax_id: newTaxIDValue
+      }));
+    }
+  };
+  const handleDeleteTaxID = (e, taxID) => {
+    e.preventDefault();
+    const confirmDeletion = window.confirm('Are you sure you want to delete this tax ID?');
+    if (confirmDeletion) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.deleteTaxID)(taxID));
+    }
+  };
   const handleClick = async () => {
     if (stripe_customer_id) {
       dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateUser)()).then(response => {
@@ -245,7 +256,9 @@ function ClientComponent() {
     className: "title"
   }, "user details"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("form", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    colSpan: 3
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
   }, "contact")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
@@ -273,11 +286,11 @@ function ClientComponent() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    colSpan: "3"
+    colSpan: 3
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
   }, "address")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: "2"
+    colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "address_line_1",
@@ -314,7 +327,7 @@ function ClientComponent() {
     onChange: handleZipcodeChange,
     value: zipcode
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: "2"
+    colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "country",
@@ -325,7 +338,7 @@ function ClientComponent() {
   }))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    colSpan: "3"
+    colSpan: 3
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
   }, "shipping")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
@@ -350,7 +363,7 @@ function ClientComponent() {
     onChange: handleShippingPhoneChange,
     value: shipping_phone
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: "2"
+    colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "shipping_address_line_1",
@@ -387,7 +400,7 @@ function ClientComponent() {
     onChange: handleShippingZipcodeChange,
     value: shipping_zipcode
   }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: "2"
+    colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "shipping_country",
@@ -398,11 +411,11 @@ function ClientComponent() {
   })))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    colSpan: "3"
+    colSpan: 3
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
   }, "company")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
-    colSpan: "2"
+    colSpan: 2
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     className: "input",
     name: "company_name",
@@ -427,24 +440,22 @@ function ClientComponent() {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Reverse"))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
-    colSpan: "3"
+    colSpan: 5
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
-  }, "company tax id", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "s"))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    name: "tax_id_type",
-    id: "tax_id_type",
-    placeholder: "Tax ID Type",
-    onChange: handleTaxIDTypeChange,
-    value: tax_id_type
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    className: "input",
-    name: "tax_id",
-    id: "tax_id",
-    placeholder: "Tax ID",
-    onChange: handleTaxIDChange,
-    value: tax_id
-  })))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, "company tax id", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "s")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, "Type"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, "ID"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, "Verified"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    colSpan: 2
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, tax_ids && tax_ids.length > 0 && tax_ids.map(tax_id => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
+    key: tax_id.id
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, tax_id.type.replace(/_/g, ' ').toUpperCase()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, tax_id.value), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
+    className: "status"
+  }, tax_id.verification.status), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "add-button",
+    onClick: e => handleAddTaxID(e)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "add"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "delete-button",
+    onClick: e => handleDeleteTaxID(e, tax_id.id)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "delete")))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
     message: message,
     messageType: messageType
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {

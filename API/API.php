@@ -74,6 +74,18 @@ class API
             'permission_callback' => '__return_true',
         ));
         
+        register_rest_route('orb/user/v1', '/add/tax-id/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
+            'methods' => 'POST',
+            'callback' => array($user, 'add_user_tax_id'),
+            'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('orb/user/v1', '/delete/tax-id/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
+            'methods' => 'DELETE',
+            'callback' => array($user, 'delete_user_tax_id'),
+            'permission_callback' => '__return_true',
+        ));
+
         register_rest_route('orb/email/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
             'callback' => array($email, 'send_quote_email'),

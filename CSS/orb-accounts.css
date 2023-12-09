@@ -826,24 +826,26 @@ table {
 }
 table thead {
   background-color: var(--orb-accounts-table-color);
-  width: 100%;
+}
+table thead tr th {
+  color: var(--orb-accounts-table-color-text);
+  text-transform: uppercase;
+  text-align: left;
 }
 table thead tr th h5 {
   padding: 0.25em 0;
   margin: 0;
-  color: var(--orb-accounts-table-color-text);
 }
 table thead tr th h5 span {
   text-transform: lowercase;
 }
-table th {
-  border-right: 0.375em solid var(--orb-accounts-table-border-color);
-}
 table th,
 table td {
+  border-right: 0.375em solid var(--orb-accounts-table-border-color);
   padding: 0.375em;
 }
-table th:last-child {
+table th:last-child,
+table td:last-child {
   border-right: none;
 }
 table td {
@@ -881,6 +883,10 @@ table tfoot tr:last-child {
   gap: 1.5rem;
 }
 .start form table.card {
+  display: block;
+  flex-direction: unset;
+  align-items: unset;
+  gap: unset;
   padding: 0;
 }
 .start form table.card thead tr th h5 {
@@ -917,6 +923,26 @@ table tfoot tr:last-child {
 .start form .tax-exempt {
   display: flex;
   flex-direction: row;
+}
+
+.status {
+  text-transform: capitalize;
+}
+
+.add-button {
+  background-color: var(--orb-accounts-color-success);
+}
+.add-button h4 {
+  color: var(--orb-accounts-color-success-text);
+  text-transform: capitalize;
+}
+
+.delete-button {
+  background-color: var(--orb-accounts-color-error);
+}
+.delete-button h4 {
+  color: var(--orb-accounts-color-error-text);
+  text-transform: capitalize;
 }
 
 .dashboard .orb-services {
@@ -984,7 +1010,10 @@ table tfoot tr:last-child {
   color: var(--orb-accounts-color-success-text);
 }
 
-button.services-btn h3 {
+button {
+  padding: 0.5em;
+}
+button h3 {
   text-transform: uppercase;
 }
 

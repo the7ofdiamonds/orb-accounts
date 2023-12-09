@@ -9410,8 +9410,10 @@ const accountsStripeSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.cre
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   accountsUserSlice: () => (/* binding */ accountsUserSlice),
+/* harmony export */   addTaxID: () => (/* binding */ addTaxID),
 /* harmony export */   addUser: () => (/* binding */ addUser),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   deleteTaxID: () => (/* binding */ deleteTaxID),
 /* harmony export */   getUser: () => (/* binding */ getUser),
 /* harmony export */   splitName: () => (/* binding */ splitName),
 /* harmony export */   splitShippingName: () => (/* binding */ splitShippingName),
@@ -9628,6 +9630,61 @@ const updateUser = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncT
         tax_exempt: tax_exempt,
         tax_id_type: tax_id_type,
         tax_id: tax_id
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const addTaxID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('user/addTaxID', async (tax_id_data, {
+  getState
+}) => {
+  try {
+    const {
+      stripe_customer_id
+    } = getState().accountsUser;
+    const response = await fetch(`/wp-json/orb/user/v1/add/tax-id/${stripe_customer_id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tax_id_type: tax_id_data.tax_id_type,
+        tax_id: tax_id_data.tax_id
+      })
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const deleteTaxID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('user/deleteTaxID', async (stripe_tax_id, {
+  getState
+}) => {
+  try {
+    const {
+      stripe_customer_id
+    } = getState().accountsUser;
+    const response = await fetch(`/wp-json/orb/user/v1/delete/tax-id/${stripe_customer_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        stripe_tax_id: stripe_tax_id
       })
     });
     if (!response.ok) {
