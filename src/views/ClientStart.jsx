@@ -36,6 +36,8 @@ import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';
 
+import countries from '../utils/Country.js';
+
 function ClientComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -182,11 +184,23 @@ function ClientComponent() {
 
   const handleAddTaxID = (e) => {
     e.preventDefault();
-    const newTaxIDType = prompt('Enter Tax ID Type:');
-    const newTaxIDValue = prompt('Enter Tax ID Value:');
 
-    if (newTaxIDType && newTaxIDValue) {
-      dispatch(addTaxID({ tax_id_type: newTaxIDType, tax_id: newTaxIDValue }));
+    // Prompt the user to select a country
+    const selectedCountry = prompt('Select a country:', countries.join(', '));
+
+    // Check if the user selected a country
+    if (selectedCountry) {
+      // Use the selected country to get the corresponding enum
+      const enumValue = countries[selectedCountry];
+
+      // Prompt the user to enter a tax ID value
+      const newTaxIDValue = prompt(`Enter ${selectedCountry} Tax ID Value:`);
+
+      // Check if the tax ID value is provided by the user
+      if (newTaxIDValue) {
+        // Dispatch an action to add the tax ID to the state using Redux
+        dispatch(addTaxID({ tax_id_type: enumValue, tax_id: newTaxIDValue }));
+      }
     }
   };
 
@@ -201,21 +215,12 @@ function ClientComponent() {
     }
   };
 
-  const handleClick = async () => {
-    if (stripe_customer_id) {
-      dispatch(updateUser()).then((response) => {
-        if (response.error === undefined) {
-          window.location.href = '/client/selections';
-        } else {
-          console.error(response.error.message);
-          setMessageType('error');
-          setMessage(response.error.message);
-        }
-      });
-    }
-
-    if (name === '') {
-      setMessage('Please provide a name.');
+  const handleSave = () => {
+    if (first_name === '') {
+      setMessage('Please provide first name.');
+      setMessageType('error');
+    } else if (last_name === '') {
+      setMessage('Please provide last name.');
       setMessageType('error');
     } else if (address_line_1 === '') {
       setMessage('Please provide an address.');
@@ -234,15 +239,29 @@ function ClientComponent() {
       stripe_customer_id === undefined
     ) {
       dispatch(addUser()).then((response) => {
-        if (response.error === undefined) {
-          window.location.href = '/client/selections';
-        } else {
+        if (response.error !== undefined) {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
         }
       });
     }
+  };
+
+  const handleUpdate = () => {
+    if (stripe_customer_id) {
+      dispatch(updateUser()).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        }
+      });
+    }
+  };
+
+  const handleSelections = () => {
+    window.location.href = '/client/selections';
   };
 
   if (clientLoading) {
@@ -303,7 +322,7 @@ function ClientComponent() {
               <thead>
                 <tr>
                   <th colSpan={3}>
-                    <h5 className="title">address</h5>
+                    <h5 className="title">billing address</h5>
                   </th>
                 </tr>
               </thead>
@@ -574,13 +593,61 @@ function ClientComponent() {
             </tbody>
             <tfoot></tfoot>
           </table>
+
+          <table className="card">
+            <thead></thead>
+            <tbody>
+              <tr>
+                <td>
+                  <label htmlFor="">Select Country:</label>
+                  <select
+                    className="select"
+                    name="country"
+                    id="country"
+                    // onChange={handleTaxExemptChange}
+                    // value={tax_exempt}
+                  >
+                    {countries &&
+                      countries.length > 0 &&
+                      countries.map((country) => (
+                        <option value={country.enum}>
+                          <label>{country.country}</label>
+                        </option>
+                      ))}
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </form>
 
         <StatusBar message={message} messageType={messageType} />
 
-        <button id="selections_button" onClick={handleClick}>
-          <h3 className="title">selections</h3>
-        </button>
+        <div className="action">
+          {stripe_customer_id === '' ? (
+            <button onClick={handleSave}>
+              <h3>save</h3>
+            </button>
+          ) : (
+            ''
+          )}
+
+          {stripe_customer_id ? (
+            <button onClick={handleUpdate}>
+              <h3>update</h3>
+            </button>
+          ) : (
+            ''
+          )}
+
+          {stripe_customer_id ? (
+            <button onClick={handleSelections}>
+              <h3>selections</h3>
+            </button>
+          ) : (
+            ''
+          )}
+        </div>
       </section>
     </>
   );

@@ -1,4 +1,6 @@
 .start {
+  margin-top: 2.5rem;
+
   form {
     display: flex;
     flex-direction: column;
@@ -11,6 +13,7 @@
       align-items: unset;
       gap: unset;
       padding: 0;
+
       thead {
         tr {
           th {
@@ -25,11 +28,14 @@
       tbody {
         tr {
           border-bottom: none;
+
           td {
             padding: 0.375em;
+
             input {
               width: 100%;
             }
+
             p.email {
               text-transform: lowercase;
             }
@@ -40,6 +46,7 @@
 
     .email {
       text-transform: lowercase;
+
       span {
         text-transform: capitalize;
         padding-right: 0.25rem;
@@ -68,6 +75,7 @@
 
 .add-button {
   background-color: var(--orb-accounts-color-success);
+
   h4 {
     color: var(--orb-accounts-color-success-text);
     text-transform: capitalize;
@@ -76,8 +84,17 @@
 
 .delete-button {
   background-color: var(--orb-accounts-color-error);
+  
   h4 {
     color: var(--orb-accounts-color-error-text);
     text-transform: capitalize;
   }
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
 }

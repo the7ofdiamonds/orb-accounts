@@ -876,6 +876,9 @@ table tfoot tr:last-child {
   border-bottom: none;
 }
 
+.start {
+  margin-top: 2.5rem;
+}
 .start form {
   display: flex;
   flex-direction: column;
@@ -943,6 +946,14 @@ table tfoot tr:last-child {
 .delete-button h4 {
   color: var(--orb-accounts-color-error-text);
   text-transform: capitalize;
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 .dashboard .orb-services {
