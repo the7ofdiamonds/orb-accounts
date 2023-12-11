@@ -60,317 +60,320 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-// countries.js
-
 const countries = [{
   country: 'Andorra',
   enum: 'ad_nrt',
-  description: 'Andorran NRT number',
+  description: 'Andorran NRT Number',
   example: 'A-123456-Z'
 }, {
   country: 'Argentina',
   enum: 'ar_cuit',
-  description: 'Argentinian tax ID number',
+  description: 'Argentinian Tax ID Number',
   example: '12-3456789-01'
 }, {
-  country: 'Australia ABN',
+  country: 'Australia - Business',
   enum: 'au_abn',
   description: 'Australian Business Number (AU ABN)',
   example: '12345678912'
 }, {
-  country: 'Australia ATO',
+  country: 'Australia - Taxation',
   enum: 'au_arn',
   description: 'Australian Taxation Office Reference Number',
   example: '123456789123'
 }, {
   country: 'Austria',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'ATU12345678'
 }, {
   country: 'Belgium',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'BE0123456789'
 }, {
   country: 'Bolivia',
   enum: 'bo_tin',
-  description: 'Bolivian tax ID',
+  description: 'Bolivian Tax ID',
   example: '123456789'
 }, {
-  country: 'Brazil CNPJ',
+  country: 'Brazil - CNPJ',
   enum: 'br_cnpj',
-  description: 'Brazilian CNPJ number',
+  description: 'Brazilian CNPJ Number',
   example: '01.234.456/5432-10'
 }, {
-  country: 'Brazil CPF',
+  country: 'Brazil - CPF',
   enum: 'br_cpf',
-  description: 'Brazilian CPF number',
+  description: 'Brazilian CPF Number',
   example: '123.456.789-87'
 }, {
-  country: 'Bulgaria UIC',
+  country: 'Bulgaria - UIC',
   enum: 'bg_uic',
   description: 'Bulgaria Unified Identification Code',
   example: '123456789'
 }, {
   country: 'Bulgaria',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'BG0123456789'
 }, {
-  country: 'Canada BN',
+  country: 'Canada - BN',
   enum: 'ca_bn',
   description: 'Canadian BN',
   example: '123456789'
 }, {
-  country: 'Canada GST/HST',
+  country: 'Canada - GST/HST',
   enum: 'ca_gst_hst',
-  description: 'Canadian GST/HST number',
+  description: 'Canadian GST/HST Number',
   example: '123456789RT0002'
 }, {
-  country: 'Canada PST BC',
+  country: 'Canada (British Columbia)',
   enum: 'ca_pst_bc',
-  description: 'Canadian PST number (British Columbia)',
+  description: 'Canadian PST Number',
   example: 'PST-1234-5678'
 }, {
-  country: 'Canada PST MB',
+  country: 'Canada (Manitoba)',
   enum: 'ca_pst_mb',
-  description: 'Canadian PST number (Manitoba)',
+  description: 'Canadian PST Number',
   example: '123456-7'
 }, {
-  country: 'Canada PST SK',
+  country: 'Canada (Saskatchewan)',
   enum: 'ca_pst_sk',
-  description: 'Canadian PST number (Saskatchewan)',
+  description: 'Canadian PST Number',
   example: '1234567'
 }, {
-  country: 'Canada QST',
+  country: 'Canada (Québec)',
   enum: 'ca_qst',
-  description: 'Canadian QST number (Québec)',
+  description: 'Canadian QST Number',
   example: '1234567890TQ1234'
 }, {
-  country: 'Chile TIN',
+  country: 'Chile',
   enum: 'cl_tin',
   description: 'Chilean TIN',
   example: '12.345.678-K'
 }, {
-  country: 'China TIN',
+  country: 'China',
   enum: 'cn_tin',
-  description: 'Chinese tax ID',
+  description: 'Chinese Tax ID',
   example: '123456789012345678'
 }, {
-  country: 'Colombia NIT',
+  country: 'Colombia',
   enum: 'co_nit',
-  description: 'Colombian NIT number',
+  description: 'Colombian NIT Number',
   example: '123.456.789-0'
 }, {
-  country: 'Costa Rica TIN',
+  country: 'Costa Rica',
   enum: 'cr_tin',
-  description: 'Costa Rican tax ID',
+  description: 'Costa Rican Tax ID',
   example: '1-234-567890'
 }, {
   country: 'Croatia',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'HR12345678912'
 }, {
   country: 'Cyprus',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'CY12345678Z'
 }, {
   country: 'Czech Republic',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'CZ1234567890'
 }, {
   country: 'Denmark',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'DK12345678'
 }, {
-  country: 'Dominican Republic RCN',
+  country: 'Dominican Republic',
   enum: 'do_rcn',
-  description: 'Dominican RCN number',
+  description: 'Dominican RCN Number',
   example: '123-4567890-1'
 }, {
-  country: 'Ecuador RUC',
+  country: 'Ecuador',
   enum: 'ec_ruc',
-  description: 'Ecuadorian RUC number',
+  description: 'Ecuadorian RUC Number',
   example: '1234567890001'
 }, {
-  country: 'Egypt TIN',
+  country: 'Egypt',
   enum: 'eg_tin',
   description: 'Egyptian Tax Identification Number',
   example: '123456789'
 }, {
-  country: 'El Salvador NIT',
+  country: 'El Salvador',
   enum: 'sv_nit',
-  description: 'El Salvadorian NIT number',
+  description: 'El Salvadorian NIT Number',
   example: '1234-567890-123-4'
 }, {
   country: 'Estonia',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'EE123456789'
 }, {
-  country: 'EU OSS VAT',
+  country: 'Europe',
   enum: 'eu_oss_vat',
-  description: 'European One Stop Shop VAT number for non-Union scheme',
+  description: 'European One Stop Shop VAT Number for non-Union scheme',
   example: 'EU123456789'
 }, {
   country: 'Finland',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'FI12345678'
 }, {
   country: 'France',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'FRAB123456789'
 }, {
-  country: 'Georgia VAT',
+  country: 'Georgia',
   enum: 'ge_vat',
   description: 'Georgian VAT',
   example: '123456789'
 }, {
   country: 'Germany',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'DE123456789'
 }, {
   country: 'Greece',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'EL123456789'
 }, {
-  country: 'Hong Kong BR',
+  country: 'Hong Kong',
   enum: 'hk_br',
-  description: 'Hong Kong BR number',
+  description: 'Hong Kong BR Number',
   example: '12345678'
 }, {
   country: 'Hungary',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'HU12345678'
 }, {
-  country: 'Hungary TIN',
+  country: 'Hungary (adószám)',
   enum: 'hu_tin',
-  description: 'Hungary tax number (adószám)',
+  description: 'Hungary Tax Number',
   example: '12345678-1-23'
 }, {
-  country: 'Iceland VAT',
+  country: 'Iceland',
   enum: 'is_vat',
   description: 'Icelandic VAT',
   example: '123456'
 }, {
-  country: 'India GST',
+  country: 'India',
   enum: 'in_gst',
-  description: 'Indian GST number',
+  description: 'Indian GST Number',
   example: '12ABCDE3456FGZH'
 }, {
-  country: 'Indonesia NPWP',
+  country: 'Indonesia',
   enum: 'id_npwp',
-  description: 'Indonesian NPWP number',
+  description: 'Indonesian NPWP Number',
   example: '12.345.678.9-012.345'
 }, {
   country: 'Ireland',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'IE1234567AB'
 }, {
-  country: 'Israel VAT',
+  country: 'Ireland (Northern)',
+  enum: 'eu_vat',
+  description: 'Northern Ireland VAT Number',
+  example: 'XI123456789'
+}, {
+  country: 'Israel',
   enum: 'il_vat',
   description: 'Israel VAT',
   example: '000012345'
 }, {
   country: 'Italy',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'IT12345678912'
 }, {
-  country: 'Japan CN',
+  country: 'Japan (Hōjin Bangō)',
   enum: 'jp_cn',
-  description: 'Japanese Corporate Number (Hōjin Bangō)',
+  description: 'Japanese Corporate Number',
   example: '1234567891234'
 }, {
-  country: 'Japan RN',
+  country: 'Japan (Tōroku Kokugai Jigyōsha)',
   enum: 'jp_rn',
-  description: 'Japanese Registered Foreign Businesses\' Registration Number (Tōroku Kokugai Jigyōsha no Tōroku Bangō)',
+  description: 'Japanese Registered Foreign Businesses\' Registration Number',
   example: '12345'
 }, {
-  country: 'Japan TRN',
+  country: 'Japan (Tōroku Bangō)',
   enum: 'jp_trn',
-  description: 'Japanese Tax Registration Number (Tōroku Bangō)',
+  description: 'Japanese Tax Registration Number',
   example: 'T1234567891234'
 }, {
-  country: 'Kenya PIN',
+  country: 'Kenya',
   enum: 'ke_pin',
   description: 'Kenya Revenue Authority Personal Identification Number',
   example: 'P000111111A'
 }, {
   country: 'Latvia',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'LV12345678912'
 }, {
-  country: 'Liechtenstein UID',
+  country: 'Liechtenstein',
   enum: 'li_uid',
-  description: 'Liechtensteinian UID number',
+  description: 'Liechtensteinian UID Number',
   example: 'CHE123456789'
 }, {
   country: 'Lithuania',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'LT123456789123'
 }, {
   country: 'Luxembourg',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'LU12345678'
 }, {
-  country: 'Malaysia FRP',
+  country: 'Malaysia - FRP',
   enum: 'my_frp',
-  description: 'Malaysian FRP number',
+  description: 'Malaysian FRP Number',
   example: '12345678'
 }, {
-  country: 'Malaysia ITN',
+  country: 'Malaysia - ITN',
   enum: 'my_itn',
   description: 'Malaysian ITN',
   example: 'C 1234567890'
 }, {
-  country: 'Malaysia SST',
+  country: 'Malaysia - SST',
   enum: 'my_sst',
-  description: 'Malaysian SST number',
+  description: 'Malaysian SST Number',
   example: 'A12-3456-78912345'
 }, {
   country: 'Malta',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'MT12345678'
 }, {
-  country: 'Mexico RFC',
+  country: 'Mexico',
   enum: 'mx_rfc',
-  description: 'Mexican RFC number',
+  description: 'Mexican RFC Number',
   example: 'ABC010203AB9'
 }, {
   country: 'Netherlands',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'NL123456789B'
 }, {
   country: 'New Zealand',
   enum: 'nz_gst',
-  description: 'New Zealand GST number',
+  description: 'New Zealand GST Number',
   example: '123456789'
 }, {
   country: 'Norway',
   enum: 'no_vat',
-  description: 'Norwegian VAT number',
+  description: 'Norwegian VAT Number',
   example: '123456789MVA'
 }, {
   country: 'Peru',
   enum: 'pe_ruc',
-  description: 'Peruvian RUC number',
+  description: 'Peruvian RUC Number',
   example: '12345678901'
 }, {
   country: 'Philippines',
@@ -380,30 +383,30 @@ const countries = [{
 }, {
   country: 'Poland',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'PL1234567890'
 }, {
   country: 'Portugal',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'PT123456789'
 }, {
   country: 'Romania',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'RO1234567891'
 }, {
-  country: 'Romania TIN',
+  country: 'Romania',
   enum: 'ro_tin',
-  description: 'Romanian tax ID number',
+  description: 'Romanian Tax ID Number',
   example: '1234567890123'
 }, {
-  country: 'Russia INN',
+  country: 'Russia - INN',
   enum: 'ru_inn',
   description: 'Russian INN',
   example: '1234567891'
 }, {
-  country: 'Russia KPP',
+  country: 'Russia - KPP',
   enum: 'ru_kpp',
   description: 'Russian KPP',
   example: '123456789'
@@ -415,37 +418,37 @@ const countries = [{
 }, {
   country: 'Serbia',
   enum: 'rs_pib',
-  description: 'Serbian PIB number',
+  description: 'Serbian PIB Number',
   example: '123456789'
 }, {
-  country: 'Singapore GST',
+  country: 'Singapore - GST',
   enum: 'sg_gst',
   description: 'Singaporean GST',
   example: 'M12345678X'
 }, {
-  country: 'Singapore UEN',
+  country: 'Singapore - UEN',
   enum: 'sg_uen',
   description: 'Singaporean UEN',
   example: '123456789F'
 }, {
   country: 'Slovakia',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'SK1234567891'
 }, {
   country: 'Slovenia',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'SI12345678'
 }, {
-  country: 'Slovenia TIN',
+  country: 'Slovenia (davčna številka)',
   enum: 'si_tin',
-  description: 'Slovenia tax number (davčna številka)',
+  description: 'Slovenia Tax Number',
   example: '12345678'
 }, {
   country: 'South Africa',
   enum: 'za_vat',
-  description: 'South African VAT number',
+  description: 'South African VAT Number',
   example: '4123456789'
 }, {
   country: 'South Korea',
@@ -453,24 +456,24 @@ const countries = [{
   description: 'Korean BRN',
   example: '123-45-67890'
 }, {
-  country: 'Spain CIF',
+  country: 'Spain - CIF',
   enum: 'es_cif',
-  description: 'Spanish NIF number (previously Spanish CIF number)',
+  description: 'Spanish NIF Number (previously Spanish CIF Number)',
   example: 'A12345678'
 }, {
   country: 'Spain',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'ESA1234567Z'
 }, {
   country: 'Sweden',
   enum: 'eu_vat',
-  description: 'European VAT number',
+  description: 'European VAT Number',
   example: 'SE123456789123'
 }, {
   country: 'Switzerland',
   enum: 'ch_vat',
-  description: 'Switzerland VAT number',
+  description: 'Switzerland VAT Number',
   example: 'CHE-123.456.789 MWST'
 }, {
   country: 'Taiwan',
@@ -498,34 +501,29 @@ const countries = [{
   description: 'United Arab Emirates TRN',
   example: '123456789012345'
 }, {
-  country: 'United Kingdom NI VAT',
-  enum: 'eu_vat',
-  description: 'Northern Ireland VAT number',
-  example: 'XI123456789'
-}, {
-  country: 'United Kingdom VAT',
+  country: 'United Kingdom',
   enum: 'gb_vat',
-  description: 'United Kingdom VAT number',
+  description: 'United Kingdom VAT Number',
   example: 'GB123456789'
 }, {
-  country: 'United States EIN',
+  country: 'United States',
   enum: 'us_ein',
-  description: 'United States EIN',
+  description: 'Employer Identification Number',
   example: '12-3456789'
 }, {
   country: 'Uruguay',
   enum: 'uy_ruc',
-  description: 'Uruguayan RUC number',
+  description: 'Uruguayan RUC Number',
   example: '123456789012'
 }, {
   country: 'Venezuela',
   enum: 've_rif',
-  description: 'Venezuelan RIF number',
+  description: 'Venezuelan RIF Number',
   example: 'A-12345678-9'
 }, {
   country: 'Vietnam',
   enum: 'vn_tin',
-  description: 'Vietnamese tax ID number',
+  description: 'Vietnamese Tax ID Number',
   example: '1234567890'
 }];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (countries);
@@ -565,6 +563,8 @@ function ClientComponent() {
   const navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useNavigate)();
   const [messageType, setMessageType] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('info');
   const [message, setMessage] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('To receive a quote, please fill out the form above with the required information.');
+  const [isFomCompleted, setIsFormCompleted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [taxInfo, setTaxInfo] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)('');
   const {
     clientLoading,
     stripe_customer_id,
@@ -591,8 +591,30 @@ function ClientComponent() {
     shipping_country,
     company_name,
     tax_exempt,
-    tax_ids
+    tax_ids,
+    tax_id_type,
+    tax_id
   } = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.accountsUser);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (user_email) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.getUser)());
+    }
+  }, [user_email, dispatch]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (first_name && last_name && address_line_1 && city && state && zipcode) {
+      setIsFormCompleted(true);
+    }
+  }, [first_name, last_name, address_line_1, city, state, zipcode]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (name) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitName)(name));
+    }
+  }, [name, dispatch]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (shipping_name) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitShippingName)(shipping_name));
+    }
+  }, [shipping_name, dispatch]);
   const handleFirstNameChange = event => {
     dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateFirstName)(event.target.value));
   };
@@ -653,56 +675,64 @@ function ClientComponent() {
   const handleTaxExemptChange = event => {
     dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxExempt)(event.target.value));
   };
-  const [isFomCompleted, setIsFormCompleted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (user_email) {
-      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.getUser)());
-    }
-  }, [user_email, dispatch]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (first_name && last_name && address_line_1 && city && state && zipcode) {
-      setIsFormCompleted(true);
-    }
-  }, [first_name, last_name, address_line_1, city, state, zipcode]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (name) {
-      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitName)(name));
-    }
-  }, [name, dispatch]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (shipping_name) {
-      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.splitShippingName)(shipping_name));
-    }
-  }, [shipping_name, dispatch]);
-  const handleAddTaxID = e => {
+  const handleAddCompanyTaxID = e => {
     e.preventDefault();
-
-    // Prompt the user to select a country
-    const selectedCountry = prompt('Select a country:', _utils_Country_js__WEBPACK_IMPORTED_MODULE_6__["default"].join(', '));
-
-    // Check if the user selected a country
-    if (selectedCountry) {
-      // Use the selected country to get the corresponding enum
-      const enumValue = _utils_Country_js__WEBPACK_IMPORTED_MODULE_6__["default"][selectedCountry];
-
-      // Prompt the user to enter a tax ID value
-      const newTaxIDValue = prompt(`Enter ${selectedCountry} Tax ID Value:`);
-
-      // Check if the tax ID value is provided by the user
-      if (newTaxIDValue) {
-        // Dispatch an action to add the tax ID to the state using Redux
-        dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.addTaxID)({
-          tax_id_type: enumValue,
-          tax_id: newTaxIDValue
-        }));
-      }
+    var modalElement = document.querySelector('.modal');
+    if (modalElement) {
+      modalElement.style.display = 'block';
+    } else {
+      console.error('Modal element not found');
     }
   };
   const handleDeleteTaxID = (e, taxID) => {
     e.preventDefault();
-    const confirmDeletion = window.confirm('Are you sure you want to delete this tax ID?');
+    const confirmDeletion = window.confirm('Are you sure you want to delete this Tax ID?');
     if (confirmDeletion) {
-      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.deleteTaxID)(taxID));
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.deleteTaxID)(taxID)).then(response => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        } else {
+          window.location.reload();
+        }
+      });
+    }
+  };
+  const handleTaxIDType = (e, selectedCountry) => {
+    e.preventDefault();
+    setTaxInfo(selectedCountry);
+    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxIDType)(selectedCountry.enum));
+  };
+  const handleTaxID = (e, tax_id) => {
+    e.preventDefault();
+    dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.updateTaxID)(tax_id));
+  };
+  const handleAddTaxID = e => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure you want to add this Tax ID?');
+    if (confirm && tax_id_type && tax_id) {
+      dispatch((0,_controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_2__.addTaxID)({
+        tax_id_type: tax_id_type,
+        tax_id: tax_id
+      })).then(response => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        } else {
+          window.location.reload();
+        }
+      });
+    }
+  };
+  const handleCancelTaxID = e => {
+    e.preventDefault();
+    var modalElement = document.querySelector('.modal');
+    if (modalElement) {
+      modalElement.style.display = 'none';
+    } else {
+      console.error('Modal element not found');
     }
   };
   const handleSave = () => {
@@ -730,6 +760,8 @@ function ClientComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
+        } else {
+          window.location.reload();
         }
       });
     }
@@ -741,6 +773,8 @@ function ClientComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
+        } else {
+          window.location.reload();
         }
       });
     }
@@ -940,35 +974,56 @@ function ClientComponent() {
     value: "reverse"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, "Reverse"))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+  }, tax_ids && tax_ids.length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     colSpan: 5
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", {
     className: "title"
   }, "company tax id", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, "s")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, "Type"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, "ID"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", null, "Verified"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
     colSpan: 2
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, tax_ids && tax_ids.length > 0 && tax_ids.map(tax_id => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, tax_ids.map(tax_id => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", {
     key: tax_id.id
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, tax_id.type.replace(/_/g, ' ').toUpperCase()), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, tax_id.value), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", {
     className: "status"
   }, tax_id.verification.status), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "add-button",
-    onClick: e => handleAddTaxID(e)
+    onClick: e => handleAddCompanyTaxID(e)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "add"))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     className: "delete-button",
     onClick: e => handleDeleteTaxID(e, tax_id.id)
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "delete")))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "delete"))))))) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "add-button",
+    onClick: e => handleAddCompanyTaxID(e)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "add company tax id")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tfoot", null)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "modal"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "card"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("thead", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("th", {
+    colSpan: 2
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "add company tax id")))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     htmlFor: ""
-  }, "Select Country:"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+  }, "Select Country:")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     className: "select",
     name: "country",
-    id: "country"
-    // onChange={handleTaxExemptChange}
-    // value={tax_exempt}
+    id: "country",
+    onChange: e => handleTaxIDType(e, JSON.parse(e.target.value))
   }, _utils_Country_js__WEBPACK_IMPORTED_MODULE_6__["default"] && _utils_Country_js__WEBPACK_IMPORTED_MODULE_6__["default"].length > 0 && _utils_Country_js__WEBPACK_IMPORTED_MODULE_6__["default"].map(country => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: country.enum
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, country.country))))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    key: country.country,
+    value: JSON.stringify(country)
+  }, country.country))))), tax_id_type && taxInfo && Object.keys(taxInfo).length > 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
+    htmlFor: "tax_id"
+  }, taxInfo.description)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    className: "input",
+    name: taxInfo.description,
+    id: `tax_id`,
+    placeholder: `${taxInfo.example}`,
+    onChange: e => handleTaxID(e, e.target.value)
+  }))) : '', (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, tax_id_type && tax_id ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "add-button",
+    onClick: e => handleAddTaxID(e)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "add")) : ''), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    className: "cancel-button",
+    onClick: e => handleCancelTaxID(e)
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("h4", null, "cancel")))))))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_StatusBar_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
     message: message,
     messageType: messageType
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

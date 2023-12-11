@@ -30,6 +30,8 @@ import {
   deleteTaxID,
   splitName,
   splitShippingName,
+  updateTaxIDType,
+  updateTaxID,
 } from '../controllers/accountsUserSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
@@ -46,6 +48,8 @@ function ClientComponent() {
   const [message, setMessage] = useState(
     'To receive a quote, please fill out the form above with the required information.'
   );
+  const [isFomCompleted, setIsFormCompleted] = useState(false);
+  const [taxInfo, setTaxInfo] = useState('');
 
   const {
     clientLoading,
@@ -74,7 +78,33 @@ function ClientComponent() {
     company_name,
     tax_exempt,
     tax_ids,
+    tax_id_type,
+    tax_id,
   } = useSelector((state) => state.accountsUser);
+
+  useEffect(() => {
+    if (user_email) {
+      dispatch(getUser());
+    }
+  }, [user_email, dispatch]);
+
+  useEffect(() => {
+    if (first_name && last_name && address_line_1 && city && state && zipcode) {
+      setIsFormCompleted(true);
+    }
+  }, [first_name, last_name, address_line_1, city, state, zipcode]);
+
+  useEffect(() => {
+    if (name) {
+      dispatch(splitName(name));
+    }
+  }, [name, dispatch]);
+
+  useEffect(() => {
+    if (shipping_name) {
+      dispatch(splitShippingName(shipping_name));
+    }
+  }, [shipping_name, dispatch]);
 
   const handleFirstNameChange = (event) => {
     dispatch(updateFirstName(event.target.value));
@@ -156,62 +186,74 @@ function ClientComponent() {
     dispatch(updateTaxExempt(event.target.value));
   };
 
-  const [isFomCompleted, setIsFormCompleted] = useState(false);
-
-  useEffect(() => {
-    if (user_email) {
-      dispatch(getUser());
-    }
-  }, [user_email, dispatch]);
-
-  useEffect(() => {
-    if (first_name && last_name && address_line_1 && city && state && zipcode) {
-      setIsFormCompleted(true);
-    }
-  }, [first_name, last_name, address_line_1, city, state, zipcode]);
-
-  useEffect(() => {
-    if (name) {
-      dispatch(splitName(name));
-    }
-  }, [name, dispatch]);
-
-  useEffect(() => {
-    if (shipping_name) {
-      dispatch(splitShippingName(shipping_name));
-    }
-  }, [shipping_name, dispatch]);
-
-  const handleAddTaxID = (e) => {
+  const handleAddCompanyTaxID = (e) => {
     e.preventDefault();
+    var modalElement = document.querySelector('.modal');
 
-    // Prompt the user to select a country
-    const selectedCountry = prompt('Select a country:', countries.join(', '));
-
-    // Check if the user selected a country
-    if (selectedCountry) {
-      // Use the selected country to get the corresponding enum
-      const enumValue = countries[selectedCountry];
-
-      // Prompt the user to enter a tax ID value
-      const newTaxIDValue = prompt(`Enter ${selectedCountry} Tax ID Value:`);
-
-      // Check if the tax ID value is provided by the user
-      if (newTaxIDValue) {
-        // Dispatch an action to add the tax ID to the state using Redux
-        dispatch(addTaxID({ tax_id_type: enumValue, tax_id: newTaxIDValue }));
-      }
+    if (modalElement) {
+      modalElement.style.display = 'block';
+    } else {
+      console.error('Modal element not found');
     }
   };
 
   const handleDeleteTaxID = (e, taxID) => {
     e.preventDefault();
     const confirmDeletion = window.confirm(
-      'Are you sure you want to delete this tax ID?'
+      'Are you sure you want to delete this Tax ID?'
     );
 
     if (confirmDeletion) {
-      dispatch(deleteTaxID(taxID));
+      dispatch(deleteTaxID(taxID)).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        } else {
+          window.location.reload();
+        }
+      });
+    }
+  };
+
+  const handleTaxIDType = (e, selectedCountry) => {
+    e.preventDefault();
+    setTaxInfo(selectedCountry);
+    dispatch(updateTaxIDType(selectedCountry.enum));
+  };
+
+  const handleTaxID = (e, tax_id) => {
+    e.preventDefault();
+    dispatch(updateTaxID(tax_id));
+  };
+
+  const handleAddTaxID = (e) => {
+    e.preventDefault();
+    const confirm = window.confirm('Are you sure you want to add this Tax ID?');
+
+    if (confirm && tax_id_type && tax_id) {
+      dispatch(addTaxID({ tax_id_type: tax_id_type, tax_id: tax_id })).then(
+        (response) => {
+          if (response.error !== undefined) {
+            console.error(response.error.message);
+            setMessageType('error');
+            setMessage(response.error.message);
+          } else {
+            window.location.reload();
+          }
+        }
+      );
+    }
+  };
+
+  const handleCancelTaxID = (e) => {
+    e.preventDefault();
+    var modalElement = document.querySelector('.modal');
+
+    if (modalElement) {
+      modalElement.style.display = 'none';
+    } else {
+      console.error('Modal element not found');
     }
   };
 
@@ -243,6 +285,8 @@ function ClientComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
+        } else {
+          window.location.reload();
         }
       });
     }
@@ -255,6 +299,8 @@ function ClientComponent() {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
+        } else {
+          window.location.reload();
         }
       });
     }
@@ -551,74 +597,132 @@ function ClientComponent() {
           </table>
 
           <table className="card">
-            <thead>
-              <tr>
-                <th colSpan={5}>
-                  <h5 className="title">
-                    company tax id<span>s</span>
-                  </h5>
-                </th>
-              </tr>
-              <tr>
-                <th>Type</th>
-                <th>ID</th>
-                <th>Verified</th>
-                <th colSpan={2}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {tax_ids &&
-                tax_ids.length > 0 &&
-                tax_ids.map((tax_id) => (
-                  <tr key={tax_id.id}>
-                    <td>{tax_id.type.replace(/_/g, ' ').toUpperCase()}</td>
-                    <td>{tax_id.value}</td>
-                    <td className="status">{tax_id.verification.status}</td>
+            {tax_ids && tax_ids.length > 0 ? (
+              <>
+                <thead>
+                  <tr>
+                    <th colSpan={5}>
+                      <h5 className="title">
+                        company tax id<span>s</span>
+                      </h5>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>Type</th>
+                    <th>ID</th>
+                    <th>Verified</th>
+                    <th colSpan={2}></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tax_ids.map((tax_id) => (
+                    <tr key={tax_id.id}>
+                      <td>{tax_id.type.replace(/_/g, ' ').toUpperCase()}</td>
+                      <td>{tax_id.value}</td>
+                      <td className="status">{tax_id.verification.status}</td>
+                      <td>
+                        <button
+                          className="add-button"
+                          onClick={(e) => handleAddCompanyTaxID(e)}>
+                          <h4>add</h4>
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          className="delete-button"
+                          onClick={(e) => handleDeleteTaxID(e, tax_id.id)}>
+                          <h4>delete</h4>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </>
+            ) : (
+              <button
+                className="add-button"
+                onClick={(e) => handleAddCompanyTaxID(e)}>
+                <h3>add company tax id</h3>
+              </button>
+            )}
+            <tfoot></tfoot>
+          </table>
+
+          <div className="modal">
+            <table className="card">
+              <thead>
+                <tr>
+                  <th colSpan={2}>
+                    <h5>add company tax id</h5>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <label htmlFor="">Select Country:</label>
+                  </td>
+                  <td>
+                    <select
+                      className="select"
+                      name="country"
+                      id="country"
+                      onChange={(e) =>
+                        handleTaxIDType(e, JSON.parse(e.target.value))
+                      }>
+                      {countries &&
+                        countries.length > 0 &&
+                        countries.map((country) => (
+                          <option
+                            key={country.country}
+                            value={JSON.stringify(country)}>
+                            {country.country}
+                          </option>
+                        ))}
+                    </select>
+                  </td>
+                </tr>
+                {tax_id_type && taxInfo && Object.keys(taxInfo).length > 0 ? (
+                  <tr>
                     <td>
+                      <label htmlFor="tax_id">{taxInfo.description}</label>
+                    </td>
+                    <td>
+                      <input
+                        className="input"
+                        name={taxInfo.description}
+                        id={`tax_id`}
+                        placeholder={`${taxInfo.example}`}
+                        onChange={(e) => handleTaxID(e, e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  ''
+                )}
+                <tr>
+                  <td>
+                    {tax_id_type && tax_id ? (
                       <button
                         className="add-button"
                         onClick={(e) => handleAddTaxID(e)}>
                         <h4>add</h4>
                       </button>
-                    </td>
-                    <td>
-                      <button
-                        className="delete-button"
-                        onClick={(e) => handleDeleteTaxID(e, tax_id.id)}>
-                        <h4>delete</h4>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-            <tfoot></tfoot>
-          </table>
-
-          <table className="card">
-            <thead></thead>
-            <tbody>
-              <tr>
-                <td>
-                  <label htmlFor="">Select Country:</label>
-                  <select
-                    className="select"
-                    name="country"
-                    id="country"
-                    // onChange={handleTaxExemptChange}
-                    // value={tax_exempt}
-                  >
-                    {countries &&
-                      countries.length > 0 &&
-                      countries.map((country) => (
-                        <option value={country.enum}>
-                          <label>{country.country}</label>
-                        </option>
-                      ))}
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                  <td>
+                    <button
+                      className="cancel-button"
+                      onClick={(e) => handleCancelTaxID(e)}>
+                      <h4>cancel</h4>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </form>
 
         <StatusBar message={message} messageType={messageType} />

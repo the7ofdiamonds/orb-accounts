@@ -935,14 +935,22 @@ table tfoot tr:last-child {
 .add-button {
   background-color: var(--orb-accounts-color-success);
 }
+.add-button h3,
 .add-button h4 {
   color: var(--orb-accounts-color-success-text);
+}
+.add-button h3 {
+  text-transform: uppercase;
+}
+.add-button h4 {
   text-transform: capitalize;
 }
 
+.cancel-button,
 .delete-button {
   background-color: var(--orb-accounts-color-error);
 }
+.cancel-button h4,
 .delete-button h4 {
   color: var(--orb-accounts-color-error-text);
   text-transform: capitalize;
@@ -1055,6 +1063,10 @@ div.loading {
 }
 div.loading h1 {
   color: white;
+}
+
+.modal {
+  display: none;
 }
 
 /*# sourceMappingURL=orb-accounts.css.map */

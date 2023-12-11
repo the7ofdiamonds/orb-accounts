@@ -76,15 +76,24 @@
 .add-button {
   background-color: var(--orb-accounts-color-success);
 
+  h3,
   h4 {
     color: var(--orb-accounts-color-success-text);
+  }
+
+  h3 {
+    text-transform: uppercase;
+  }
+
+  h4 {
     text-transform: capitalize;
   }
 }
 
+.cancel-button,
 .delete-button {
   background-color: var(--orb-accounts-color-error);
-  
+
   h4 {
     color: var(--orb-accounts-color-error-text);
     text-transform: capitalize;
