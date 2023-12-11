@@ -53,8 +53,8 @@ class ORB_Accounts
 
     public function __construct()
     {
-        $this->plugin = plugin_basename(__FILE__);
-        add_filter("plugin_action_links_$this->plugin", [$this, 'settings_link']);
+        // $this->plugin = plugin_basename(__FILE__);
+        // add_filter("plugin_action_links_$this->plugin", [$this, 'settings_link']);
 
         add_action('admin_init', function () {
             new Admin;

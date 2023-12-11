@@ -37,8 +37,9 @@ import {
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
 import StatusBar from './components/StatusBar.jsx';
+import { getCountries, getTaxIDInfo } from '../controllers/accountsEnums.js';
 
-import countries from '../utils/Country.js';
+// import countries from '../utils/Country.js';
 
 function ClientComponent() {
   const dispatch = useDispatch();
@@ -82,6 +83,8 @@ function ClientComponent() {
     tax_id,
   } = useSelector((state) => state.accountsUser);
 
+  const { countries, taxIDInfo } = useSelector((state) => state.accountsEnums);
+
   useEffect(() => {
     if (user_email) {
       dispatch(getUser());
@@ -105,6 +108,14 @@ function ClientComponent() {
       dispatch(splitShippingName(shipping_name));
     }
   }, [shipping_name, dispatch]);
+
+  useEffect(() => {
+    dispatch(getCountries());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getTaxIDInfo());
+  }, [dispatch]);
 
   const handleFirstNameChange = (event) => {
     dispatch(updateFirstName(event.target.value));
@@ -428,15 +439,24 @@ function ClientComponent() {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={2}>
-                    <input
-                      className="input"
+                  <td>
+                    <label htmlFor="country">Country</label>
+                  </td>
+                  <td>
+                    <select
+                      className="select"
                       name="country"
                       id="country"
-                      placeholder="Country"
-                      onChange={handleCountryChange}
-                      value={country}
-                    />
+                      onChange={(e) => handleCountryChange(e, e.target.value)}
+                      value={country}>
+                      {countries &&
+                        countries.length > 0 &&
+                        countries.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.country}
+                          </option>
+                        ))}
+                    </select>
                   </td>
                 </tr>
               </tbody>
@@ -538,15 +558,27 @@ function ClientComponent() {
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={2}>
-                    <input
-                      className="input"
+                  <td>
+                    <label htmlFor="shipping_country">Shipping Country</label>
+                  </td>
+                  <td>
+                    <select
+                      className="select"
                       name="shipping_country"
                       id="shipping_country"
                       placeholder="Shipping Country"
-                      onChange={handleShippingCountryChange}
-                      value={shipping_country}
-                    />
+                      onChange={(e) =>
+                        handleShippingCountryChange(e, e.target.value)
+                      }
+                      value={shipping_country}>
+                      {countries &&
+                        countries.length > 0 &&
+                        countries.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.country}
+                          </option>
+                        ))}
+                    </select>
                   </td>
                 </tr>
               </tbody>
@@ -665,14 +697,14 @@ function ClientComponent() {
                   <td>
                     <select
                       className="select"
-                      name="country"
-                      id="country"
+                      name="tax_id_country"
+                      id="tax_id_country"
                       onChange={(e) =>
                         handleTaxIDType(e, JSON.parse(e.target.value))
                       }>
-                      {countries &&
-                        countries.length > 0 &&
-                        countries.map((country) => (
+                      {taxIDInfo &&
+                        taxIDInfo.length > 0 &&
+                        taxIDInfo.map((country) => (
                           <option
                             key={country.country}
                             value={JSON.stringify(country)}>

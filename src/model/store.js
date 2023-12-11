@@ -7,6 +7,7 @@ import { accountsReceiptSlice } from '../controllers/accountsReceiptSlice.js';
 import { accountsServicesSlice } from '../controllers/accountsServicesSlice.js';
 import { accountsStripeSlice } from '../controllers/accountsStripeSlice.js';
 import { accountsUserSlice } from '../controllers/accountsUserSlice.js';
+import { accountsEnumsSlice } from '../controllers/accountsEnums.js';
 
 const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ const store = configureStore({
     accountsReceipt: accountsReceiptSlice.reducer,
     accountsServices: accountsServicesSlice.reducer,
     accountsStripe: accountsStripeSlice.reducer,
-    accountsUser: accountsUserSlice.reducer
+    accountsUser: accountsUserSlice.reducer,
+    accountsEnums: accountsEnumsSlice.reducer
   },
 });
 

@@ -7921,6 +7921,91 @@ const accountsEmailSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.crea
 
 /***/ }),
 
+/***/ "./src/controllers/accountsEnums.js":
+/*!******************************************!*\
+  !*** ./src/controllers/accountsEnums.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsEnumsSlice: () => (/* binding */ accountsEnumsSlice),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getCountries: () => (/* binding */ getCountries),
+/* harmony export */   getTaxIDInfo: () => (/* binding */ getTaxIDInfo)
+/* harmony export */ });
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+
+const initialState = {
+  enumsLoading: false,
+  enumsError: '',
+  taxIDInfo: ''
+};
+const getCountries = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('enums/getCountries', async () => {
+  try {
+    const response = await fetch(`/wp-json/orb/enums/v1/countries`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const getTaxIDInfo = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('enums/getTaxIDInfo', async () => {
+  try {
+    const response = await fetch(`/wp-json/orb/enums/v1/countries/tax-id`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      const errorMessage = errorData.message;
+      throw new Error(errorMessage);
+    }
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    throw error.message;
+  }
+});
+const accountsEnumsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: 'enums',
+  initialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(getCountries.fulfilled, (state, action) => {
+      state.enumsLoading = true;
+      state.enumsError = '';
+      state.countries = action.payload;
+    }).addCase(getTaxIDInfo.fulfilled, (state, action) => {
+      state.enumsLoading = true;
+      state.enumsError = '';
+      state.taxIDInfo = action.payload;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getTaxIDInfo.pending, getCountries.pending), state => {
+      state.enumsLoading = true;
+      state.enumsError = null;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getTaxIDInfo.rejected, getCountries.rejected), (state, action) => {
+      state.enumsLoading = false;
+      state.enumsError = action.error.message;
+    });
+  }
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsEnumsSlice);
+
+/***/ }),
+
 /***/ "./src/controllers/accountsInvoiceSlice.js":
 /*!*************************************************!*\
   !*** ./src/controllers/accountsInvoiceSlice.js ***!
@@ -9892,7 +9977,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /* harmony import */ var _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/accountsEmail.js */ "./src/controllers/accountsEmail.js");
 /* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
 /* harmony import */ var _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsProductsSlice.js */ "./src/controllers/accountsProductsSlice.js");
@@ -9901,6 +9986,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsServicesSlice.js */ "./src/controllers/accountsServicesSlice.js");
 /* harmony import */ var _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsStripeSlice.js */ "./src/controllers/accountsStripeSlice.js");
 /* harmony import */ var _controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsUserSlice.js */ "./src/controllers/accountsUserSlice.js");
+/* harmony import */ var _controllers_accountsEnums_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../controllers/accountsEnums.js */ "./src/controllers/accountsEnums.js");
 
 
 
@@ -9910,7 +9996,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_8__.configureStore)({
+
+const store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_9__.configureStore)({
   reducer: {
     accountsEmail: _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_0__.accountsEmailSlice.reducer,
     accountsInvoice: _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_1__.accountsInvoiceSlice.reducer,
@@ -9919,7 +10006,8 @@ const store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_8__.configureStore)({
     accountsReceipt: _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_4__.accountsReceiptSlice.reducer,
     accountsServices: _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_5__.accountsServicesSlice.reducer,
     accountsStripe: _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.accountsStripeSlice.reducer,
-    accountsUser: _controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_7__.accountsUserSlice.reducer
+    accountsUser: _controllers_accountsUserSlice_js__WEBPACK_IMPORTED_MODULE_7__.accountsUserSlice.reducer,
+    accountsEnums: _controllers_accountsEnums_js__WEBPACK_IMPORTED_MODULE_8__.accountsEnumsSlice.reducer
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);

@@ -45,16 +45,29 @@ class API
         // PDF being used ???
         $pdf = new PDF;
 
+        $enums = new Enums();
         $user = new Users($stripeClient);
-        $email = new Email($stripeClient, $mailer);
-        new EmailQuote($stripeClient, $mailer);
-        new EmailInvoice($stripeClient, $mailer);
-        new EmailReceipt($stripeClient, $mailer);
-        new EmailOnboarding($stripeClient, $mailer);
+        // $email = new Email($stripeClient, $mailer);
+        // new EmailQuote($stripeClient, $mailer);
+        // new EmailInvoice($stripeClient, $mailer);
+        // new EmailReceipt($stripeClient, $mailer);
+        // new EmailOnboarding($stripeClient, $mailer);
         $invoice = new Invoice($stripeClient);
         $quote = new Quote($stripeClient);
         $receipt = new Receipt($stripeClient);
         $stripe = new Stripe($stripeClient);
+
+        register_rest_route('orb/enums/v1', '/countries', array(
+            'methods' => 'GET',
+            'callback' => array($enums, 'get_countries'),
+            'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('orb/enums/v1', '/countries/tax-id', array(
+            'methods' => 'GET',
+            'callback' => array($enums, 'get_tax_id_info'),
+            'permission_callback' => '__return_true',
+        ));
 
         register_rest_route('orb/user/v1', '/add', array(
             'methods' => 'POST',
@@ -86,29 +99,29 @@ class API
             'permission_callback' => '__return_true',
         ));
 
-        register_rest_route('orb/email/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'POST',
-            'callback' => array($email, 'send_quote_email'),
-            'permission_callback' => '__return_true',
-        ));
+        // register_rest_route('orb/email/v1', '/quote/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        //     'methods' => 'POST',
+        //     'callback' => array($email, 'send_quote_email'),
+        //     'permission_callback' => '__return_true',
+        // ));
 
-        register_rest_route('orb/email/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'POST',
-            'callback' => array($email, 'send_invoice_email'),
-            'permission_callback' => '__return_true',
-        ));
+        // register_rest_route('orb/email/v1', '/invoice/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        //     'methods' => 'POST',
+        //     'callback' => array($email, 'send_invoice_email'),
+        //     'permission_callback' => '__return_true',
+        // ));
 
-        register_rest_route('orb/email/v1', '/receipt/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'POST',
-            'callback' => array($email, 'send_receipt_email'),
-            'permission_callback' => '__return_true',
-        ));
+        // register_rest_route('orb/email/v1', '/receipt/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        //     'methods' => 'POST',
+        //     'callback' => array($email, 'send_receipt_email'),
+        //     'permission_callback' => '__return_true',
+        // ));
 
-        register_rest_route('orb/email/v1', '/onboarding/(?P<slug>[a-zA-Z0-9-_]+)', array(
-            'methods' => 'POST',
-            'callback' => array($email, 'send_onboarding_email'),
-            'permission_callback' => '__return_true',
-        ));
+        // register_rest_route('orb/email/v1', '/onboarding/(?P<slug>[a-zA-Z0-9-_]+)', array(
+        //     'methods' => 'POST',
+        //     'callback' => array($email, 'send_onboarding_email'),
+        //     'permission_callback' => '__return_true',
+        // ));
 
         register_rest_route('orb/invoice/v1', '/save/(?P<slug>[a-zA-Z0-9-_]+)', array(
             'methods' => 'POST',
