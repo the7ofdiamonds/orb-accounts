@@ -22,12 +22,9 @@ function PaymentComponent() {
   const [messageType, setMessageType] = useState('');
   const [message, setMessage] = useState('');
 
-  const { user_email } = useSelector((state) => state.accountsUser);
+  const { user_email } = useSelector((state) => state.accountsUsers);
   const { stripe_invoice_id, status, amount_remaining } = useSelector(
     (state) => state.accountsInvoice
-  );
-  const { paymentLoading, paymentError } = useSelector(
-    (state) => state.accountsPayment
   );
   const { receipt_id } = useSelector((state) => state.accountsReceipt);
 
@@ -74,7 +71,7 @@ function PaymentComponent() {
       });
     }
   }, [user_email, dispatch]);
-// Check to see if payment intent
+  // Check to see if payment intent
   useEffect(() => {
     if (status === 'open') {
       setMessage('Choose a payment method');
@@ -100,14 +97,6 @@ function PaymentComponent() {
       window.location.href = `/billing/receipt/${receipt_id}`;
     }
   };
-
-  if (paymentLoading) {
-    return <LoadingComponent />;
-  }
-
-  if (paymentError) {
-    return <ErrorComponent error={paymentError} />;
-  }
 
   return (
     <>

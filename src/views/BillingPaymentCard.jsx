@@ -35,8 +35,6 @@ const CardPaymentComponent = () => {
   const dispatch = useDispatch();
   const elements = useElements();
 
-  // const CardNumber = elements.create(cardNumber);
-
   const [messageType, setMessageType] = useState('info');
   const [message, setMessage] = useState(
     'Please enter your card number, expiration date, and the code on the back.'
@@ -119,7 +117,6 @@ const CardPaymentComponent = () => {
     }
   }, [status, paymentMethod, dispatch]);
 
-
   const handlePay = () => {
     if (client_secret) {
     }
@@ -135,16 +132,27 @@ const CardPaymentComponent = () => {
 
   return (
     <>
-      <section className="payment">
+      <section className="payment-card">
         <PaymentNavigationComponent />
 
-        <form className="debit-credit-card card">
-          <div className="card-number-box">
-            <CardNumberElement />
-          </div>
+        <form className="credit-card-form card">
+          <div className="card-logo">Card Logo</div>
 
-          <CardExpiryElement />
-          <CardCvcElement className="cvv-box"></CardCvcElement>
+          <div className="card-chip"></div>
+
+          <div className="signature-line">
+            <div className="card-number-box">
+              <CardNumberElement placeholder="1234 5678 9012 3456" />
+            </div>
+
+            <div className="card-expiration-date">
+              <CardExpiryElement placeholder="MM/YY" />
+            </div>
+
+            <div className="card-cvc">
+              <CardCvcElement placeholder="123" />
+            </div>
+          </div>
         </form>
 
         <StatusBar message={message} messageType={messageType} />

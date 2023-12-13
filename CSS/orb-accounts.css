@@ -232,90 +232,6 @@ section.invoice {
   max-width: fit-content;
 }
 
-.debit-credit-card {
-  position: relative;
-  height: 250px;
-  width: 400px;
-}
-.debit-credit-card .front {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  background: var(--orb-color-primary);
-  border-radius: 5px;
-  backface-visibility: hidden;
-  padding: 20px;
-  transform: perspective(1000px) rotateY(0deg);
-  transition: transform 0.4s ease-out;
-}
-.debit-credit-card .front .image {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 10px;
-}
-.debit-credit-card .front .image img {
-  height: 50px;
-}
-.debit-credit-card .front .card-number-box {
-  padding: 30px 0;
-  font-size: 22px;
-  color: var(--orb-color-secondary);
-}
-.debit-credit-card .front .flexbox {
-  display: flex;
-}
-.debit-credit-card .front .flexbox .box:nth-child(1) {
-  margin-right: auto;
-}
-.debit-credit-card .front .flexbox .box {
-  font-size: 15px;
-  color: var(--orb-color-secondary);
-}
-.debit-credit-card .back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(45deg, blueviolet, deeppink);
-  border-radius: 5px;
-  padding: 20px 0;
-  text-align: right;
-  backface-visibility: hidden;
-  box-shadow: var(--orb-box-shadow);
-  transform: perspective(1000px) rotateY(180deg);
-  transition: transform 0.4s ease-out;
-}
-.debit-credit-card .back .stripe {
-  background: #000;
-  width: 100%;
-  margin: 10px 0;
-  height: 50px;
-}
-.debit-credit-card .back .box {
-  padding: 0 20px;
-}
-.debit-credit-card .back .box span {
-  color: var(--orb-color-secondary);
-  font-size: 15px;
-}
-.debit-credit-card .back .box .cvv-box {
-  height: 50px;
-  padding: 10px;
-  margin-top: 5px;
-  color: var(--orb-color-primary);
-  background: var(--orb-color-secondary);
-  border-radius: 5px;
-  width: 100%;
-}
-.debit-credit-card .back .box img {
-  margin-top: 30px;
-  height: 30px;
-}
-
 .debit-credit-form {
   display: grid;
   grid-template-areas: "number number number" "holder holder holder" "month year cvv";
@@ -1069,16 +985,40 @@ div.loading h1 {
   display: none;
 }
 
-.debit-credit-card {
-  position: relative;
-  height: 250px;
+.payment-card .credit-card-form.card {
   width: 400px;
+  height: 250px;
 }
-.debit-credit-card .card-number-box {
-  padding: 30px 0;
-  font-size: 22px;
-  background-color: black;
-  color: white;
+.payment-card .credit-card-form.card .card-logo {
+  max-width: 33%;
+  max-height: 25%;
+}
+.payment-card .credit-card-form.card .card-chip {
+  max-width: 50px;
+  max-height: 30px;
+}
+.payment-card .credit-card-form.card .signature-line {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.payment-card .credit-card-form.card .signature-line .card-number-box,
+.payment-card .credit-card-form.card .signature-line .card-expiration-date,
+.payment-card .credit-card-form.card .signature-line .card-cvc {
+  width: inherit;
+}
+.payment-card .credit-card-form.card .signature-line .card-number-box > div {
+  width: 100%;
+}
+.payment-card .credit-card-form.card .signature-line .card-expiration-date > div {
+  width: 100%;
+}
+.payment-card .credit-card-form.card .signature-line .card-cvc > div {
+  width: 100%;
 }
 
 /*# sourceMappingURL=orb-accounts.css.map */

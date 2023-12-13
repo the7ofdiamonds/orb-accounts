@@ -136,7 +136,7 @@ function PaymentComponent() {
     message = _useState4[0],
     setMessage = _useState4[1];
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
-      return state.accountsUser;
+      return state.accountsUsers;
     }),
     user_email = _useSelector.user_email;
   var _useSelector2 = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
@@ -146,14 +146,9 @@ function PaymentComponent() {
     status = _useSelector2.status,
     amount_remaining = _useSelector2.amount_remaining;
   var _useSelector3 = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
-      return state.accountsPayment;
-    }),
-    paymentLoading = _useSelector3.paymentLoading,
-    paymentError = _useSelector3.paymentError;
-  var _useSelector4 = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
       return state.accountsReceipt;
     }),
-    receipt_id = _useSelector4.receipt_id;
+    receipt_id = _useSelector3.receipt_id;
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (user_email) {
@@ -214,14 +209,6 @@ function PaymentComponent() {
       window.location.href = "/billing/receipt/".concat(receipt_id);
     }
   };
-  if (paymentLoading) {
-    return /*#__PURE__*/React.createElement(_loading_LoadingComponent_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], null);
-  }
-  if (paymentError) {
-    return /*#__PURE__*/React.createElement(_error_ErrorComponent_jsx__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      error: paymentError
-    });
-  }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("section", {
     className: "payment"
   }, /*#__PURE__*/React.createElement("h2", {
