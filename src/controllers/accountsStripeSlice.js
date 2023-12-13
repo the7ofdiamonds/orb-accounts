@@ -59,7 +59,8 @@ const initialState = {
     last4: '',
     wallet: '',
     created: '',
-    type: ''
+    type: '',
+    paymentMethod: ''
 }
 
 export const getStripeQuote = createAsyncThunk('stripe/getStripeQuote', async (stripeQuoteID, { getState }) => {
@@ -225,7 +226,7 @@ export const accountsStripeSlice = createSlice({
             state.client_secret = action.payload;
         },
         updatePaymentMethod: (state, action) => {
-            state.client_secret = action.payload;
+            state.paymentMethod = action.payload;
         }
     },
     extraReducers: (builder) => {

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkorb_accounts=self.webpackChunkorb_accounts||[]).push([[634],{7634:(e,t,n)=>{n.r(t),n.d(t,{default:()=>c});const c=function(){return React.createElement(React.Fragment,null,React.createElement("main",{className:"client"},React.createElement("h1",null,"Client"),React.createElement("button",null,React.createElement("h3",null,"billing"))))}}}]);

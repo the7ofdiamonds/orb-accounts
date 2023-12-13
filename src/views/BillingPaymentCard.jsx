@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import {
+  useStripe,
+  useElements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+} from '@stripe/react-stripe-js';
+
 import PaymentNavigationComponent from './components/PaymentNavigation';
 
-import { getUser } from '../controllers/accountsUserSlice';
-import {
-  getInvoiceByID,
-  updateInvoiceStatus,
-} from '../controllers/accountsInvoiceSlice';
+import { getUser } from '../controllers/accountsUsersSlice.js';
+import { getInvoiceByID } from '../controllers/accountsInvoiceSlice';
 import { saveReceipt } from '../controllers/accountsReceiptSlice';
 import {
   getStripeInvoice,
@@ -27,6 +32,10 @@ import StatusBar from './components/StatusBar';
 
 const CardPaymentComponent = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const elements = useElements();
+
+  // const CardNumber = elements.create(cardNumber);
 
   const [messageType, setMessageType] = useState('info');
   const [message, setMessage] = useState(
@@ -34,47 +43,25 @@ const CardPaymentComponent = () => {
   );
 
   const { user_email, first_name, last_name, stripe_customer_id } = useSelector(
-    (state) => state.accountsUser
+    (state) => state.accountsUsers
   );
+  const { stripe_invoice_id } = useSelector((state) => state.accountsInvoice);
   const {
-    stripe_invoice_id,
+    stripeLoading,
+    stripeError,
     payment_intent_id,
     status,
     account_country,
     currency,
     amount_due,
     amount_paid,
-    remaining_balance,
-  } = useSelector((state) => state.accountsInvoice);
-  const { stripeLoading, stripeError, client_secret } = useSelector(
-    (state) => state.accountsStripe
-  );
-  const { receipt_id, payment_method } = useSelector(
-    (state) => state.accountsReceipt
-  );
-
-  const [cardNumber, setCardNumber] = useState('');
-  const [expMonth, setExpMonth] = useState('');
-  const [expYear, setExpYear] = useState('');
-  const [CVC, setCVC] = useState('');
-
-  const handleCardNumberChange = (e) => {
-    setCardNumber(e.target.value);
-  };
-
-  const handleExpMonthChange = (e) => {
-    setExpMonth(e.target.value);
-  };
-
-  const handleExpYearChange = (e) => {
-    setExpYear(e.target.value);
-  };
-
-  const handleCVCChange = (e) => {
-    setCVC(e.target.value);
-  };
-
-  const dispatch = useDispatch();
+    amount_remaining,
+    onboarding_links,
+    client_secret,
+    payment_method_id,
+    paymentMethod,
+  } = useSelector((state) => state.accountsStripe);
+  const { receipt_id } = useSelector((state) => state.accountsReceipt);
 
   useEffect(() => {
     if (user_email) {
@@ -100,7 +87,7 @@ const CardPaymentComponent = () => {
     if (stripe_invoice_id) {
       dispatch(getStripeInvoice(stripe_invoice_id));
     }
-  }, [dispatch, stripe_invoice_id]);
+  }, [stripe_invoice_id, dispatch]);
 
   useEffect(() => {
     if (payment_intent_id) {
@@ -109,141 +96,105 @@ const CardPaymentComponent = () => {
   }, [payment_intent_id, dispatch]);
 
   useEffect(() => {
-    if (payment_method && stripe_invoice_id) {
-      dispatch(getStripeInvoice(stripe_invoice_id));
+    if (payment_method_id) {
+      dispatch(getPaymentMethod(payment_method_id));
     }
-  }, [payment_method, dispatch]);
+  }, [payment_method_id, dispatch]);
 
   useEffect(() => {
-    if (payment_method) {
-      dispatch(getPaymentMethod(payment_method));
+    if (payment_method_id) {
+      dispatch(updatePaymentMethod(PaymentMethodGenerator(payment_method_id)));
     }
-  }, [payment_method, dispatch]);
+  }, [payment_method_id, dispatch]);
 
   useEffect(() => {
-    if (payment_method) {
-      dispatch(updatePaymentMethod(PaymentMethodGenerator(payment_method)));
+    if (status === 'paid' && paymentMethod) {
+      dispatch(saveReceipt()).then((response) => {
+        if (response.error !== undefined) {
+          console.error(response.error.message);
+          setMessageType('error');
+          setMessage(response.error.message);
+        }
+      });
     }
-  }, [dispatch, payment_method]);
+  }, [status, paymentMethod, dispatch]);
 
-  useEffect(() => {
-    if (status === 'paid') {
-      dispatch(saveReceipt());
+
+  const handlePay = () => {
+    if (client_secret) {
     }
-  }, [dispatch, status]);
-
-  useEffect(() => {
-    const input = document.getElementById('credit-card-input');
-
-    if (input) {
-      input.addEventListener(
-        'input',
-        () =>
-          (input.value = FormatCreditNumber(input.value.replaceAll(' ', '')))
-      );
-    }
-  }, [cardNumber]);
-
-  const handleSubmit = () => {
-    console.log(cardNumber);
   };
 
-  if (paymentLoading) {
-    return <LoadingComponent />;
-  }
+  const handleReceipt = () => {
+    if (receipt_id) {
+      window.location.href = `/billing/receipt/${receipt_id}`;
+    }
+  };
 
-  if (paymentError) {
-    return <ErrorComponent error={paymentError} />;
-  }
+  const handleOnboarding = () => {};
 
   return (
     <>
       <section className="payment">
         <PaymentNavigationComponent />
 
-        <div className="debit-credit-card card">
-          <div className="front">
-            <div className="image">
-              <img src="" alt="" />
-              <img src="" alt="" />
-            </div>
-            <div className="card-number-box">
-              {cardNumber ? cardNumber : '0000 0000 0000 0000'}
-            </div>
-            <div className="flexbox">
-              <div className="box">
-                <div className="card-holder-name">
-                  {first_name} {last_name}
-                </div>
-              </div>
-
-              <div className="box">
-                <div className="expiration">
-                  <h5>{expMonth ? expMonth : '00'}</h5>/
-                  <h5>{expYear ? expYear : '0000'}</h5>
-                </div>
-              </div>
-            </div>
+        <form className="debit-credit-card card">
+          <div className="card-number-box">
+            <CardNumberElement />
           </div>
 
-          <div className="back">
-            <div className="box">
-              <span>CVC</span>
-              <div className="cvv-box">{CVC ? CVC : '0000'}</div>
-              <img src="" alt="" />
-            </div>
-          </div>
-        </div>
-
-        <form className="payment-card-form">
-          <input
-            id="credit-card-input"
-            type="text"
-            size={16}
-            maxLength={19}
-            placeholder="0000 0000 0000 0000"
-            onChange={handleCardNumberChange}
-            value={cardNumber}
-          />
-          <input
-            type="text"
-            size={1}
-            maxLength={2}
-            placeholder="00"
-            onChange={handleExpMonthChange}
-            value={expMonth}
-          />
-          <input
-            type="text"
-            size={3}
-            maxLength={4}
-            placeholder="0000"
-            onChange={handleExpYearChange}
-            value={expYear}
-          />
-          <input
-            type="text"
-            size={3}
-            maxLength={4}
-            placeholder="CVC"
-            onChange={handleCVCChange}
-            value={CVC}
-          />
+          <CardExpiryElement />
+          <CardCvcElement className="cvv-box"></CardCvcElement>
         </form>
 
         <StatusBar message={message} messageType={messageType} />
 
-        {amount_due ? (
-          <h3>
-            Amount: {FormatCurrency(amount_due, account_country, currency)}
-          </h3>
-        ) : (
-          ''
-        )}
+        <div className="amount">
+          {amount_paid ? (
+            <>
+              <h3>
+                Amount Paid:
+                {FormatCurrency(amount_paid, account_country, currency)}
+              </h3>
+              <h3>
+                Balance:{' '}
+                {FormatCurrency(amount_remaining, account_country, currency)}
+              </h3>
+            </>
+          ) : amount_due ? (
+            <h3>
+              Amount: {FormatCurrency(amount_due, account_country, currency)}
+            </h3>
+          ) : (
+            ''
+          )}
+        </div>
 
-        <button type="submit" onClick={handleSubmit}>
-          <h3>PAY</h3>
-        </button>
+        <div className="action">
+          {amount_due && client_secret ? (
+            <button type="submit" onClick={handlePay}>
+              <h3>pay</h3>
+            </button>
+          ) : (
+            ''
+          )}
+
+          {receipt_id ? (
+            <button type="submit" onClick={handleReceipt}>
+              <h3>receipt</h3>
+            </button>
+          ) : (
+            ''
+          )}
+
+          {receipt_id && onboarding_links ? (
+            <button type="submit" onClick={handleOnboarding}>
+              <h3>onboarding</h3>
+            </button>
+          ) : (
+            ''
+          )}
+        </div>
       </section>
     </>
   );

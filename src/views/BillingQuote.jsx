@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getUser } from '../controllers/accountsUserSlice.js';
+import { getUser } from '../controllers/accountsUsersSlice.js';
 import {
   cancelQuote,
   acceptQuote,
@@ -26,7 +26,7 @@ function QuoteComponent() {
     'To receive an invoice for the selected services, you must accept the quote above.'
   );
 
-  const { user_email } = useSelector((state) => state.accountsUser);
+  const { user_email } = useSelector((state) => state.accountsUsers);
   const {
     quoteLoading,
     quoteError,

@@ -97,7 +97,7 @@ class Database
             amount_due VARCHAR(255) DEFAULT NULL,
             amount_remaining VARCHAR(255) DEFAULT NULL,
             invoice_pdf_url VARCHAR(255) DEFAULT NULL,
-            onboarding_link TEXT DEFAULT NULL,
+            onboarding_links TEXT DEFAULT NULL,
             PRIMARY KEY (id)
         ) $charset_collate;";
 
@@ -125,7 +125,7 @@ class Database
         stripe_customer_id VARCHAR(255) DEFAULT NULL,
         name VARCHAR(255) DEFAULT NULL,
         receipt_pdf_url VARCHAR(255) DEFAULT NULL,
-        onboarding_link TEXT DEFAULT NULL,
+        onboarding_links TEXT DEFAULT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 

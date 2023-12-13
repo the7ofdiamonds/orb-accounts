@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkorb_accounts=self.webpackChunkorb_accounts||[]).push([[445],{2445:(c,e,n)=>{n.r(e),n.d(e,{default:()=>u});var t=n(7294);const u=function(){return t.createElement("div",null,"Dashboard Accounts")}}}]);

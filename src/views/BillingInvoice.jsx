@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getUser } from '../controllers/accountsUserSlice.js';
+import { getUser } from '../controllers/accountsUsersSlice.js';
 import {
   getInvoiceByID,
   finalizeInvoice,
@@ -29,7 +29,7 @@ function InvoiceComponent() {
     'To start receiving the services listed above, please use the payment button below.'
   );
 
-  const { user_email } = useSelector((state) => state.accountsClient);
+  const { user_email } = useSelector((state) => state.accountsUsers);
   const {
     invoiceLoading,
     invoiceError,

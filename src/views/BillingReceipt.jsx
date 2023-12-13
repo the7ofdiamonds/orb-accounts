@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getUser } from '../controllers/accountsUserSlice.js';
+import { getUser } from '../controllers/accountsUsersSlice.js';
 import { getReceiptByID } from '../controllers/accountsReceiptSlice.js';
 import {
   getStripeInvoice,
@@ -34,7 +34,7 @@ function ReceiptComponent() {
     state,
     zipcode,
     phone
-  } = useSelector((state) => state.accountsUser);
+  } = useSelector((state) => state.accountsUsers);
   const {
     receiptLoading,
     receiptError,

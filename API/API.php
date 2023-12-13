@@ -13,49 +13,45 @@ use ORB\Accounts\Email\EmailInvoice;
 use ORB\Accounts\Email\EmailQuote;
 use ORB\Accounts\Email\EmailReceipt;
 use ORB\Accounts\Email\EmailOnboarding;
+use ORB\Accounts\ENV\EnvironmentVariables;
 use ORB\Accounts\PDF\PDF;
 
 class API
 {
     public function __construct()
     {
-        $dotenv = Dotenv::createImmutable(ORB_ACCOUNTS);
-        $dotenv->load(__DIR__);
-        $envFilePath = ORB_ACCOUNTS . '.env';
-        $envContents = file_get_contents($envFilePath);
-        $lines = explode("\n", $envContents);
-        $stripeSecretKey = null;
+        $mailer = new PHPMailer();
+        // PDF being used ???
+        $pdf = new PDF;
+        $enums = new Enums();
+        $env_var = new EnvironmentVariables();
 
-        foreach ($lines as $line) {
-            $parts = explode('=', $line, 2);
-            if (count($parts) === 2 && $parts[0] === 'STRIPE_SECRET_KEY') {
-                $stripeSecretKey = trim($parts[1]);
-                break;
-            }
-        }
+        $stripeSecretKey = $env_var->getStripeSecretKey();
 
         if ($stripeSecretKey !== null) {
             StripeAPI::setApiKey($stripeSecretKey);
             $stripeClient = new StripeClient($stripeSecretKey);
+
+            $user = new Users($stripeClient);
+            // $email = new Email($stripeClient, $mailer);
+            // new EmailQuote($stripeClient, $mailer);
+            // new EmailInvoice($stripeClient, $mailer);
+            // new EmailReceipt($stripeClient, $mailer);
+            // new EmailOnboarding($stripeClient, $mailer);
+            $env = new ENV;
+            $invoice = new Invoice($stripeClient);
+            $quote = new Quote($stripeClient);
+            $receipt = new Receipt($stripeClient);
+            $stripe = new Stripe($stripeClient);
         } else {
             error_log('Stripe Secret Key is required.');
         }
 
-        $mailer = new PHPMailer();
-        // PDF being used ???
-        $pdf = new PDF;
-
-        $enums = new Enums();
-        $user = new Users($stripeClient);
-        // $email = new Email($stripeClient, $mailer);
-        // new EmailQuote($stripeClient, $mailer);
-        // new EmailInvoice($stripeClient, $mailer);
-        // new EmailReceipt($stripeClient, $mailer);
-        // new EmailOnboarding($stripeClient, $mailer);
-        $invoice = new Invoice($stripeClient);
-        $quote = new Quote($stripeClient);
-        $receipt = new Receipt($stripeClient);
-        $stripe = new Stripe($stripeClient);
+        register_rest_route('orb/env/v1', '/stripe-secret-key', array(
+            'methods' => 'GET',
+            'callback' => array($env, 'get_stripe_secret_key'),
+            'permission_callback' => '__return_true',
+        ));
 
         register_rest_route('orb/enums/v1', '/countries', array(
             'methods' => 'GET',
@@ -74,19 +70,19 @@ class API
             'callback' => array($user, 'add_user'),
             'permission_callback' => '__return_true',
         ));
-        
+
         register_rest_route('orb/users/v1', '/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
             'methods' => 'GET',
             'callback' => array($user, 'get_user'),
             'permission_callback' => '__return_true',
         ));
-        
+
         register_rest_route('orb/user/v1', '/update/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
             'methods' => 'PATCH',
             'callback' => array($user, 'update_user'),
             'permission_callback' => '__return_true',
         ));
-        
+
         register_rest_route('orb/user/v1', '/add/tax-id/(?P<slug>[a-zA-Z0-9-_.%]+)', array(
             'methods' => 'POST',
             'callback' => array($user, 'add_user_tax_id'),

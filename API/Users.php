@@ -151,7 +151,7 @@ class Users
             $user_email = urldecode($slug);
             $user = get_user_by('email', $user_email);
 
-            $databaseUser = $this->database_users->getUser($user->id);
+            $databaseUser = $this->database_users->getUser($user->ID);
             $stripeCustomer = $this->stripe_customers->getCustomer($databaseUser['stripe_customer_id']);
 
             return rest_ensure_response($stripeCustomer);

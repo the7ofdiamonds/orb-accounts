@@ -53,7 +53,7 @@ export const saveInvoice = createAsyncThunk('invoice/saveInvoice', async (stripe
 
 export const getInvoice = createAsyncThunk('invoice/getInvoice', async (stripeInvoiceID, { getState }) => {
   try {
-    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_customer_id } = getState().accountsUsers;
     const { stripe_invoice_id } = getState().accountsInvoice;
     
     const response = await fetch(`/wp-json/orb/invoice/v1/${stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id}`, {
@@ -82,7 +82,7 @@ export const getInvoice = createAsyncThunk('invoice/getInvoice', async (stripeIn
 
 export const getInvoiceByID = createAsyncThunk('invoice/getInvoiceByID', async (id, { getState }) => {
   try {
-    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_customer_id } = getState().accountsUsers;
 
     const response = await fetch(`/wp-json/orb/invoice/v1/id/${id}`, {
       method: 'POST',
@@ -137,7 +137,7 @@ export const getInvoiceByQuoteID = createAsyncThunk('invoice/getInvoiceByQuoteID
 
 export const updateInvoice = createAsyncThunk('invoice/updateInvoice', async (_, { getState }) => {
   try {
-    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_customer_id } = getState().accountsUsers;
     const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
   
     const response = await fetch(`/wp-json/orb/v1/invoice/update/${invoice_id}`, {
@@ -166,7 +166,7 @@ export const updateInvoice = createAsyncThunk('invoice/updateInvoice', async (_,
 
 export const updateInvoiceStatus = createAsyncThunk('invoice/updateInvoiceStatus', async (_, { getState }) => {
   try {
-    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_customer_id } = getState().accountsUsers;
     const { invoice_id, stripe_invoice_id } = getState().accountsInvoice;
   
     const response = await fetch(`/wp-json/orb/invoice/v1/update/status/${invoice_id}`, {
@@ -195,7 +195,7 @@ export const updateInvoiceStatus = createAsyncThunk('invoice/updateInvoiceStatus
 
 export const getClientInvoices = createAsyncThunk('invoice/getClientInvoices', async (_, { getState }) => {
   try {
-    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_customer_id } = getState().accountsUsers;
 
     const response = await fetch(`/wp-json/orb/invoice/v1/client/${stripe_customer_id}`, {
       method: 'GET',
@@ -219,7 +219,7 @@ export const getClientInvoices = createAsyncThunk('invoice/getClientInvoices', a
 
 export const finalizeInvoice = createAsyncThunk('invoice/finalizeInvoice', async (_, { getState }) => {
   try {
-    const { stripe_customer_id } = getState().accountsClient;
+    const { stripe_customer_id } = getState().accountsUsers;
     const { stripe_invoice_id } = getState().accountsInvoice;
   
     const response = await fetch(`/wp-json/orb/invoice/v1/finalize/${stripe_invoice_id}`, {

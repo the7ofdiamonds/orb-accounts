@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkorb_accounts=self.webpackChunkorb_accounts||[]).push([[86],{86:(e,t,n)=>{n.r(t),n.d(t,{default:()=>l});var c=n(7294);const l=function(){return c.createElement(c.Fragment,null,c.createElement("section",{className:"billing"},c.createElement("h2",{className:"title"},"billing")))}}}]);

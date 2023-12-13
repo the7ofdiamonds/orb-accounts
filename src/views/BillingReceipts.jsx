@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getUser } from '../controllers/accountsUserSlice';
+import { getUser } from '../controllers/accountsUsersSlice';
 import { getClientReceipts } from '../controllers/accountsReceiptSlice';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
@@ -11,7 +11,7 @@ function BillingReceipts() {
   const dispatch = useDispatch();
 
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.accountsUser
+    (state) => state.accountsUsers
   );
   const { receiptLoading, receiptError, receipts } = useSelector(
     (state) => state.accountsReceipt

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { fetchServices } from '../controllers/accountsServicesSlice.js';
-import { getUser } from '../controllers/accountsUserSlice.js';
+import { getUser } from '../controllers/accountsUsersSlice.js';
 import {
   addSelections,
   calculateSelections,

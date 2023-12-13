@@ -59,7 +59,7 @@ export const addUser = createAsyncThunk('user/addUser', async (_, { getState }) 
             tax_exempt,
             tax_id_type,
             tax_id,
-        } = getState().accountsUser;
+        } = getState().accountsUsers;
 
         const response = await fetch('/wp-json/orb/user/v1/add', {
             method: 'POST',
@@ -108,7 +108,7 @@ export const addUser = createAsyncThunk('user/addUser', async (_, { getState }) 
 
 export const getUser = createAsyncThunk('user/getUser', async (_, { getState }) => {
     try {
-        const { user_email } = getState().accountsUser;
+        const { user_email } = getState().accountsUsers;
         const encodedEmail = encodeURIComponent(user_email);
 
         const response = await fetch(`/wp-json/orb/users/v1/${encodedEmail}`, {
@@ -158,7 +158,7 @@ export const updateUser = createAsyncThunk('user/updateUser', async (_, { getSta
             tax_exempt,
             tax_id_type,
             tax_id,
-        } = getState().accountsUser;
+        } = getState().accountsUsers;
 
         const response = await fetch(`/wp-json/orb/user/v1/update/${stripe_customer_id}`, {
             method: 'PATCH',
@@ -209,7 +209,7 @@ export const addTaxID = createAsyncThunk('user/addTaxID', async (tax_id_data, { 
     try {
         const {
             stripe_customer_id,
-        } = getState().accountsUser;
+        } = getState().accountsUsers;
 
         const response = await fetch(`/wp-json/orb/user/v1/add/tax-id/${stripe_customer_id}`, {
             method: 'POST',
@@ -239,7 +239,7 @@ export const deleteTaxID = createAsyncThunk('user/deleteTaxID', async (stripe_ta
     try {
         const {
             stripe_customer_id,
-        } = getState().accountsUser;
+        } = getState().accountsUsers;
 
         const response = await fetch(`/wp-json/orb/user/v1/delete/tax-id/${stripe_customer_id}`, {
             method: 'DELETE',
@@ -264,7 +264,7 @@ export const deleteTaxID = createAsyncThunk('user/deleteTaxID', async (stripe_ta
     }
 });
 
-export const accountsUserSlice = createSlice({
+export const accountsUsersSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
@@ -460,6 +460,6 @@ export const {
     updateTaxID,
     splitName,
     splitShippingName
-} = accountsUserSlice.actions;
+} = accountsUsersSlice.actions;
 
-export default accountsUserSlice;
+export default accountsUsersSlice;

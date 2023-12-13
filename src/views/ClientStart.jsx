@@ -32,7 +32,7 @@ import {
   splitShippingName,
   updateTaxIDType,
   updateTaxID,
-} from '../controllers/accountsUserSlice.js';
+} from '../controllers/accountsUsersSlice.js';
 
 import LoadingComponent from '../loading/LoadingComponent.jsx';
 import ErrorComponent from '../error/ErrorComponent.jsx';
@@ -81,7 +81,7 @@ function ClientComponent() {
     tax_ids,
     tax_id_type,
     tax_id,
-  } = useSelector((state) => state.accountsUser);
+  } = useSelector((state) => state.accountsUsers);
 
   const { countries, taxIDInfo } = useSelector((state) => state.accountsEnums);
 

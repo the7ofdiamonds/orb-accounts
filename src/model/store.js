@@ -6,7 +6,7 @@ import { accountsQuoteSlice } from '../controllers/accountsQuoteSlice.js';
 import { accountsReceiptSlice } from '../controllers/accountsReceiptSlice.js';
 import { accountsServicesSlice } from '../controllers/accountsServicesSlice.js';
 import { accountsStripeSlice } from '../controllers/accountsStripeSlice.js';
-import { accountsUserSlice } from '../controllers/accountsUserSlice.js';
+import { accountsUsersSlice } from '../controllers/accountsUsersSlice.js';
 import { accountsEnumsSlice } from '../controllers/accountsEnums.js';
 
 const store = configureStore({
@@ -18,7 +18,7 @@ const store = configureStore({
     accountsReceipt: accountsReceiptSlice.reducer,
     accountsServices: accountsServicesSlice.reducer,
     accountsStripe: accountsStripeSlice.reducer,
-    accountsUser: accountsUserSlice.reducer,
+    accountsUsers: accountsUsersSlice.reducer,
     accountsEnums: accountsEnumsSlice.reducer
   },
 });

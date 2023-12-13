@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import PaymentNavigationComponent from './components/PaymentNavigation.jsx';
 
-import { getUser } from '../controllers/accountsUserSlice.js';
+import { getUser } from '../controllers/accountsUsersSlice.js';
 import { getInvoiceByID } from '../controllers/accountsInvoiceSlice.js';
 import { getReceipt } from '../controllers/accountsReceiptSlice.js';
 import {
@@ -74,7 +74,7 @@ function PaymentComponent() {
       });
     }
   }, [user_email, dispatch]);
-
+// Check to see if payment intent
   useEffect(() => {
     if (status === 'open') {
       setMessage('Choose a payment method');

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkorb_accounts=self.webpackChunkorb_accounts||[]).push([[914],{8914:(e,c,t)=>{t.r(c),t.d(c,{default:()=>a});const a=function(){return React.createElement("div",{className:"loading"},React.createElement("h1",null,"Loading......"))}}}]);
