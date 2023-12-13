@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkorb_accounts=self.webpackChunkorb_accounts||[]).push([[40],{2008:(e,a,r)=>{r.r(a),r.d(a,{default:()=>t});const t=function(e){const{error:a}=e;return React.createElement("main",{className:"error"},React.createElement("div",{className:"status-bar card error"},React.createElement("span",null,a)))}}}]);

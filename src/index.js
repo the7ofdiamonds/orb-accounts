@@ -1,6 +1,3 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
@@ -11,8 +8,10 @@ import store from './model/store.js';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+import dotenv from 'dotenv';
+dotenv.configDotenv({path: '../'});
+
 const stripeKey = process.env.REACT_APP_STRIPE_KEY;
-console.log(stripeKey);
 const stripe = loadStripe(stripeKey);
 
 const orb = document.getElementById('orb_accounts');

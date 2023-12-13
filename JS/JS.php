@@ -21,8 +21,8 @@ class JS
         $this->dir = ORB_ACCOUNTS;
         $this->dirURL = ORB_ACCOUNTS_URL;
 
-        $this->buildDir = $this->dir . 'build/';
-        $this->buildDirURL = $this->dirURL . 'build/';
+        $this->buildDir = $this->dir . 'dist/';
+        $this->buildDirURL = $this->dirURL . 'dist/';
         $this->buildFilePrefix = $this->buildDir . 'src_views_';
         $this->buildFilePrefixURL = $this->buildDirURL . 'src_views_';
 
@@ -33,8 +33,8 @@ class JS
     {
         try {
             if (!empty($section)) {
-                $filePath = $this->buildFilePrefix . $section . '_jsx.js';
-                $filePathURL = $this->buildFilePrefixURL . $section . '_jsx.js';
+                $filePath = $this->buildFilePrefix . $section . '_jsx.index.js';
+                $filePathURL = $this->buildFilePrefixURL . $section . '_jsx.index.js';
 
                 wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
@@ -61,8 +61,8 @@ class JS
     {
         try {
             if (!empty($page) && is_array($page)) {
-                $filePath = $this->buildFilePrefix . $page['file_name'] . '_jsx.js';
-                $filePathURL = $this->buildFilePrefixURL . $page['file_name'] . '_jsx.js';
+                $filePath = $this->buildFilePrefix . $page['file_name'] . '_jsx.index.js';
+                $filePathURL = $this->buildFilePrefixURL . $page['file_name'] . '_jsx.index.js';
 
                 wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
@@ -89,8 +89,8 @@ class JS
     {
         try {
             if (!empty($taxonomy) && is_array($taxonomy) && is_tax($taxonomy['taxonomy'])) {
-                $filePath = $this->buildFilePrefix . $taxonomy['file_name'] . '_jsx.js';
-                $filePathURL = $this->buildFilePrefixURL . $taxonomy['file_name'] . '_jsx.js';
+                $filePath = $this->buildFilePrefix . $taxonomy['file_name'] . '_jsx.index.js';
+                $filePathURL = $this->buildFilePrefixURL . $taxonomy['file_name'] . '_jsx.index.js';
 
                 wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
@@ -117,8 +117,8 @@ class JS
     {
         try {
             if (!empty($post_type) && is_array($post_type) && is_post_type_archive($post_type['name'])) {
-                $filePath = $this->buildFilePrefix . $post_type['archive_page'] . '_jsx.js';
-                $filePathURL = $this->buildFilePrefixURL . $post_type['archive_page'] . '_jsx.js';
+                $filePath = $this->buildFilePrefix . $post_type['archive_page'] . '_jsx.index.js';
+                $filePathURL = $this->buildFilePrefixURL . $post_type['archive_page'] . '_jsx.index.js';
 
                 wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
@@ -145,8 +145,8 @@ class JS
     {
         try {
             if (!empty($post_type) && is_array($post_type) && is_singular($post_type['name'])) {
-                $filePath = $this->buildFilePrefix . $post_type['single_page'] . '_jsx.js';
-                $filePathURL = $this->buildFilePrefixURL . $post_type['single_page'] . '_jsx.js';
+                $filePath = $this->buildFilePrefix . $post_type['single_page'] . '_jsx.index.js';
+                $filePathURL = $this->buildFilePrefixURL . $post_type['single_page'] . '_jsx.index.js';
 
                 wp_enqueue_script('wp-element', $this->includes_url . 'js/dist/element.min.js', [], null, true);
 
