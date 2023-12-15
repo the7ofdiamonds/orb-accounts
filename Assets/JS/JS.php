@@ -1,6 +1,6 @@
 <?php
 
-namespace ORB\Accounts\JS;
+namespace ORB\Accounts\Assets\JS;
 
 use Exception;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace ORB\Accounts\CSS;
+namespace ORB\Accounts\Assets\CSS;
 
 use Exception;
 
-use ORB\Accounts\CSS\Customizer\BorderRadius;
-use ORB\Accounts\CSS\Customizer\Color;
-use ORB\Accounts\CSS\Customizer\Shadow;
-use ORB\Accounts\CSS\Customizer\StatusBar;
-use ORB\Accounts\CSS\Customizer\Table;
+use ORB\Accounts\Assets\CSS\Customizer\BorderRadius;
+use ORB\Accounts\Assets\CSS\Customizer\Color;
+use ORB\Accounts\Assets\CSS\Customizer\Shadow;
+use ORB\Accounts\Assets\CSS\Customizer\StatusBar;
+use ORB\Accounts\Assets\CSS\Customizer\Table;
 
 class CSS
 {
@@ -27,8 +27,8 @@ class CSS
         $this->dirURL = ORB_ACCOUNTS_URL;
         $this->cssFileName = 'orb-accounts.css';
 
-        $this->cssFolderPath = $this->dir . 'CSS/';
-        $this->cssFolderPathURL = $this->dirURL . 'CSS/';
+        $this->cssFolderPath = $this->dir . 'Assets/CSS/';
+        $this->cssFolderPathURL = $this->dirURL . 'Assets/CSS/';
 
         $this->filePath = $this->cssFolderPath . $this->cssFileName;
     }

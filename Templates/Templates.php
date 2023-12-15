@@ -2,8 +2,8 @@
 
 namespace ORB\Accounts\Templates;
 
-use ORB\Accounts\CSS\CSS;
-use ORB\Accounts\JS\JS;
+use ORB\Accounts\Assets\CSS\CSS;
+use ORB\Accounts\Assets\JS\JS;
 
 class Templates
 {

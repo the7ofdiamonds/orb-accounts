@@ -23,6 +23,7 @@ class API
         $mailer = new PHPMailer();
         // PDF being used ???
         $pdf = new PDF;
+        $images = new Images();
         $enums = new Enums();
         $env_var = new EnvironmentVariables();
 
@@ -46,6 +47,18 @@ class API
         } else {
             error_log('Stripe Secret Key is required.');
         }
+
+        register_rest_route('orb/images/v1', 'company/logo', array(
+            'methods' => 'GET',
+            'callback' => array($images, 'get_company_logo'),
+            'permission_callback' => '__return_true',
+        ));
+
+        register_rest_route('orb/images/v1', '/(?P<filename>[a-zA-Z0-9_.%]+\.(png|jpg|jpeg|gif))$', array(
+            'methods' => 'GET',
+            'callback' => array($images, 'get_image'),
+            'permission_callback' => '__return_true',
+        ));
 
         register_rest_route('orb/env/v1', '/stripe-secret-key', array(
             'methods' => 'GET',

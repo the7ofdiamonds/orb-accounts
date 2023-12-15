@@ -1,6 +1,6 @@
 <?php
 
-namespace ORB\Accounts\CSS\Customizer;
+namespace ORB\Accounts\Assets\CSS\Customizer;
 
 class BorderRadius
 {

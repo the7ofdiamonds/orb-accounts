@@ -25,9 +25,10 @@ class Invoice
         try {
             $stripe_invoice_id = $request->get_param('slug');
             $quote_id = $request['quote_id'];
+            $onboarding_links = $request['onboarding_links'];
 
             $stripe_invoice = $this->stripe_invoice->getStripeInvoice($stripe_invoice_id);
-            $invoice_id = $this->database_invoice->saveInvoice($stripe_invoice, $quote_id);
+            $invoice_id = $this->database_invoice->saveInvoice($stripe_invoice, $quote_id, $onboarding_links);
 
             return rest_ensure_response($invoice_id);
         } catch (Exception $e) {
@@ -129,9 +130,10 @@ class Invoice
     {
         try {
             $stripe_invoice_id = $request->get_param('slug');
+            $onboarding_links = $request['onboarding_links'];
 
             $stripe_invoice = $this->stripe_invoice->getStripeInvoice($stripe_invoice_id);
-            $update_invoice = $this->database_invoice->updateInvoice($stripe_invoice);
+            $update_invoice = $this->database_invoice->updateInvoice($stripe_invoice, $onboarding_links);
 
             return rest_ensure_response($update_invoice);
         } catch (Exception $e) {
@@ -208,9 +210,10 @@ class Invoice
 
             $quote = $this->database_invoice->getInvoice($stripe_invoice_id, $stripe_customer_id);
             $quote_id = $quote['quote_id'];
-
+            $onboarding_links = $quote['onboarding_links'];
+            
             $stripe_invoice = $this->stripe_invoice->finalizeInvoice($stripe_invoice_id);
-            $invoice_id = $this->database_invoice->saveInvoice($stripe_invoice, $quote_id);
+            $invoice_id = $this->database_invoice->saveInvoice($stripe_invoice, $quote_id, $onboarding_links);
 
             return rest_ensure_response($invoice_id);
         } catch (Exception $e) {

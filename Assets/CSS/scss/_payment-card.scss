@@ -1,0 +1,109 @@
+.payment-card {
+  .credit-card-form.card {
+    border-radius: 1rem;
+    width: 25rem;
+    height: 15rem;
+    background-color: black;
+    perspective: 1000px;
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .card-front {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform: perspective(1000px) rotateY(0deg);
+      transition: transform 0.4s ease-out;
+
+      .card-logo {
+        width: 12rem;
+        height: 4rem;
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+      }
+
+      .card-chip {
+        width: 5rem;
+        height: 5rem;
+        position: absolute;
+        top: 5rem;
+        left: 1rem;
+      }
+
+      .card-holder-name {
+        position: absolute;
+        left: 1.5rem;
+        bottom: 1.5rem;
+        width: 100%;
+        text-align: left;
+
+        h5 {
+          font-family: 'OCR-B', sans-serif;
+          text-transform: uppercase;
+          font-weight: bold;
+          color: hsl(0, 0, 75);
+          background-color: #636363;
+          text-shadow:
+            -0.5px 1px 1px #fff,
+            1px 1px 1px #fff;
+          background-clip: text;
+          -webkit-background-clip: text;
+          -moz-background-clip: text;
+        }
+      }
+    }
+
+    .card-back {
+      position: absolute;
+      top: 5rem;
+      width: 100%;
+      height: 100%;
+      transform: perspective(1000px) rotateY(180deg);
+      transition: transform 0.4s ease-out;
+
+      .signature-line {
+        display: flex;
+        gap: 10px;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin: auto;
+        background-color: white;
+        padding: 0.5rem;
+
+        .card-number-box,
+        .card-expiration-date,
+        .card-cvc {
+          width: inherit;
+        }
+
+        .card-number-box > div {
+          width: 100%;
+        }
+
+        .card-expiration-date > div {
+          width: 100%;
+        }
+
+        .card-cvc > div {
+          width: 100%;
+        }
+      }
+    }
+
+    &:hover,
+    &:active {
+      transform: rotateY(-180deg);
+    }
+  }
+}

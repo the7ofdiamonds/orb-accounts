@@ -8425,6 +8425,432 @@ var accountsEnumsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.create
 
 /***/ }),
 
+/***/ "./src/controllers/accountsImagesSlice.js":
+/*!************************************************!*\
+  !*** ./src/controllers/accountsImagesSlice.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   accountsImagesSlice: () => (/* binding */ accountsImagesSlice),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getCompanyLogo: () => (/* binding */ getCompanyLogo)
+/* harmony export */ });
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+function _typeof(o) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
+}
+function _regeneratorRuntime() {
+  "use strict";
+
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+  _regeneratorRuntime = function _regeneratorRuntime() {
+    return e;
+  };
+  var t,
+    e = {},
+    r = Object.prototype,
+    n = r.hasOwnProperty,
+    o = Object.defineProperty || function (t, e, r) {
+      t[e] = r.value;
+    },
+    i = "function" == typeof Symbol ? Symbol : {},
+    a = i.iterator || "@@iterator",
+    c = i.asyncIterator || "@@asyncIterator",
+    u = i.toStringTag || "@@toStringTag";
+  function define(t, e, r) {
+    return Object.defineProperty(t, e, {
+      value: r,
+      enumerable: !0,
+      configurable: !0,
+      writable: !0
+    }), t[e];
+  }
+  try {
+    define({}, "");
+  } catch (t) {
+    define = function define(t, e, r) {
+      return t[e] = r;
+    };
+  }
+  function wrap(t, e, r, n) {
+    var i = e && e.prototype instanceof Generator ? e : Generator,
+      a = Object.create(i.prototype),
+      c = new Context(n || []);
+    return o(a, "_invoke", {
+      value: makeInvokeMethod(t, r, c)
+    }), a;
+  }
+  function tryCatch(t, e, r) {
+    try {
+      return {
+        type: "normal",
+        arg: t.call(e, r)
+      };
+    } catch (t) {
+      return {
+        type: "throw",
+        arg: t
+      };
+    }
+  }
+  e.wrap = wrap;
+  var h = "suspendedStart",
+    l = "suspendedYield",
+    f = "executing",
+    s = "completed",
+    y = {};
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+  var p = {};
+  define(p, a, function () {
+    return this;
+  });
+  var d = Object.getPrototypeOf,
+    v = d && d(d(values([])));
+  v && v !== r && n.call(v, a) && (p = v);
+  var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p);
+  function defineIteratorMethods(t) {
+    ["next", "throw", "return"].forEach(function (e) {
+      define(t, e, function (t) {
+        return this._invoke(e, t);
+      });
+    });
+  }
+  function AsyncIterator(t, e) {
+    function invoke(r, o, i, a) {
+      var c = tryCatch(t[r], t, o);
+      if ("throw" !== c.type) {
+        var u = c.arg,
+          h = u.value;
+        return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) {
+          invoke("next", t, i, a);
+        }, function (t) {
+          invoke("throw", t, i, a);
+        }) : e.resolve(h).then(function (t) {
+          u.value = t, i(u);
+        }, function (t) {
+          return invoke("throw", t, i, a);
+        });
+      }
+      a(c.arg);
+    }
+    var r;
+    o(this, "_invoke", {
+      value: function value(t, n) {
+        function callInvokeWithMethodAndArg() {
+          return new e(function (e, r) {
+            invoke(t, n, e, r);
+          });
+        }
+        return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+      }
+    });
+  }
+  function makeInvokeMethod(e, r, n) {
+    var o = h;
+    return function (i, a) {
+      if (o === f) throw new Error("Generator is already running");
+      if (o === s) {
+        if ("throw" === i) throw a;
+        return {
+          value: t,
+          done: !0
+        };
+      }
+      for (n.method = i, n.arg = a;;) {
+        var c = n.delegate;
+        if (c) {
+          var u = maybeInvokeDelegate(c, n);
+          if (u) {
+            if (u === y) continue;
+            return u;
+          }
+        }
+        if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) {
+          if (o === h) throw o = s, n.arg;
+          n.dispatchException(n.arg);
+        } else "return" === n.method && n.abrupt("return", n.arg);
+        o = f;
+        var p = tryCatch(e, r, n);
+        if ("normal" === p.type) {
+          if (o = n.done ? s : l, p.arg === y) continue;
+          return {
+            value: p.arg,
+            done: n.done
+          };
+        }
+        "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg);
+      }
+    };
+  }
+  function maybeInvokeDelegate(e, r) {
+    var n = r.method,
+      o = e.iterator[n];
+    if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y;
+    var i = tryCatch(o, e.iterator, r.arg);
+    if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y;
+    var a = i.arg;
+    return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y);
+  }
+  function pushTryEntry(t) {
+    var e = {
+      tryLoc: t[0]
+    };
+    1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e);
+  }
+  function resetTryEntry(t) {
+    var e = t.completion || {};
+    e.type = "normal", delete e.arg, t.completion = e;
+  }
+  function Context(t) {
+    this.tryEntries = [{
+      tryLoc: "root"
+    }], t.forEach(pushTryEntry, this), this.reset(!0);
+  }
+  function values(e) {
+    if (e || "" === e) {
+      var r = e[a];
+      if (r) return r.call(e);
+      if ("function" == typeof e.next) return e;
+      if (!isNaN(e.length)) {
+        var o = -1,
+          i = function next() {
+            for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next;
+            return next.value = t, next.done = !0, next;
+          };
+        return i.next = i;
+      }
+    }
+    throw new TypeError(_typeof(e) + " is not iterable");
+  }
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), o(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) {
+    var e = "function" == typeof t && t.constructor;
+    return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name));
+  }, e.mark = function (t) {
+    return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t;
+  }, e.awrap = function (t) {
+    return {
+      __await: t
+    };
+  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () {
+    return this;
+  }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) {
+    void 0 === i && (i = Promise);
+    var a = new AsyncIterator(wrap(t, r, n, o), i);
+    return e.isGeneratorFunction(r) ? a : a.next().then(function (t) {
+      return t.done ? t.value : a.next();
+    });
+  }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () {
+    return this;
+  }), define(g, "toString", function () {
+    return "[object Generator]";
+  }), e.keys = function (t) {
+    var e = Object(t),
+      r = [];
+    for (var n in e) r.push(n);
+    return r.reverse(), function next() {
+      for (; r.length;) {
+        var t = r.pop();
+        if (t in e) return next.value = t, next.done = !1, next;
+      }
+      return next.done = !0, next;
+    };
+  }, e.values = values, Context.prototype = {
+    constructor: Context,
+    reset: function reset(e) {
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t);
+    },
+    stop: function stop() {
+      this.done = !0;
+      var t = this.tryEntries[0].completion;
+      if ("throw" === t.type) throw t.arg;
+      return this.rval;
+    },
+    dispatchException: function dispatchException(e) {
+      if (this.done) throw e;
+      var r = this;
+      function handle(n, o) {
+        return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o;
+      }
+      for (var o = this.tryEntries.length - 1; o >= 0; --o) {
+        var i = this.tryEntries[o],
+          a = i.completion;
+        if ("root" === i.tryLoc) return handle("end");
+        if (i.tryLoc <= this.prev) {
+          var c = n.call(i, "catchLoc"),
+            u = n.call(i, "finallyLoc");
+          if (c && u) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
+          } else if (c) {
+            if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
+          } else {
+            if (!u) throw new Error("try statement without catch or finally");
+            if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
+          }
+        }
+      }
+    },
+    abrupt: function abrupt(t, e) {
+      for (var r = this.tryEntries.length - 1; r >= 0; --r) {
+        var o = this.tryEntries[r];
+        if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) {
+          var i = o;
+          break;
+        }
+      }
+      i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null);
+      var a = i ? i.completion : {};
+      return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a);
+    },
+    complete: function complete(t, e) {
+      if ("throw" === t.type) throw t.arg;
+      return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y;
+    },
+    finish: function finish(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y;
+      }
+    },
+    "catch": function _catch(t) {
+      for (var e = this.tryEntries.length - 1; e >= 0; --e) {
+        var r = this.tryEntries[e];
+        if (r.tryLoc === t) {
+          var n = r.completion;
+          if ("throw" === n.type) {
+            var o = n.arg;
+            resetTryEntry(r);
+          }
+          return o;
+        }
+      }
+      throw new Error("illegal catch attempt");
+    },
+    delegateYield: function delegateYield(e, r, n) {
+      return this.delegate = {
+        iterator: values(e),
+        resultName: r,
+        nextLoc: n
+      }, "next" === this.method && (this.arg = t), y;
+    }
+  }, e;
+}
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+  if (info.done) {
+    resolve(value);
+  } else {
+    Promise.resolve(value).then(_next, _throw);
+  }
+}
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+      args = arguments;
+    return new Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+      _next(undefined);
+    });
+  };
+}
+
+var initialState = {
+  imagesLoading: false,
+  imagesError: '',
+  logo_url: ''
+};
+var getCompanyLogo = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('images/getCompanyLogo', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+  var response, errorData, errorMessage, responseData;
+  return _regeneratorRuntime().wrap(function _callee$(_context) {
+    while (1) switch (_context.prev = _context.next) {
+      case 0:
+        _context.prev = 0;
+        _context.next = 3;
+        return fetch('/wp-json/orb/images/v1/company/logo', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      case 3:
+        response = _context.sent;
+        if (response.ok) {
+          _context.next = 10;
+          break;
+        }
+        _context.next = 7;
+        return response.json();
+      case 7:
+        errorData = _context.sent;
+        errorMessage = errorData.message;
+        throw new Error(errorMessage);
+      case 10:
+        _context.next = 12;
+        return response.json();
+      case 12:
+        responseData = _context.sent;
+        return _context.abrupt("return", responseData);
+      case 16:
+        _context.prev = 16;
+        _context.t0 = _context["catch"](0);
+        throw _context.t0.message;
+      case 19:
+      case "end":
+        return _context.stop();
+    }
+  }, _callee, null, [[0, 16]]);
+})));
+var accountsImagesSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+  name: 'images',
+  initialState: initialState,
+  reducers: {},
+  extraReducers: function extraReducers(builder) {
+    builder.addCase(getCompanyLogo.fulfilled, function (state, action) {
+      state.imagesLoading = false;
+      state.imagesError = '';
+      state.logo_url = action.payload;
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getCompanyLogo.pending), function (state) {
+      state.imagesLoading = true;
+      state.imagesError = '';
+    }).addMatcher((0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.isAnyOf)(getCompanyLogo.rejected), function (state, action) {
+      state.imagesLoading = false;
+      state.imagesError = action.error.message;
+    });
+  }
+});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accountsImagesSlice);
+
+/***/ }),
+
 /***/ "./src/controllers/accountsInvoiceSlice.js":
 /*!*************************************************!*\
   !*** ./src/controllers/accountsInvoiceSlice.js ***!
@@ -8822,6 +9248,7 @@ function _toPrimitive(t, r) {
 var initialState = (_initialState = {
   invoiceLoading: false,
   invoiceError: '',
+  name: '',
   quote_id: '',
   invoices: [],
   invoice_id: '',
@@ -8830,53 +9257,55 @@ var initialState = (_initialState = {
   payment_intent_id: '',
   items: '',
   stripe_invoice_id: ''
-}, _defineProperty(_initialState, "payment_intent_id", ''), _defineProperty(_initialState, "client_secret", ''), _defineProperty(_initialState, "selections", ''), _defineProperty(_initialState, "subtotal", ''), _defineProperty(_initialState, "tax", ''), _defineProperty(_initialState, "due_date", ''), _defineProperty(_initialState, "amount_due", ''), _defineProperty(_initialState, "amount_paid", ''), _defineProperty(_initialState, "amount_remaining", ''), _defineProperty(_initialState, "payment_date", ''), _defineProperty(_initialState, "invoice_pdf", ''), _initialState);
+}, _defineProperty(_initialState, "payment_intent_id", ''), _defineProperty(_initialState, "client_secret", ''), _defineProperty(_initialState, "selections", ''), _defineProperty(_initialState, "subtotal", ''), _defineProperty(_initialState, "tax", ''), _defineProperty(_initialState, "due_date", ''), _defineProperty(_initialState, "amount_due", ''), _defineProperty(_initialState, "amount_paid", ''), _defineProperty(_initialState, "amount_remaining", ''), _defineProperty(_initialState, "payment_date", ''), _defineProperty(_initialState, "invoice_pdf", ''), _defineProperty(_initialState, "onboarding_links", ''), _initialState);
 var saveInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/saveInvoice', /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(stripeInvoiceID, _ref) {
-    var getState, _getState$quote, quote_id, stripe_invoice_id, response, errorData, errorMessage, responseData;
+    var getState, _getState$accountsQuo, quote_id, stripe_invoice_id, onboarding_links, response, errorData, errorMessage, responseData;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           getState = _ref.getState;
           _context.prev = 1;
-          _getState$quote = getState().quote, quote_id = _getState$quote.quote_id, stripe_invoice_id = _getState$quote.stripe_invoice_id;
-          _context.next = 5;
+          _getState$accountsQuo = getState().accountsQuote, quote_id = _getState$accountsQuo.quote_id, stripe_invoice_id = _getState$accountsQuo.stripe_invoice_id;
+          onboarding_links = getState().accountsInvoice.onboarding_links;
+          _context.next = 6;
           return fetch("/wp-json/orb/invoice/v1/save/".concat(stripeInvoiceID ? stripeInvoiceID : stripe_invoice_id), {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              quote_id: quote_id
+              quote_id: quote_id,
+              onboarding_links: onboarding_links
             })
           });
-        case 5:
+        case 6:
           response = _context.sent;
           if (response.ok) {
-            _context.next = 12;
+            _context.next = 13;
             break;
           }
-          _context.next = 9;
+          _context.next = 10;
           return response.json();
-        case 9:
+        case 10:
           errorData = _context.sent;
           errorMessage = errorData.message;
           throw new Error(errorMessage);
-        case 12:
-          _context.next = 14;
+        case 13:
+          _context.next = 15;
           return response.json();
-        case 14:
+        case 15:
           responseData = _context.sent;
           return _context.abrupt("return", responseData);
-        case 18:
-          _context.prev = 18;
+        case 19:
+          _context.prev = 19;
           _context.t0 = _context["catch"](1);
           throw _context.t0;
-        case 21:
+        case 22:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[1, 18]]);
+    }, _callee, null, [[1, 19]]);
   }));
   return function (_x, _x2) {
     return _ref2.apply(this, arguments);
@@ -8994,7 +9423,7 @@ var getInvoiceByQuoteID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
           getState = _ref7.getState;
           _context4.prev = 1;
           stripe_customer_id = getState().accountsClient.stripe_customer_id;
-          quote_id = getState().quote.quote_id;
+          quote_id = getState().accountsQuote.quote_id;
           _context4.next = 6;
           return fetch("/wp-json/orb/invoice/v1/quoteid/".concat(quoteID ? quoteID : quote_id), {
             method: 'POST',
@@ -9039,14 +9468,14 @@ var getInvoiceByQuoteID = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.creat
 }());
 var updateInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('invoice/updateInvoice', /*#__PURE__*/function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(_, _ref9) {
-    var getState, stripe_customer_id, _getState$accountsInv, invoice_id, stripe_invoice_id, response, errorData, errorMessage, responseData;
+    var getState, stripe_customer_id, _getState$accountsInv, invoice_id, stripe_invoice_id, onboarding_links, response, errorData, errorMessage, responseData;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           getState = _ref9.getState;
           _context5.prev = 1;
           stripe_customer_id = getState().accountsUsers.stripe_customer_id;
-          _getState$accountsInv = getState().accountsInvoice, invoice_id = _getState$accountsInv.invoice_id, stripe_invoice_id = _getState$accountsInv.stripe_invoice_id;
+          _getState$accountsInv = getState().accountsInvoice, invoice_id = _getState$accountsInv.invoice_id, stripe_invoice_id = _getState$accountsInv.stripe_invoice_id, onboarding_links = _getState$accountsInv.onboarding_links;
           _context5.next = 6;
           return fetch("/wp-json/orb/v1/invoice/update/".concat(invoice_id), {
             method: 'PATCH',
@@ -9055,7 +9484,8 @@ var updateInvoice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsync
             },
             body: JSON.stringify({
               stripe_customer_id: stripe_customer_id,
-              stripe_invoice_id: stripe_invoice_id
+              stripe_invoice_id: stripe_invoice_id,
+              onboarding_links: onboarding_links
             })
           });
         case 6:
@@ -11875,7 +12305,7 @@ var initialState = (_initialState = {
   statement_descriptor: '',
   payment_date: '',
   receipt_number: ''
-}, _defineProperty(_initialState, "invoice_pdf", ''), _defineProperty(_initialState, "payment_intent_id", ''), _defineProperty(_initialState, "client_secret", ''), _defineProperty(_initialState, "payment_status", ''), _defineProperty(_initialState, "payment_method_id", ''), _defineProperty(_initialState, "email", ''), _defineProperty(_initialState, "name", ''), _defineProperty(_initialState, "phone", ''), _defineProperty(_initialState, "address_line_1", ''), _defineProperty(_initialState, "address_line_2", ''), _defineProperty(_initialState, "state", ''), _defineProperty(_initialState, "city", ''), _defineProperty(_initialState, "postal_code", ''), _defineProperty(_initialState, "country", ''), _defineProperty(_initialState, "brand", ''), _defineProperty(_initialState, "card_country", ''), _defineProperty(_initialState, "exp_month", ''), _defineProperty(_initialState, "exp_year", ''), _defineProperty(_initialState, "funding", ''), _defineProperty(_initialState, "generated_from", ''), _defineProperty(_initialState, "last4", ''), _defineProperty(_initialState, "wallet", ''), _defineProperty(_initialState, "created", ''), _defineProperty(_initialState, "type", ''), _defineProperty(_initialState, "paymentMethod", ''), _initialState);
+}, _defineProperty(_initialState, "invoice_pdf", ''), _defineProperty(_initialState, "payment_intent_id", ''), _defineProperty(_initialState, "client_secret", ''), _defineProperty(_initialState, "payment_status", ''), _defineProperty(_initialState, "payment_method_id", ''), _defineProperty(_initialState, "email", ''), _defineProperty(_initialState, "name", 'Jamel Lyons'), _defineProperty(_initialState, "phone", ''), _defineProperty(_initialState, "address_line_1", ''), _defineProperty(_initialState, "address_line_2", ''), _defineProperty(_initialState, "state", ''), _defineProperty(_initialState, "city", ''), _defineProperty(_initialState, "postal_code", ''), _defineProperty(_initialState, "country", ''), _defineProperty(_initialState, "brand", ''), _defineProperty(_initialState, "card_country", ''), _defineProperty(_initialState, "exp_month", ''), _defineProperty(_initialState, "exp_year", ''), _defineProperty(_initialState, "funding", ''), _defineProperty(_initialState, "generated_from", ''), _defineProperty(_initialState, "last4", ''), _defineProperty(_initialState, "wallet", ''), _defineProperty(_initialState, "created", ''), _defineProperty(_initialState, "type", ''), _defineProperty(_initialState, "paymentMethod", ''), _initialState);
 var getStripeQuote = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createAsyncThunk)('stripe/getStripeQuote', /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(stripeQuoteID, _ref) {
     var getState, stripe_quote_id, response, errorData, errorMessage, responseData;
@@ -13277,16 +13707,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
-/* harmony import */ var _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/accountsEmail.js */ "./src/controllers/accountsEmail.js");
-/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
-/* harmony import */ var _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsProductsSlice.js */ "./src/controllers/accountsProductsSlice.js");
-/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
-/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
-/* harmony import */ var _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsServicesSlice.js */ "./src/controllers/accountsServicesSlice.js");
-/* harmony import */ var _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsStripeSlice.js */ "./src/controllers/accountsStripeSlice.js");
-/* harmony import */ var _controllers_accountsUsersSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsUsersSlice.js */ "./src/controllers/accountsUsersSlice.js");
-/* harmony import */ var _controllers_accountsEnums_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../controllers/accountsEnums.js */ "./src/controllers/accountsEnums.js");
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
+/* harmony import */ var _controllers_accountsImagesSlice_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/accountsImagesSlice.js */ "./src/controllers/accountsImagesSlice.js");
+/* harmony import */ var _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../controllers/accountsEmail.js */ "./src/controllers/accountsEmail.js");
+/* harmony import */ var _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../controllers/accountsInvoiceSlice.js */ "./src/controllers/accountsInvoiceSlice.js");
+/* harmony import */ var _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../controllers/accountsProductsSlice.js */ "./src/controllers/accountsProductsSlice.js");
+/* harmony import */ var _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../controllers/accountsQuoteSlice.js */ "./src/controllers/accountsQuoteSlice.js");
+/* harmony import */ var _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../controllers/accountsReceiptSlice.js */ "./src/controllers/accountsReceiptSlice.js");
+/* harmony import */ var _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../controllers/accountsServicesSlice.js */ "./src/controllers/accountsServicesSlice.js");
+/* harmony import */ var _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../controllers/accountsStripeSlice.js */ "./src/controllers/accountsStripeSlice.js");
+/* harmony import */ var _controllers_accountsUsersSlice_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../controllers/accountsUsersSlice.js */ "./src/controllers/accountsUsersSlice.js");
+/* harmony import */ var _controllers_accountsEnums_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../controllers/accountsEnums.js */ "./src/controllers/accountsEnums.js");
 
 
 
@@ -13297,17 +13728,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_9__.configureStore)({
+
+var store = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_10__.configureStore)({
   reducer: {
-    accountsEmail: _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_0__.accountsEmailSlice.reducer,
-    accountsInvoice: _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_1__.accountsInvoiceSlice.reducer,
-    accountsProducts: _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_2__.accountsProductsSlice.reducer,
-    accountsQuote: _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_3__.accountsQuoteSlice.reducer,
-    accountsReceipt: _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_4__.accountsReceiptSlice.reducer,
-    accountsServices: _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_5__.accountsServicesSlice.reducer,
-    accountsStripe: _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_6__.accountsStripeSlice.reducer,
-    accountsUsers: _controllers_accountsUsersSlice_js__WEBPACK_IMPORTED_MODULE_7__.accountsUsersSlice.reducer,
-    accountsEnums: _controllers_accountsEnums_js__WEBPACK_IMPORTED_MODULE_8__.accountsEnumsSlice.reducer
+    accountsImages: _controllers_accountsImagesSlice_js__WEBPACK_IMPORTED_MODULE_0__.accountsImagesSlice.reducer,
+    accountsEmail: _controllers_accountsEmail_js__WEBPACK_IMPORTED_MODULE_1__.accountsEmailSlice.reducer,
+    accountsInvoice: _controllers_accountsInvoiceSlice_js__WEBPACK_IMPORTED_MODULE_2__.accountsInvoiceSlice.reducer,
+    accountsProducts: _controllers_accountsProductsSlice_js__WEBPACK_IMPORTED_MODULE_3__.accountsProductsSlice.reducer,
+    accountsQuote: _controllers_accountsQuoteSlice_js__WEBPACK_IMPORTED_MODULE_4__.accountsQuoteSlice.reducer,
+    accountsReceipt: _controllers_accountsReceiptSlice_js__WEBPACK_IMPORTED_MODULE_5__.accountsReceiptSlice.reducer,
+    accountsServices: _controllers_accountsServicesSlice_js__WEBPACK_IMPORTED_MODULE_6__.accountsServicesSlice.reducer,
+    accountsStripe: _controllers_accountsStripeSlice_js__WEBPACK_IMPORTED_MODULE_7__.accountsStripeSlice.reducer,
+    accountsUsers: _controllers_accountsUsersSlice_js__WEBPACK_IMPORTED_MODULE_8__.accountsUsersSlice.reducer,
+    accountsEnums: _controllers_accountsEnums_js__WEBPACK_IMPORTED_MODULE_9__.accountsEnumsSlice.reducer
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);

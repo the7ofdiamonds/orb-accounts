@@ -21,6 +21,7 @@ import {
   getPaymentMethod,
   updatePaymentMethod,
 } from '../controllers/accountsStripeSlice.js';
+import { getCompanyLogo } from '../controllers/accountsImagesSlice.js';
 
 import { PaymentMethodGenerator } from '../utils/PaymentMethod';
 import { FormatCreditNumber } from '../utils/FormatCreditNumber';
@@ -49,6 +50,7 @@ const CardPaymentComponent = () => {
     stripeError,
     payment_intent_id,
     status,
+    name,
     account_country,
     currency,
     amount_due,
@@ -60,6 +62,7 @@ const CardPaymentComponent = () => {
     paymentMethod,
   } = useSelector((state) => state.accountsStripe);
   const { receipt_id } = useSelector((state) => state.accountsReceipt);
+  const { logo_url } = useSelector((state) => state.accountsImages);
 
   useEffect(() => {
     if (user_email) {
@@ -68,14 +71,14 @@ const CardPaymentComponent = () => {
           console.error(response.error.message);
           setMessageType('error');
           setMessage(response.error.message);
-        } else {
-          dispatch(getInvoiceByID(id)).then((response) => {
-            if (response.error !== undefined) {
-              console.error(response.error.message);
-              setMessageType('error');
-              setMessage(response.error.message);
-            }
-          });
+          // } else {
+          //   dispatch(getInvoiceByID(id)).then((response) => {
+          //     if (response.error !== undefined) {
+          //       console.error(response.error.message);
+          //       setMessageType('error');
+          //       setMessage(response.error.message);
+          //     }
+          //   });
         }
       });
     }
@@ -117,6 +120,10 @@ const CardPaymentComponent = () => {
     }
   }, [status, paymentMethod, dispatch]);
 
+  useEffect(async () => {
+    dispatch(getCompanyLogo());
+  }, []);
+
   const handlePay = () => {
     if (client_secret) {
     }
@@ -136,21 +143,36 @@ const CardPaymentComponent = () => {
         <PaymentNavigationComponent />
 
         <form className="credit-card-form card">
-          <div className="card-logo">Card Logo</div>
-
-          <div className="card-chip"></div>
-
-          <div className="signature-line">
-            <div className="card-number-box">
-              <CardNumberElement placeholder="1234 5678 9012 3456" />
+          <div className="card-front">
+            <div className="card-logo">
+              <img src={logo_url} alt="" />
             </div>
 
-            <div className="card-expiration-date">
-              <CardExpiryElement placeholder="MM/YY" />
+            <div className="card-chip">
+              <img
+                src="/wp-content/plugins/orb-accounts/Assets/Images/pngegg.png"
+                alt=""
+              />
             </div>
 
-            <div className="card-cvc">
-              <CardCvcElement placeholder="123" />
+            <div className="card-holder-name">
+              <h5>{name}</h5>
+            </div>
+          </div>
+
+          <div className="card-back">
+            <div className="signature-line">
+              <div className="card-number-box">
+                <CardNumberElement placeholder="1234 5678 9012 3456" />
+              </div>
+
+              <div className="card-expiration-date">
+                <CardExpiryElement placeholder="MM/YY" />
+              </div>
+
+              <div className="card-cvc">
+                <CardCvcElement placeholder="123" />
+              </div>
             </div>
           </div>
         </form>

@@ -34,7 +34,7 @@
     "update-dev": "git push orb-accounts development",
     "update-prod": "git push orb-accounts production",
     "vite": "vite start",
-    "watch:sass": "sass --watch ./CSS/scss/main.scss ./CSS/orb-accounts.css"
+    "watch:sass": "sass --watch ./Assets/CSS/scss/main.scss ./Assets/CSS/orb-accounts.css"
   },
   "author": "THE7OFDIAMONDS.TECH",
   "license": "ISC",

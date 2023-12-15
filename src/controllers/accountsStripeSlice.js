@@ -42,7 +42,7 @@ const initialState = {
     payment_status: '',
     payment_method_id: '',
     email: '',
-    name: '',
+    name: 'Jamel Lyons',
     phone: '',
     address_line_1: '',
     address_line_2: '',

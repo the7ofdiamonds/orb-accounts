@@ -986,22 +986,69 @@ div.loading h1 {
 }
 
 .payment-card .credit-card-form.card {
+  border-radius: 1rem;
   width: 25rem;
   height: 15rem;
+  background-color: black;
+  perspective: 1000px;
 }
 .payment-card .credit-card-form.card img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+.payment-card .credit-card-form.card .card-front {
   width: 100%;
-  height: auto;
+  height: 100%;
+  position: relative;
+  transform: perspective(1000px) rotateY(0deg);
+  transition: transform 0.4s ease-out;
 }
-.payment-card .credit-card-form.card .card-logo {
-  max-width: 33%;
-  max-height: 25%;
+.payment-card .credit-card-form.card .card-front .card-logo {
+  width: 12rem;
+  height: 4rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }
-.payment-card .credit-card-form.card .card-chip {
-  width: 3rem;
-  height: auto;
+.payment-card .credit-card-form.card .card-front .card-chip {
+  width: 5rem;
+  height: 5rem;
+  position: absolute;
+  top: 5rem;
+  left: 1rem;
 }
-.payment-card .credit-card-form.card .signature-line {
+.payment-card .credit-card-form.card .card-front .card-holder-name {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  width: 100%;
+  text-align: left;
+}
+.payment-card .credit-card-form.card .card-front .card-holder-name h5 {
+  font-family: "OCR-B", sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: hsl(0, 0%, 75%);
+  background-color: #636363;
+  text-shadow: -0.5px 1px 1px #fff, 1px 1px 1px #fff;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+}
+.payment-card .credit-card-form.card .card-back {
+  position: absolute;
+  top: 5rem;
+  width: 100%;
+  height: 100%;
+  transform: perspective(1000px) rotateY(180deg);
+  transition: transform 0.4s ease-out;
+}
+.payment-card .credit-card-form.card .card-back .signature-line {
   display: flex;
   gap: 10px;
   width: 100%;
@@ -1009,20 +1056,25 @@ div.loading h1 {
   align-items: center;
   justify-content: center;
   margin: auto;
+  background-color: white;
+  padding: 0.5rem;
 }
-.payment-card .credit-card-form.card .signature-line .card-number-box,
-.payment-card .credit-card-form.card .signature-line .card-expiration-date,
-.payment-card .credit-card-form.card .signature-line .card-cvc {
+.payment-card .credit-card-form.card .card-back .signature-line .card-number-box,
+.payment-card .credit-card-form.card .card-back .signature-line .card-expiration-date,
+.payment-card .credit-card-form.card .card-back .signature-line .card-cvc {
   width: inherit;
 }
-.payment-card .credit-card-form.card .signature-line .card-number-box > div {
+.payment-card .credit-card-form.card .card-back .signature-line .card-number-box > div {
   width: 100%;
 }
-.payment-card .credit-card-form.card .signature-line .card-expiration-date > div {
+.payment-card .credit-card-form.card .card-back .signature-line .card-expiration-date > div {
   width: 100%;
 }
-.payment-card .credit-card-form.card .signature-line .card-cvc > div {
+.payment-card .credit-card-form.card .card-back .signature-line .card-cvc > div {
   width: 100%;
+}
+.payment-card .credit-card-form.card:hover, .payment-card .credit-card-form.card:active {
+  transform: rotateY(-180deg);
 }
 
 /*# sourceMappingURL=orb-accounts.css.map */
