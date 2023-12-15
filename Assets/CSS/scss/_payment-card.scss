@@ -81,22 +81,16 @@
         background-color: white;
         padding: 0.5rem;
 
-        .card-number-box,
-        .card-expiration-date,
+        .card-number-box {
+          width: 15rem;
+        }
+
+        .card-expiration-date{
+          width: 5rem;
+        }
+
         .card-cvc {
-          width: inherit;
-        }
-
-        .card-number-box > div {
-          width: 100%;
-        }
-
-        .card-expiration-date > div {
-          width: 100%;
-        }
-
-        .card-cvc > div {
-          width: 100%;
+          width: 5rem;
         }
       }
     }

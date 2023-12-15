@@ -1059,19 +1059,14 @@ div.loading h1 {
   background-color: white;
   padding: 0.5rem;
 }
-.payment-card .credit-card-form.card .card-back .signature-line .card-number-box,
-.payment-card .credit-card-form.card .card-back .signature-line .card-expiration-date,
+.payment-card .credit-card-form.card .card-back .signature-line .card-number-box {
+  width: 15rem;
+}
+.payment-card .credit-card-form.card .card-back .signature-line .card-expiration-date {
+  width: 5rem;
+}
 .payment-card .credit-card-form.card .card-back .signature-line .card-cvc {
-  width: inherit;
-}
-.payment-card .credit-card-form.card .card-back .signature-line .card-number-box > div {
-  width: 100%;
-}
-.payment-card .credit-card-form.card .card-back .signature-line .card-expiration-date > div {
-  width: 100%;
-}
-.payment-card .credit-card-form.card .card-back .signature-line .card-cvc > div {
-  width: 100%;
+  width: 5rem;
 }
 .payment-card .credit-card-form.card:hover, .payment-card .credit-card-form.card:active {
   transform: rotateY(-180deg);
