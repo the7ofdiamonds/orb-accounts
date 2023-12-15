@@ -990,7 +990,8 @@ div.loading h1 {
   width: 25rem;
   height: 15rem;
   background-color: black;
-  perspective: 1000px;
+  transform: perspective(1000px) rotateY(0deg);
+  transition: transform 0.4s ease-out;
 }
 .payment-card .credit-card-form.card img {
   width: auto;
@@ -1002,8 +1003,6 @@ div.loading h1 {
   width: 100%;
   height: 100%;
   position: relative;
-  transform: perspective(1000px) rotateY(0deg);
-  transition: transform 0.4s ease-out;
 }
 .payment-card .credit-card-form.card .card-front .card-logo {
   width: 12rem;
@@ -1046,7 +1045,6 @@ div.loading h1 {
   width: 100%;
   height: 100%;
   transform: perspective(1000px) rotateY(180deg);
-  transition: transform 0.4s ease-out;
 }
 .payment-card .credit-card-form.card .card-back .signature-line {
   display: flex;
@@ -1069,7 +1067,7 @@ div.loading h1 {
   width: 5rem;
 }
 .payment-card .credit-card-form.card:hover, .payment-card .credit-card-form.card:active {
-  transform: rotateY(-180deg);
+  transform: rotateY(180deg);
 }
 
 /*# sourceMappingURL=orb-accounts.css.map */
