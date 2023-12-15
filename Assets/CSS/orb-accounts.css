@@ -989,7 +989,6 @@ div.loading h1 {
   border-radius: 1rem;
   width: 25rem;
   height: 15rem;
-  background-color: black;
   transform: perspective(1000px) rotateY(0deg);
   transition: transform 0.4s ease-out;
 }
@@ -999,17 +998,29 @@ div.loading h1 {
   max-width: 100%;
   max-height: 100%;
 }
-.payment-card .credit-card-form.card .card-front {
+.payment-card .credit-card-form.card .card-front,
+.payment-card .credit-card-form.card .card-center,
+.payment-card .credit-card-form.card .card-back {
   width: 100%;
   height: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
+  border-radius: 1rem;
+}
+.payment-card .credit-card-form.card .card-front {
+  background-color: black;
+}
+.payment-card .credit-card-form.card .card-front .card-logo,
+.payment-card .credit-card-form.card .card-front .card-chip,
+.payment-card .credit-card-form.card .card-front .card-holder-name {
+  position: absolute;
+  z-index: 100;
 }
 .payment-card .credit-card-form.card .card-front .card-logo {
   width: 12rem;
   height: 4rem;
-  position: absolute;
-  top: 0;
-  right: 0;
+  top: 0.5rem;
+  right: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: end;
@@ -1017,12 +1028,10 @@ div.loading h1 {
 .payment-card .credit-card-form.card .card-front .card-chip {
   width: 5rem;
   height: 5rem;
-  position: absolute;
   top: 5rem;
-  left: 1rem;
+  left: 0.25rem;
 }
 .payment-card .credit-card-form.card .card-front .card-holder-name {
-  position: absolute;
   left: 1.5rem;
   bottom: 1.5rem;
   width: 100%;
@@ -1039,11 +1048,11 @@ div.loading h1 {
   -webkit-background-clip: text;
   -moz-background-clip: text;
 }
+.payment-card .credit-card-form.card .card-center {
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.95);
+}
 .payment-card .credit-card-form.card .card-back {
-  position: absolute;
-  top: 5rem;
-  width: 100%;
-  height: 100%;
   transform: perspective(1000px) rotateY(180deg);
 }
 .payment-card .credit-card-form.card .card-back .signature-line {
@@ -1053,9 +1062,10 @@ div.loading h1 {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: auto;
   background-color: white;
   padding: 0.5rem;
+  position: absolute;
+  top: 5rem;
 }
 .payment-card .credit-card-form.card .card-back .signature-line .card-number-box {
   width: 15rem;
@@ -1068,6 +1078,12 @@ div.loading h1 {
 }
 .payment-card .credit-card-form.card:hover, .payment-card .credit-card-form.card:active {
   transform: rotateY(180deg);
+}
+.payment-card .credit-card-form.card:hover .card-front, .payment-card .credit-card-form.card:active .card-front {
+  z-index: 0;
+}
+.payment-card .credit-card-form.card:hover .card-back, .payment-card .credit-card-form.card:active .card-back {
+  z-index: 100;
 }
 
 /*# sourceMappingURL=orb-accounts.css.map */

@@ -3,7 +3,6 @@
     border-radius: 1rem;
     width: 25rem;
     height: 15rem;
-    background-color: black;
     transform: perspective(1000px) rotateY(0deg);
     transition: transform 0.4s ease-out;
 
@@ -14,17 +13,31 @@
       max-height: 100%;
     }
 
-    .card-front {
+    .card-front,
+    .card-center,
+    .card-back {
       width: 100%;
       height: 100%;
-      position: relative;
+      position: absolute;
+      top: 0;
+      border-radius: 1rem;
+    }
+
+    .card-front {
+      background-color: black;
+
+      .card-logo,
+      .card-chip,
+      .card-holder-name {
+        position: absolute;
+        z-index: 100;
+      }
 
       .card-logo {
         width: 12rem;
         height: 4rem;
-        position: absolute;
-        top: 0;
-        right: 0;
+        top: 0.5rem;
+        right: 0.5rem;
         display: flex;
         align-items: center;
         justify-content: end;
@@ -33,13 +46,11 @@
       .card-chip {
         width: 5rem;
         height: 5rem;
-        position: absolute;
         top: 5rem;
-        left: 1rem;
+        left: 0.25rem;
       }
 
       .card-holder-name {
-        position: absolute;
         left: 1.5rem;
         bottom: 1.5rem;
         width: 100%;
@@ -61,11 +72,12 @@
       }
     }
 
+    .card-center {
+      z-index: 50;
+      background-color: rgba(0, 0, 0, 0.95);
+    }
+
     .card-back {
-      position: absolute;
-      top: 5rem;
-      width: 100%;
-      height: 100%;
       transform: perspective(1000px) rotateY(180deg);
 
       .signature-line {
@@ -75,15 +87,16 @@
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        margin: auto;
         background-color: white;
         padding: 0.5rem;
+        position: absolute;
+        top: 5rem;
 
         .card-number-box {
           width: 15rem;
         }
 
-        .card-expiration-date{
+        .card-expiration-date {
           width: 5rem;
         }
 
@@ -96,6 +109,14 @@
     &:hover,
     &:active {
       transform: rotateY(180deg);
+      
+      .card-front {
+        z-index: 0;
+      }
+
+      .card-back {
+        z-index: 100;
+      }
     }
   }
 }

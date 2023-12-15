@@ -160,6 +160,8 @@ const CardPaymentComponent = () => {
             </div>
           </div>
 
+          <div className="card-center"></div>
+          
           <div className="card-back">
             <div className="signature-line">
               <div className="card-number-box">
