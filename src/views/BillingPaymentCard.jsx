@@ -163,6 +163,8 @@ const CardPaymentComponent = () => {
           <div className="card-center"></div>
           
           <div className="card-back">
+            <div className="card-magnetic-strip"></div>
+            
             <div className="signature-line">
               <div className="card-number-box">
                 <CardNumberElement placeholder="1234 5678 9012 3456" />
