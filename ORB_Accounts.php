@@ -103,7 +103,7 @@ class ORB_Accounts
 
     public function activate()
     {
-        (new Database)->createTables();
+        (new Database)->createDatabase();
         $this->pages->add_pages();
         // (new Roles)->add_roles();
         $this->router->react_rewrite_rules();

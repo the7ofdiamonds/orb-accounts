@@ -20,6 +20,35 @@ class EnvironmentVariables
         $this->lines = explode("\n", $envContents);
     }
 
+    public function getENV($key)
+    {
+        try {
+            $value = null;
+
+            foreach ($this->lines as $line) {
+                $parts = explode('=', $line, 2);
+                if (count($parts) === 2 && $parts[0] === $key) {
+                    $value = trim($parts[1]);
+                    break;
+                }
+            }
+
+            if ($value === null) {
+                throw new Exception($key . ' Key is required.', 404);
+            }
+
+            return $value;
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            $errorCode = $e->getCode();
+            $response = $errorMessage . ' ' . $errorCode;
+
+            error_log($response . ' at getENV');
+
+            return $response;
+        }
+    }
+
     function getStripeSecretKey()
     {
         $this->stripeSecretKey = null;
@@ -32,8 +61,8 @@ class EnvironmentVariables
             }
         }
 
-        if ($this->stripeSecretKey === null) {   
-            throw new Exception('Stripe Secret Key is required.', 404);     
+        if ($this->stripeSecretKey === null) {
+            throw new Exception('Stripe Secret Key is required.', 404);
         }
 
         return $this->stripeSecretKey;
