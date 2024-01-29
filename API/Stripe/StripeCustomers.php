@@ -18,10 +18,10 @@ class StripeCustomers
 
     public function createCustomer(
         $email,
-        $phone = '',
         $name,
         $address = '',
         $shipping = '',
+        $phone = '',
         $metadata = '',
         $tax_exempt = '',
         $tax_id_data = '',
@@ -83,10 +83,10 @@ class StripeCustomers
     public function updateCustomer(
         $stripe_customer_id,
         $email,
-        $phone = '',
         $name,
         $address = '',
         $shipping = '',
+        $phone = '',
         $metadata = '',
         $tax_exempt = '',
         $tax_id_data = '',

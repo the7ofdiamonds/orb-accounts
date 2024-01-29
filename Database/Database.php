@@ -180,7 +180,7 @@ class Database
     }
 
     function create_quote_table()
-    {
+    {error_log("create_quote_table");
         $table_name = 'orb_quote';
 
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (  
@@ -206,7 +206,7 @@ class Database
     }
 
     function create_invoice_table()
-    {
+    {error_log("create_invoice_table");
         $table_name = 'orb_invoice';
 
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
@@ -234,7 +234,7 @@ class Database
     }
 
     function create_receipt_table()
-    {
+    {error_log("create_receipt_table");
         $table_name = 'orb_receipt';
 
         $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (

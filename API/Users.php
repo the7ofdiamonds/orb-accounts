@@ -109,10 +109,10 @@ class Users
 
             $user = $this->stripe_customers->createCustomer(
                 $email,
-                $phone,
                 $name,
                 $address,
                 $shipping,
+                $phone,
                 $metadata,
                 $tax_exempt,
                 $tax_id_data,
@@ -238,10 +238,10 @@ class Users
             $updated_user = $this->stripe_customers->updateCustomer(
                 $stripe_customer_id,
                 $email,
-                $phone,
                 $name,
                 $address,
                 $shipping,
+                $phone,
                 $metadata,
                 $tax_exempt,
                 // $invoice_settings,

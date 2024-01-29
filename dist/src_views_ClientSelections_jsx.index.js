@@ -151,7 +151,7 @@ function SelectionsComponent() {
     servicesError = _useSelector.servicesError,
     services = _useSelector.services;
   var _useSelector2 = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (state) {
-      return state.accountsUser;
+      return state.accountsUsers;
     }),
     user_email = _useSelector2.user_email,
     stripe_customer_id = _useSelector2.stripe_customer_id;

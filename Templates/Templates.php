@@ -56,7 +56,7 @@ class Templates
     function get_protected_page_template($template_include, $protected_page)
     {
         $template = $this->pluginDir . 'Pages/page-protected.php';
-
+error_log($template);
         if (file_exists($template)) {
             add_action('wp_head', function () use ($protected_page) {
                 $this->css->load_pages_css($protected_page);

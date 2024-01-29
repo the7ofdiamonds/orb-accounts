@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { accountsSlice } from '../controllers/accountsSlice.js';
 import { accountsImagesSlice } from '../controllers/accountsImagesSlice.js';
 import { accountsEmailSlice } from '../controllers/accountsEmail.js';
 import { accountsInvoiceSlice } from '../controllers/accountsInvoiceSlice.js';
@@ -12,6 +13,7 @@ import { accountsEnumsSlice } from '../controllers/accountsEnums.js';
 
 const store = configureStore({
   reducer: {
+    accounts: accountsSlice.reducer,
     accountsImages: accountsImagesSlice.reducer,
     accountsEmail: accountsEmailSlice.reducer,
     accountsInvoice: accountsInvoiceSlice.reducer,

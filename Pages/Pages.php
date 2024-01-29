@@ -19,6 +19,10 @@ class Pages
 
         $this->protected_pages_list = [
             [
+                'regex' => '#^/accounts#',
+                'file_name' => 'Accounts',
+            ],
+            [
                 'regex' => '#^/billing/invoice/(?P<slug>[a-zA-Z0-9-_]+)#',
                 'file_name' => 'BillingInvoice',
             ],

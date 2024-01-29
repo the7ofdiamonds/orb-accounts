@@ -31,7 +31,7 @@ function SelectionsComponent() {
     (state) => state.accountsServices
   );
   const { user_email, stripe_customer_id } = useSelector(
-    (state) => state.accountsUser
+    (state) => state.accountsUsers
   );
   const {
     quoteLoading,

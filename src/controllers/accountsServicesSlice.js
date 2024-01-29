@@ -101,7 +101,6 @@ export const accountsServicesSlice = createSlice({
           state.serviceLoading = false;
           state.serviceError = action.error.message;
         });
-
   }
 })
 
